@@ -1,12 +1,12 @@
 
 import { motion } from "framer-motion";
-import { MessageSquare, Youtube, BookOpen, Lightbulb } from "lucide-react";
+import { BookOpen, Users, Lightbulb, Youtube } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 
 const About = () => {
   return (
-    <div dir="rtl">
+    <div>
       {/* Hero Section */}
       <section className="pt-20 pb-16 md:pt-28 md:pb-20 bg-gray-50">
         <div className="container mx-auto px-4">
@@ -59,6 +59,10 @@ const About = () => {
                 במשך השנים האחרונות, הקדשתי את עצמי ללימוד, מחקר והוראה של כלי AI מתקדמים, במטרה לעזור לאנשים וארגונים להשתמש בהם באופן יעיל ומועיל בחיי היום יום והעבודה.
               </p>
 
+              <p className="text-lg mb-4 text-muted-foreground">
+                אני בעל יכולת ייחודית למקד את התוכן והמסרים לקהל היעד הספציפי, ולהנגיש מידע מורכב בצורה פשוטה וברורה לכל מי שמעוניין ללמוד.
+              </p>
+
               <p className="text-lg mb-8 text-muted-foreground">
                 אני מאמין שהבינה המלאכותית היא לא רק עתיד הטכנולוגיה, אלא ההווה שלה, וחשוב לי להנגיש את הידע הזה לכמה שיותר אנשים בצורה ברורה ומעשית.
               </p>
@@ -92,7 +96,7 @@ const About = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
           >
-            <h2 className="text-3xl font-bold mb-4">ניסיון ומומחיות</h2>
+            <h2 className="text-3xl font-bold mb-4">השירותים שלי</h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
               תחומי העיסוק והמומחיות העיקריים שלי בעולם הבינה המלאכותית
             </p>
@@ -107,11 +111,11 @@ const About = () => {
               className="bg-white p-6 rounded-xl shadow-sm"
             >
               <div className="bg-purple-100 p-4 rounded-full w-16 h-16 flex items-center justify-center mb-4 text-primary">
-                <MessageSquare className="h-8 w-8" />
+                <Users className="h-8 w-8" />
               </div>
-              <h3 className="text-xl font-semibold mb-3">הרצאות וסדנאות</h3>
+              <h3 className="text-xl font-semibold mb-3">הרצאות לארגונים</h3>
               <p className="text-muted-foreground">
-                הרצאות מרתקות וסדנאות מעשיות לארגונים, חברות וכנסים בתחום הבינה המלאכותית.
+                הרצאות מותאמות אישית לארגונים וחברות, המציגות את עולם הבינה המלאכותית בצורה נגישה ומרתקת.
               </p>
             </motion.div>
 
@@ -123,11 +127,11 @@ const About = () => {
               className="bg-white p-6 rounded-xl shadow-sm"
             >
               <div className="bg-purple-100 p-4 rounded-full w-16 h-16 flex items-center justify-center mb-4 text-primary">
-                <Youtube className="h-8 w-8" />
+                <Lightbulb className="h-8 w-8" />
               </div>
-              <h3 className="text-xl font-semibold mb-3">תוכן חינוכי</h3>
+              <h3 className="text-xl font-semibold mb-3">סדנאות מעשיות</h3>
               <p className="text-muted-foreground">
-                יצירת תוכן חינוכי מקצועי ונגיש בערוץ היוטיוב שלי עם למעלה מ-6,000 מנויים.
+                סדנאות פרקטיות המקנות כלים ומיומנויות מעשיות לשימוש בטכנולוגיות AI בעולם העבודה והחיים האישיים.
               </p>
             </motion.div>
 
@@ -141,9 +145,9 @@ const About = () => {
               <div className="bg-purple-100 p-4 rounded-full w-16 h-16 flex items-center justify-center mb-4 text-primary">
                 <BookOpen className="h-8 w-8" />
               </div>
-              <h3 className="text-xl font-semibold mb-3">מחקר וכתיבה</h3>
+              <h3 className="text-xl font-semibold mb-3">קורסים ממוקדים</h3>
               <p className="text-muted-foreground">
-                מחקר מעמיק וכתיבה של מאמרים מקצועיים על התפתחויות וטרנדים בעולם הבינה המלאכותית.
+                קורסים ייעודיים בנושאי בינה מלאכותית, המותאמים לרמת הידע וצרכי הלומדים, ומשלבים תיאוריה עם יישום מעשי.
               </p>
             </motion.div>
 
@@ -155,19 +159,112 @@ const About = () => {
               className="bg-white p-6 rounded-xl shadow-sm"
             >
               <div className="bg-purple-100 p-4 rounded-full w-16 h-16 flex items-center justify-center mb-4 text-primary">
-                <Lightbulb className="h-8 w-8" />
+                <Youtube className="h-8 w-8" />
               </div>
-              <h3 className="text-xl font-semibold mb-3">ייעוץ לארגונים</h3>
+              <h3 className="text-xl font-semibold mb-3">תוכן דיגיטלי</h3>
               <p className="text-muted-foreground">
-                ייעוץ אסטרטגי לארגונים בתהליכי אימוץ והטמעה של טכנולוגיות בינה מלאכותית.
+                תוכן מקצועי ואיכותי בערוץ היוטיוב שלי, המציע מדריכים, טיפים וסקירות על כלי AI חדשניים לקהל הרחב.
               </p>
             </motion.div>
           </div>
         </div>
       </section>
 
+      {/* Unique Value Section */}
+      <section className="py-16 bg-white">
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+            >
+              <h2 className="text-3xl font-bold mb-6">הייתרון שלי</h2>
+              <p className="text-lg mb-6 text-muted-foreground">
+                היכולת שלי למקד את התוכן לקהל היעד הספציפי ולהציג נושאים מורכבים בצורה נגישה ופשוטה היא מה שמייחד את ההרצאות והסדנאות שלי.
+              </p>
+              
+              <div className="space-y-4">
+                <div className="flex items-start">
+                  <div className="bg-purple-100 p-2 rounded-full text-primary mr-3 mt-1">
+                    <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-medium">התאמה אישית</h3>
+                    <p className="text-muted-foreground">התוכן מותאם לצרכים, לרמת הידע ולאתגרים הספציפיים של קהל היעד</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-start">
+                  <div className="bg-purple-100 p-2 rounded-full text-primary mr-3 mt-1">
+                    <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-medium">פישוט מושגים מורכבים</h3>
+                    <p className="text-muted-foreground">הסברת רעיונות ותהליכים מורכבים בצורה פשוטה וברורה לכל רמת ידע</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-start">
+                  <div className="bg-purple-100 p-2 rounded-full text-primary mr-3 mt-1">
+                    <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-medium">שילוב תיאוריה ומעשה</h3>
+                    <p className="text-muted-foreground">חיבור בין עקרונות תיאורטיים ליישומים מעשיים שניתן להטמיע מיד</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-start">
+                  <div className="bg-purple-100 p-2 rounded-full text-primary mr-3 mt-1">
+                    <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-medium">התעדכנות מתמדת</h3>
+                    <p className="text-muted-foreground">עדכון שוטף בכל החידושים והפיתוחים האחרונים בעולם הבינה המלאכותית</p>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+            
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+              className="relative"
+            >
+              <div className="aspect-square bg-gray-50 rounded-2xl p-8 shadow-inner">
+                <div className="absolute -top-6 -right-6 bg-purple-100 p-4 rounded-xl shadow-lg transform rotate-6">
+                  <h3 className="text-2xl font-bold text-primary">150+</h3>
+                  <p className="text-sm">הרצאות וסדנאות</p>
+                </div>
+                <img
+                  src="https://images.unsplash.com/photo-1551818255-e6e10975bc17"
+                  alt="הרצאה"
+                  className="w-full h-full object-cover rounded-xl shadow-lg"
+                />
+                <div className="absolute -bottom-6 -left-6 bg-gradient-to-r from-purple-500 to-purple-700 p-4 rounded-xl shadow-lg text-white transform -rotate-3">
+                  <h3 className="text-lg font-bold">המורכב לפשוט</h3>
+                  <p className="text-sm">בינה מלאכותית לכל אחד</p>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
       {/* Testimonials */}
-      <section className="py-20">
+      <section className="py-20 bg-gray-50">
         <div className="container mx-auto px-4">
           <motion.div
             className="text-center mb-12"
@@ -188,7 +285,7 @@ const About = () => {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5 }}
-              className="bg-gray-50 p-8 rounded-xl shadow-sm"
+              className="bg-white p-8 rounded-xl shadow-sm"
             >
               <div className="flex flex-col h-full">
                 <div className="mb-6">
@@ -211,7 +308,7 @@ const About = () => {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.2 }}
-              className="bg-gray-50 p-8 rounded-xl shadow-sm"
+              className="bg-white p-8 rounded-xl shadow-sm"
             >
               <div className="flex flex-col h-full">
                 <div className="mb-6">

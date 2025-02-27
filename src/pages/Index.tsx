@@ -1,6 +1,6 @@
 
 import { useState, useEffect, useRef } from "react";
-import { ArrowRight, Youtube, BookOpen, Calendar } from "lucide-react";
+import { ArrowRight, BookOpen, Users, Lightbulb, Youtube } from "lucide-react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -108,7 +108,7 @@ const StatNumber = ({ value, label }: { value: string, label: string }) => {
 
 const Index = () => {
   return (
-    <div dir="rtl">
+    <div>
       {/* Hero Section */}
       <section className="relative min-h-[90vh] flex items-center bg-gray-50">
         <div className="absolute inset-0 overflow-hidden">
@@ -160,6 +160,47 @@ const Index = () => {
         </div>
       </section>
 
+      {/* YouTube Channel Section */}
+      <section className="py-16 bg-gradient-to-r from-purple-700 to-purple-500 text-white">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-8">
+            <div className="md:w-1/2">
+              <h2 className="text-3xl md:text-4xl font-bold mb-4">ערוץ היוטיוב שלי</h2>
+              <p className="text-lg mb-6 opacity-90">
+                בערוץ היוטיוב שלי אני מעלה באופן קבוע תוכן חינמי ואיכותי על כלי AI חדשים, טיפים, והדרכות מעשיות. הצטרפו לקהילה של למעלה מ-6,000 עוקבים וקבלו עדכונים על כל החידושים בעולם הבינה המלאכותית.
+              </p>
+              <Button asChild variant="outline" size="lg" className="bg-transparent text-white border-white hover:bg-white/10">
+                <a 
+                  href="https://www.youtube.com/channel/UCxxxxxxxx" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="flex items-center"
+                >
+                  <Youtube className="ml-2 h-5 w-5" />
+                  לערוץ היוטיוב
+                </a>
+              </Button>
+            </div>
+            <div className="md:w-1/2 flex justify-center">
+              <div className="bg-white rounded-xl p-2 shadow-lg transform rotate-3 hover:rotate-0 transition-all duration-300">
+                <div className="aspect-video w-full max-w-md overflow-hidden rounded-lg shadow-inner bg-gray-800">
+                  <img 
+                    src="https://images.unsplash.com/photo-1611162616305-c69b3fa7fbe0" 
+                    alt="ערוץ היוטיוב" 
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="bg-white/90 rounded-full p-4 shadow-lg">
+                      <Youtube className="h-10 w-10 text-red-600" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Services Section */}
       <section className="py-20 bg-gray-50">
         <div className="container mx-auto px-4">
@@ -172,7 +213,7 @@ const Index = () => {
           >
             <h2 className="text-3xl md:text-4xl font-bold mb-4">השירותים שלי</h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              מגוון דרכים ללמוד על הכלים החדשניים ביותר בעולם הבינה המלאכותית
+              פתרונות מותאמים אישית להטמעת בינה מלאכותית בארגון שלכם
             </p>
           </motion.div>
 
@@ -187,15 +228,15 @@ const Index = () => {
               <Card className="h-full">
                 <CardContent className="pt-6">
                   <div className="bg-purple-100 p-4 rounded-full w-16 h-16 flex items-center justify-center mb-4 text-primary">
-                    <Calendar className="h-8 w-8" />
+                    <Users className="h-8 w-8" />
                   </div>
-                  <h3 className="text-xl font-semibold mb-3">הרצאות וסדנאות</h3>
+                  <h3 className="text-xl font-semibold mb-3">הרצאות לארגונים</h3>
                   <p className="text-muted-foreground mb-4">
-                    הרצאות מרתקות וסדנאות מעשיות לארגונים, חברות וכנסים מקצועיים.
+                    הרצאות מרתקות לארגונים וחברות, מותאמות לצרכים הספציפיים של הקהל והארגון.
                   </p>
                   <Button asChild variant="link" className="p-0 h-auto">
                     <Link to="/contact" className="flex items-center text-primary">
-                      קבע הרצאה
+                      תיאום הרצאה
                       <ArrowRight className="mr-2 h-4 w-4" />
                     </Link>
                   </Button>
@@ -207,22 +248,17 @@ const Index = () => {
               <Card className="h-full">
                 <CardContent className="pt-6">
                   <div className="bg-purple-100 p-4 rounded-full w-16 h-16 flex items-center justify-center mb-4 text-primary">
-                    <Youtube className="h-8 w-8" />
+                    <Lightbulb className="h-8 w-8" />
                   </div>
-                  <h3 className="text-xl font-semibold mb-3">ערוץ יוטיוב</h3>
+                  <h3 className="text-xl font-semibold mb-3">סדנאות מעשיות</h3>
                   <p className="text-muted-foreground mb-4">
-                    תוכן חינמי ואיכותי על כלי AI חדשניים, טיפים ומדריכים שימושיים.
+                    סדנאות פרקטיות ומעשיות להקניית כלים ומיומנויות בעבודה עם טכנולוגיות AI.
                   </p>
                   <Button asChild variant="link" className="p-0 h-auto">
-                    <a 
-                      href="https://www.youtube.com/channel/UCxxxxxxxx" 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="flex items-center text-primary"
-                    >
-                      לערוץ היוטיוב
+                    <Link to="/contact" className="flex items-center text-primary">
+                      מידע על סדנאות
                       <ArrowRight className="mr-2 h-4 w-4" />
-                    </a>
+                    </Link>
                   </Button>
                 </CardContent>
               </Card>
@@ -234,13 +270,13 @@ const Index = () => {
                   <div className="bg-purple-100 p-4 rounded-full w-16 h-16 flex items-center justify-center mb-4 text-primary">
                     <BookOpen className="h-8 w-8" />
                   </div>
-                  <h3 className="text-xl font-semibold mb-3">בלוג</h3>
+                  <h3 className="text-xl font-semibold mb-3">קורסים ממוקדים</h3>
                   <p className="text-muted-foreground mb-4">
-                    מאמרים מעמיקים ועדכניים על בינה מלאכותית, כלים חדשים ומגמות בתחום.
+                    קורסים ממוקדים בכלי בינה מלאכותית שונים, מותאמים לקהל היעד ולרמת הידע הקיימת.
                   </p>
                   <Button asChild variant="link" className="p-0 h-auto">
-                    <Link to="/blog" className="flex items-center text-primary">
-                      לבלוג
+                    <Link to="/contact" className="flex items-center text-primary">
+                      פרטים על קורסים
                       <ArrowRight className="mr-2 h-4 w-4" />
                     </Link>
                   </Button>
@@ -286,6 +322,36 @@ const Index = () => {
                 </Card>
               </motion.div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Unique Value Section */}
+      <section className="py-16 bg-gray-50">
+        <div className="container mx-auto px-4">
+          <div className="max-w-3xl mx-auto text-center">
+            <h2 className="text-3xl font-bold mb-6">הייתרון שלי</h2>
+            <p className="text-xl mb-8 leading-relaxed">
+              היכולת שלי למקד את התוכן לקהל היעד הספציפי ולהציג נושאים מורכבים בצורה נגישה ופשוטה הופכת את הלמידה לחוויה אפקטיבית ונעימה לכל המשתתפים.
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-right">
+              <div className="bg-white p-6 rounded-lg shadow-sm">
+                <h3 className="text-xl font-semibold mb-2">התאמה אישית</h3>
+                <p className="text-muted-foreground">כל הרצאה וסדנה מותאמת לצרכים והאתגרים הספציפיים של קהל היעד והארגון.</p>
+              </div>
+              <div className="bg-white p-6 rounded-lg shadow-sm">
+                <h3 className="text-xl font-semibold mb-2">הנגשת מידע מורכב</h3>
+                <p className="text-muted-foreground">הפיכת מושגים ותהליכים מורכבים לפשוטים ומובנים לכל רמת ידע.</p>
+              </div>
+              <div className="bg-white p-6 rounded-lg shadow-sm">
+                <h3 className="text-xl font-semibold mb-2">פרקטיקה ותיאוריה</h3>
+                <p className="text-muted-foreground">שילוב בין הבנה תיאורטית לבין יישום מעשי של הכלים הנלמדים.</p>
+              </div>
+              <div className="bg-white p-6 rounded-lg shadow-sm">
+                <h3 className="text-xl font-semibold mb-2">חוויית למידה</h3>
+                <p className="text-muted-foreground">יצירת חוויית למידה מעניינת, אינטראקטיבית ובלתי נשכחת.</p>
+              </div>
+            </div>
           </div>
         </div>
       </section>

@@ -65,7 +65,7 @@ export default {
 				}
 			},
 			fontFamily: {
-				sans: ['Inter var', 'sans-serif'],
+				sans: ['Rubik', 'sans-serif'],
 				display: ['Playfair Display', 'serif']
 			},
 			borderRadius: {

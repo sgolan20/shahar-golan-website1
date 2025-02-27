@@ -21,7 +21,7 @@ const Footer = () => {
             <p className="text-muted-foreground mt-2 mb-6 max-w-sm">
               מרצה ל-GEN-AI ובינה מלאכותית, מלמד כיצד להשתמש בכלים מתקדמים בחיי היום יום והעבודה.
             </p>
-            <div className="flex space-x-4 rtl:space-x-reverse">
+            <div className="flex space-x-4 space-x-reverse">
               <a 
                 href="https://www.youtube.com/channel/UCxxxxxxxx" 
                 target="_blank" 
@@ -63,7 +63,7 @@ const Footer = () => {
           <div className="md:col-span-1">
             <h3 className="font-display font-medium text-lg mb-4">צור קשר</h3>
             <p className="text-muted-foreground mb-2">
-              מעוניינים בהרצאה או סדנה?
+              מעוניינים בהרצאה, סדנה או קורס מותאם אישית?
             </p>
             <a 
               href="mailto:contact@shahargolan.com" 
@@ -84,7 +84,7 @@ const Footer = () => {
             aria-label="חזרה למעלה"
           >
             חזרה למעלה
-            <ArrowUp size={16} className="ml-1" />
+            <ArrowUp size={16} className="mr-1" />
           </button>
         </div>
       </div>

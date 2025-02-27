@@ -1,5 +1,5 @@
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -97,7 +97,7 @@
   }
   
   .nav-link::after {
-    @apply content-[''] absolute bottom-0 left-0 w-0 h-0.5 bg-primary transition-all duration-300 ease-in-out;
+    @apply content-[''] absolute bottom-0 right-0 w-0 h-0.5 bg-primary transition-all duration-300 ease-in-out;
   }
   
   .nav-link:hover::after {
@@ -113,10 +113,10 @@
   }
   
   .btn-shine::before {
-    @apply content-[''] absolute top-0 left-[-100%] w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-all duration-700 ease-in-out;
+    @apply content-[''] absolute top-0 right-[-100%] w-full h-full bg-gradient-to-l from-transparent via-white/20 to-transparent transition-all duration-700 ease-in-out;
   }
   
   .btn-shine:hover::before {
-    @apply left-[100%];
+    @apply right-[100%];
   }
 }
