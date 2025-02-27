@@ -66,7 +66,7 @@ export default {
 			},
 			fontFamily: {
 				sans: ['Rubik', 'sans-serif'],
-				display: ['Playfair Display', 'serif']
+				display: ['Rubik', 'sans-serif']
 			},
 			borderRadius: {
 				lg: 'var(--radius)',

@@ -1,6 +1,6 @@
 
 import { useState, useEffect, useRef } from "react";
-import { ArrowRight, BookOpen, Users, Lightbulb, Youtube } from "lucide-react";
+import { ArrowRight, BookOpen, Users, Lightbulb, Youtube, Play } from "lucide-react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -107,6 +107,20 @@ const StatNumber = ({ value, label }: { value: string, label: string }) => {
 };
 
 const Index = () => {
+  const [isVideoPlaying, setIsVideoPlaying] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  const handlePlayVideo = () => {
+    if (videoRef.current) {
+      if (isVideoPlaying) {
+        videoRef.current.pause();
+      } else {
+        videoRef.current.play();
+      }
+      setIsVideoPlaying(!isVideoPlaying);
+    }
+  };
+
   return (
     <div>
       {/* Hero Section */}
@@ -118,34 +132,57 @@ const Index = () => {
         </div>
         
         <div className="container mx-auto px-4 py-24 relative z-10">
-          <motion.div
-            className="max-w-3xl mx-auto text-center"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-          >
-            <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
-              הבינה המלאכותית כבר כאן,<br />
-              <span className="text-gradient">בואו נלמד להשתמש בה</span>
-            </h1>
-            
-            <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-              מרצה ל-GEN-AI ומומחה להטמעת כלים חדשניים בעולם העבודה והחיים האישיים
-            </p>
-            
-            <div className="flex flex-wrap justify-center gap-4">
-              <Button asChild size="lg" className="btn-shine">
-                <Link to="/contact">
-                  תיאום הרצאה
-                  <ArrowRight className="mr-2 h-4 w-4" />
-                </Link>
-              </Button>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <motion.div
+              className="max-w-3xl mx-auto lg:mx-0 text-center lg:text-right"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+            >
+              <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
+                הבינה המלאכותית כבר כאן,<br />
+                <span className="text-gradient">בואו נלמד להשתמש בה</span>
+              </h1>
               
-              <Button asChild size="lg" variant="outline">
-                <Link to="/about">למד עוד עליי</Link>
-              </Button>
-            </div>
-          </motion.div>
+              <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto lg:mr-0 lg:ml-auto">
+                מרצה ל-GEN-AI ומומחה להטמעת כלים חדשניים בעולם העבודה והחיים האישיים
+              </p>
+              
+              <div className="flex flex-wrap justify-center lg:justify-end gap-4">
+                <Button asChild size="lg" className="btn-shine">
+                  <Link to="/contact">
+                    תיאום הרצאה
+                    <ArrowRight className="mr-2 h-4 w-4" />
+                  </Link>
+                </Button>
+                
+                <Button asChild size="lg" variant="outline">
+                  <Link to="/about">למד עוד עליי</Link>
+                </Button>
+              </div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+              className="hidden lg:block"
+            >
+              <div className="relative rounded-2xl overflow-hidden shadow-xl">
+                <img 
+                  src="https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d" 
+                  alt="שחר גולן" 
+                  className="w-full h-auto object-cover" 
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-6">
+                  <div className="text-white">
+                    <p className="text-xl font-bold">שחר גולן</p>
+                    <p className="text-sm">מרצה ל-GEN-AI ובינה מלאכותית</p>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </div>
         </div>
       </section>
 
@@ -160,16 +197,60 @@ const Index = () => {
         </div>
       </section>
 
+      {/* Showreel Video Section */}
+      <section className="py-20 bg-gradient-to-r from-purple-700 to-purple-500 text-white">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">צפו בהרצאות שלי</h2>
+            <p className="text-lg opacity-90 max-w-2xl mx-auto">
+              סרטון קצר שמציג את סגנון ההרצאות, הסדנאות והקורסים שאני מעביר בנושאי בינה מלאכותית
+            </p>
+          </div>
+          
+          <div className="max-w-4xl mx-auto">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+              className="relative aspect-video rounded-xl overflow-hidden shadow-2xl"
+            >
+              {/* כאן תוכל להחליף את סרטון הדוגמה בסרטון השואוריל האמיתי שלך */}
+              <video 
+                ref={videoRef}
+                poster="https://images.unsplash.com/photo-1551818255-e6e10975bc17" 
+                className="w-full h-full object-cover"
+                controls={isVideoPlaying}
+              >
+                <source src="https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_1mb.mp4" type="video/mp4" />
+                הדפדפן שלך לא תומך בתגית וידאו.
+              </video>
+              
+              {!isVideoPlaying && (
+                <div 
+                  className="absolute inset-0 flex items-center justify-center bg-black/30 cursor-pointer"
+                  onClick={handlePlayVideo}
+                >
+                  <div className="bg-white/90 rounded-full p-4 shadow-lg transform transition-transform hover:scale-110">
+                    <Play className="h-12 w-12 text-purple-600 fill-current" />
+                  </div>
+                </div>
+              )}
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
       {/* YouTube Channel Section */}
-      <section className="py-16 bg-gradient-to-r from-purple-700 to-purple-500 text-white">
+      <section className="py-16 bg-gray-50">
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row items-center justify-between gap-8">
             <div className="md:w-1/2">
               <h2 className="text-3xl md:text-4xl font-bold mb-4">ערוץ היוטיוב שלי</h2>
-              <p className="text-lg mb-6 opacity-90">
+              <p className="text-lg mb-6 text-muted-foreground">
                 בערוץ היוטיוב שלי אני מעלה באופן קבוע תוכן חינמי ואיכותי על כלי AI חדשים, טיפים, והדרכות מעשיות. הצטרפו לקהילה של למעלה מ-6,000 עוקבים וקבלו עדכונים על כל החידושים בעולם הבינה המלאכותית.
               </p>
-              <Button asChild variant="outline" size="lg" className="bg-transparent text-white border-white hover:bg-white/10">
+              <Button asChild className="btn-shine">
                 <a 
                   href="https://www.youtube.com/channel/UCxxxxxxxx" 
                   target="_blank" 
@@ -197,6 +278,51 @@ const Index = () => {
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Gallery Section */}
+      <section className="py-20 bg-white">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">תמונות מהרצאות וסדנאות</h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              רגעים נבחרים מהרצאות וסדנאות שהעברתי בארגונים שונים ברחבי הארץ
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <motion.div 
+              whileHover={{ scale: 1.02 }}
+              className="overflow-hidden rounded-xl shadow-md"
+            >
+              <img 
+                src="https://images.unsplash.com/photo-1551818255-e6e10975bc17" 
+                alt="הרצאה 1" 
+                className="w-full h-64 md:h-72 object-cover hover:scale-105 transition-transform duration-500"
+              />
+            </motion.div>
+            <motion.div 
+              whileHover={{ scale: 1.02 }}
+              className="overflow-hidden rounded-xl shadow-md"
+            >
+              <img 
+                src="https://images.unsplash.com/photo-1488590528505-98d2b5aba04b" 
+                alt="הרצאה 2" 
+                className="w-full h-64 md:h-72 object-cover hover:scale-105 transition-transform duration-500"
+              />
+            </motion.div>
+            <motion.div 
+              whileHover={{ scale: 1.02 }}
+              className="overflow-hidden rounded-xl shadow-md"
+            >
+              <img 
+                src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6" 
+                alt="סדנה" 
+                className="w-full h-64 md:h-72 object-cover hover:scale-105 transition-transform duration-500"
+              />
+            </motion.div>
           </div>
         </div>
       </section>
