@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useRef } from "react";
 import { ArrowRight, BookOpen, Users, Lightbulb, Youtube, Play } from "lucide-react";
 import { motion } from "framer-motion";
@@ -7,33 +6,31 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
 // Simulated blog data
-const blogPosts = [
-  {
-    id: 1,
-    title: "5 כלי AI חדשים שישנו את דרך העבודה שלכם",
-    excerpt: "הכירו את הכלים החדשניים ביותר בתחום הבינה המלאכותית שיכולים לשפר את הפרודוקטיביות שלכם",
-    date: "15 במאי, 2023",
-    slug: "/blog/5-new-ai-tools"
-  },
-  {
-    id: 2,
-    title: "איך להשתמש ב-ChatGPT ליצירת תוכן איכותי",
-    excerpt: "מדריך מעשי לשימוש ב-ChatGPT ליצירת תוכן שיווקי, מקצועי ויצירתי",
-    date: "3 באפריל, 2023",
-    slug: "/blog/chatgpt-content-creation"
-  },
-  {
-    id: 3,
-    title: "בינה מלאכותית בשירות העסק הקטן",
-    excerpt: "כיצד עסקים קטנים יכולים להשתמש בכלי AI כדי להתחרות בשוק ולצמוח",
-    date: "21 במרץ, 2023",
-    slug: "/blog/ai-for-small-businesses"
-  }
-];
+const blogPosts = [{
+  id: 1,
+  title: "5 כלי AI חדשים שישנו את דרך העבודה שלכם",
+  excerpt: "הכירו את הכלים החדשניים ביותר בתחום הבינה המלאכותית שיכולים לשפר את הפרודוקטיביות שלכם",
+  date: "15 במאי, 2023",
+  slug: "/blog/5-new-ai-tools"
+}, {
+  id: 2,
+  title: "איך להשתמש ב-ChatGPT ליצירת תוכן איכותי",
+  excerpt: "מדריך מעשי לשימוש ב-ChatGPT ליצירת תוכן שיווקי, מקצועי ויצירתי",
+  date: "3 באפריל, 2023",
+  slug: "/blog/chatgpt-content-creation"
+}, {
+  id: 3,
+  title: "בינה מלאכותית בשירות העסק הקטן",
+  excerpt: "כיצד עסקים קטנים יכולים להשתמש בכלי AI כדי להתחרות בשוק ולצמוח",
+  date: "21 במרץ, 2023",
+  slug: "/blog/ai-for-small-businesses"
+}];
 
 // Framer Motion variants
 const containerVariants = {
-  hidden: { opacity: 0 },
+  hidden: {
+    opacity: 0
+  },
   visible: {
     opacity: 1,
     transition: {
@@ -41,9 +38,11 @@ const containerVariants = {
     }
   }
 };
-
 const itemVariants = {
-  hidden: { y: 20, opacity: 0 },
+  hidden: {
+    y: 20,
+    opacity: 0
+  },
   visible: {
     y: 0,
     opacity: 1,
@@ -53,21 +52,24 @@ const itemVariants = {
     }
   }
 };
-
-const StatNumber = ({ value, label }: { value: string, label: string }) => {
+const StatNumber = ({
+  value,
+  label
+}: {
+  value: string;
+  label: string;
+}) => {
   const [count, setCount] = useState(0);
   const ref = useRef<HTMLDivElement>(null);
   const [targetValue] = useState(parseInt(value.replace(/,/g, "")));
-  
   useEffect(() => {
-    const observer = new IntersectionObserver((entries) => {
+    const observer = new IntersectionObserver(entries => {
       const entry = entries[0];
       if (entry.isIntersecting) {
         const timer = setTimeout(() => {
           const steps = 50;
           const increment = targetValue / steps;
           let current = 0;
-          
           const interval = setInterval(() => {
             current += increment;
             if (current >= targetValue) {
@@ -77,39 +79,32 @@ const StatNumber = ({ value, label }: { value: string, label: string }) => {
               setCount(Math.floor(current));
             }
           }, 20);
-          
           return () => clearInterval(interval);
         }, 400);
-        
         return () => clearTimeout(timer);
       }
-    }, { threshold: 0.1 });
-    
+    }, {
+      threshold: 0.1
+    });
     if (ref.current) {
       observer.observe(ref.current);
     }
-    
     return () => {
       if (ref.current) {
         observer.unobserve(ref.current);
       }
     };
   }, [targetValue]);
-  
-  return (
-    <div className="text-center" ref={ref}>
+  return <div className="text-center" ref={ref}>
       <div className="text-4xl font-bold mb-2 text-gradient">
         {count.toLocaleString('en-US')}+
       </div>
       <div className="text-muted-foreground">{label}</div>
-    </div>
-  );
+    </div>;
 };
-
 const Index = () => {
   const [isVideoPlaying, setIsVideoPlaying] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
-
   const handlePlayVideo = () => {
     if (videoRef.current) {
       if (isVideoPlaying) {
@@ -120,9 +115,7 @@ const Index = () => {
       setIsVideoPlaying(!isVideoPlaying);
     }
   };
-
-  return (
-    <div>
+  return <div>
       {/* Hero Section */}
       <section className="relative min-h-[90vh] flex items-center bg-gray-50">
         <div className="absolute inset-0 overflow-hidden">
@@ -133,12 +126,16 @@ const Index = () => {
         
         <div className="container mx-auto px-4 py-24 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <motion.div
-              className="max-w-3xl mx-auto lg:mx-0 text-center lg:text-right"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-            >
+            <motion.div className="max-w-3xl mx-auto lg:mx-0 text-center lg:text-right" initial={{
+            opacity: 0,
+            y: 20
+          }} animate={{
+            opacity: 1,
+            y: 0
+          }} transition={{
+            duration: 0.5,
+            delay: 0.2
+          }}>
               <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
                 הבינה המלאכותית כבר כאן,<br />
                 <span className="text-gradient">בואו נלמד להשתמש בה</span>
@@ -162,18 +159,18 @@ const Index = () => {
               </div>
             </motion.div>
 
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.5, delay: 0.4 }}
-              className="hidden lg:block"
-            >
+            <motion.div initial={{
+            opacity: 0,
+            scale: 0.95
+          }} animate={{
+            opacity: 1,
+            scale: 1
+          }} transition={{
+            duration: 0.5,
+            delay: 0.4
+          }} className="hidden lg:block">
               <div className="relative rounded-2xl overflow-hidden shadow-xl">
-                <img 
-                  src="https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d" 
-                  alt="שחר גולן" 
-                  className="w-full h-auto object-cover" 
-                />
+                <img src="https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d" alt="שחר גולן" className="w-full h-auto object-cover" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-6">
                   <div className="text-white">
                     <p className="text-xl font-bold">שחר גולן</p>
@@ -208,34 +205,28 @@ const Index = () => {
           </div>
           
           <div className="max-w-4xl mx-auto">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-              className="relative aspect-video rounded-xl overflow-hidden shadow-2xl"
-            >
+            <motion.div initial={{
+            opacity: 0,
+            y: 20
+          }} whileInView={{
+            opacity: 1,
+            y: 0
+          }} viewport={{
+            once: true
+          }} transition={{
+            duration: 0.5
+          }} className="relative aspect-video rounded-xl overflow-hidden shadow-2xl">
               {/* כאן תוכל להחליף את סרטון הדוגמה בסרטון השואוריל האמיתי שלך */}
-              <video 
-                ref={videoRef}
-                poster="https://images.unsplash.com/photo-1551818255-e6e10975bc17" 
-                className="w-full h-full object-cover"
-                controls={isVideoPlaying}
-              >
+              <video ref={videoRef} poster="https://images.unsplash.com/photo-1551818255-e6e10975bc17" className="w-full h-full object-cover" controls={isVideoPlaying}>
                 <source src="https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_1mb.mp4" type="video/mp4" />
                 הדפדפן שלך לא תומך בתגית וידאו.
               </video>
               
-              {!isVideoPlaying && (
-                <div 
-                  className="absolute inset-0 flex items-center justify-center bg-black/30 cursor-pointer"
-                  onClick={handlePlayVideo}
-                >
+              {!isVideoPlaying && <div className="absolute inset-0 flex items-center justify-center bg-black/30 cursor-pointer" onClick={handlePlayVideo}>
                   <div className="bg-white/90 rounded-full p-4 shadow-lg transform transition-transform hover:scale-110">
                     <Play className="h-12 w-12 text-purple-600 fill-current" />
                   </div>
-                </div>
-              )}
+                </div>}
             </motion.div>
           </div>
         </div>
@@ -251,12 +242,7 @@ const Index = () => {
                 בערוץ היוטיוב שלי אני מעלה באופן קבוע תוכן חינמי ואיכותי על כלי AI חדשים, טיפים, והדרכות מעשיות. הצטרפו לקהילה של למעלה מ-6,000 עוקבים וקבלו עדכונים על כל החידושים בעולם הבינה המלאכותית.
               </p>
               <Button asChild className="btn-shine">
-                <a 
-                  href="https://www.youtube.com/channel/UCxxxxxxxx" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="flex items-center"
-                >
+                <a href="https://www.youtube.com/channel/UCxxxxxxxx" target="_blank" rel="noopener noreferrer" className="flex items-center">
                   <Youtube className="ml-2 h-5 w-5" />
                   לערוץ היוטיוב
                 </a>
@@ -265,11 +251,7 @@ const Index = () => {
             <div className="md:w-1/2 flex justify-center">
               <div className="bg-white rounded-xl p-2 shadow-lg transform rotate-3 hover:rotate-0 transition-all duration-300">
                 <div className="aspect-video w-full max-w-md overflow-hidden rounded-lg shadow-inner bg-gray-800">
-                  <img 
-                    src="https://images.unsplash.com/photo-1611162616305-c69b3fa7fbe0" 
-                    alt="ערוץ היוטיוב" 
-                    className="w-full h-full object-cover"
-                  />
+                  <img src="https://images.unsplash.com/photo-1611162616305-c69b3fa7fbe0" alt="ערוץ היוטיוב" className="w-full h-full object-cover" />
                   <div className="absolute inset-0 flex items-center justify-center">
                     <div className="bg-white/90 rounded-full p-4 shadow-lg">
                       <Youtube className="h-10 w-10 text-red-600" />
@@ -293,35 +275,20 @@ const Index = () => {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <motion.div 
-              whileHover={{ scale: 1.02 }}
-              className="overflow-hidden rounded-xl shadow-md"
-            >
-              <img 
-                src="https://images.unsplash.com/photo-1551818255-e6e10975bc17" 
-                alt="הרצאה 1" 
-                className="w-full h-64 md:h-72 object-cover hover:scale-105 transition-transform duration-500"
-              />
+            <motion.div whileHover={{
+            scale: 1.02
+          }} className="overflow-hidden rounded-xl shadow-md">
+              <img src="https://images.unsplash.com/photo-1551818255-e6e10975bc17" alt="הרצאה 1" className="w-full h-64 md:h-72 object-cover hover:scale-105 transition-transform duration-500" />
             </motion.div>
-            <motion.div 
-              whileHover={{ scale: 1.02 }}
-              className="overflow-hidden rounded-xl shadow-md"
-            >
-              <img 
-                src="https://images.unsplash.com/photo-1488590528505-98d2b5aba04b" 
-                alt="הרצאה 2" 
-                className="w-full h-64 md:h-72 object-cover hover:scale-105 transition-transform duration-500"
-              />
+            <motion.div whileHover={{
+            scale: 1.02
+          }} className="overflow-hidden rounded-xl shadow-md">
+              <img src="https://images.unsplash.com/photo-1488590528505-98d2b5aba04b" alt="הרצאה 2" className="w-full h-64 md:h-72 object-cover hover:scale-105 transition-transform duration-500" />
             </motion.div>
-            <motion.div 
-              whileHover={{ scale: 1.02 }}
-              className="overflow-hidden rounded-xl shadow-md"
-            >
-              <img 
-                src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6" 
-                alt="סדנה" 
-                className="w-full h-64 md:h-72 object-cover hover:scale-105 transition-transform duration-500"
-              />
+            <motion.div whileHover={{
+            scale: 1.02
+          }} className="overflow-hidden rounded-xl shadow-md">
+              <img src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6" alt="סדנה" className="w-full h-64 md:h-72 object-cover hover:scale-105 transition-transform duration-500" />
             </motion.div>
           </div>
         </div>
@@ -330,26 +297,26 @@ const Index = () => {
       {/* Services Section */}
       <section className="py-20 bg-gray-50">
         <div className="container mx-auto px-4">
-          <motion.div
-            className="text-center mb-12"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-          >
+          <motion.div className="text-center mb-12" initial={{
+          opacity: 0,
+          y: 20
+        }} whileInView={{
+          opacity: 1,
+          y: 0
+        }} viewport={{
+          once: true
+        }} transition={{
+          duration: 0.5
+        }}>
             <h2 className="text-3xl md:text-4xl font-bold mb-4">השירותים שלי</h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
               פתרונות מותאמים אישית להטמעת בינה מלאכותית בארגון שלכם
             </p>
           </motion.div>
 
-          <motion.div
-            className="grid grid-cols-1 md:grid-cols-3 gap-8"
-            variants={containerVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-          >
+          <motion.div className="grid grid-cols-1 md:grid-cols-3 gap-8" variants={containerVariants} initial="hidden" whileInView="visible" viewport={{
+          once: true
+        }}>
             <motion.div variants={itemVariants} className="card-hover">
               <Card className="h-full">
                 <CardContent className="pt-6">
@@ -427,12 +394,11 @@ const Index = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {blogPosts.map((post) => (
-              <motion.div 
-                key={post.id}
-                whileHover={{ y: -5 }}
-                transition={{ duration: 0.2 }}
-              >
+            {blogPosts.map(post => <motion.div key={post.id} whileHover={{
+            y: -5
+          }} transition={{
+            duration: 0.2
+          }}>
                 <Card className="h-full card-hover">
                   <CardContent className="p-6">
                     <p className="text-sm text-muted-foreground mb-3">{post.date}</p>
@@ -446,8 +412,7 @@ const Index = () => {
                     </Button>
                   </CardContent>
                 </Card>
-              </motion.div>
-            ))}
+              </motion.div>)}
           </div>
         </div>
       </section>
@@ -456,7 +421,7 @@ const Index = () => {
       <section className="py-16 bg-gray-50">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center">
-            <h2 className="text-3xl font-bold mb-6">הייתרון שלי</h2>
+            <h2 className="text-3xl font-bold mb-6">היתרון שלי</h2>
             <p className="text-xl mb-8 leading-relaxed">
               היכולת שלי למקד את התוכן לקהל היעד הספציפי ולהציג נושאים מורכבים בצורה נגישה ופשוטה הופכת את הלמידה לחוויה אפקטיבית ונעימה לכל המשתתפים.
             </p>
@@ -499,8 +464,6 @@ const Index = () => {
           </Button>
         </div>
       </section>
-    </div>
-  );
+    </div>;
 };
-
 export default Index;
