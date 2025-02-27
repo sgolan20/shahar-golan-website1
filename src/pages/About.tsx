@@ -1,21 +1,21 @@
-
 import { motion } from "framer-motion";
 import { BookOpen, Users, Lightbulb, Youtube } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-
 const About = () => {
-  return (
-    <div>
+  return <div>
       {/* Hero Section */}
       <section className="pt-20 pb-16 md:pt-28 md:pb-20 bg-gray-50">
         <div className="container mx-auto px-4">
-          <motion.div
-            className="max-w-3xl mx-auto text-center"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-          >
+          <motion.div className="max-w-3xl mx-auto text-center" initial={{
+          opacity: 0,
+          y: 20
+        }} animate={{
+          opacity: 1,
+          y: 0
+        }} transition={{
+          duration: 0.5
+        }}>
             <h1 className="text-4xl md:text-5xl font-bold mb-6">אודות</h1>
             <p className="text-xl text-muted-foreground">
               קצת על הרקע שלי, הניסיון והמומחיות בעולם הבינה המלאכותית
@@ -28,27 +28,34 @@ const About = () => {
       <section className="py-16">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-            >
+            <motion.div initial={{
+            opacity: 0,
+            x: -20
+          }} whileInView={{
+            opacity: 1,
+            x: 0
+          }} viewport={{
+            once: true
+          }} transition={{
+            duration: 0.5
+          }}>
               <div className="aspect-square rounded-2xl overflow-hidden shadow-lg">
-                <img
-                  src="https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d"
-                  alt="שחר גולן"
-                  className="w-full h-full object-cover"
-                />
+                <img src="https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d" alt="שחר גולן" className="w-full h-full object-cover" />
               </div>
             </motion.div>
 
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-            >
+            <motion.div initial={{
+            opacity: 0,
+            x: 20
+          }} whileInView={{
+            opacity: 1,
+            x: 0
+          }} viewport={{
+            once: true
+          }} transition={{
+            duration: 0.5,
+            delay: 0.2
+          }}>
               <h2 className="text-3xl font-bold mb-6">שחר גולן</h2>
 
               <p className="text-lg mb-4 text-muted-foreground">
@@ -72,11 +79,7 @@ const About = () => {
                   <Link to="/contact">צור קשר</Link>
                 </Button>
                 <Button asChild variant="outline">
-                  <a 
-                    href="https://www.youtube.com/channel/UCxxxxxxxx" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                  >
+                  <a href="https://www.youtube.com/channel/UCxxxxxxxx" target="_blank" rel="noopener noreferrer">
                     לערוץ היוטיוב
                   </a>
                 </Button>
@@ -89,13 +92,17 @@ const About = () => {
       {/* Experience & Expertise */}
       <section className="py-16 bg-gray-50">
         <div className="container mx-auto px-4">
-          <motion.div
-            className="text-center mb-12"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-          >
+          <motion.div className="text-center mb-12" initial={{
+          opacity: 0,
+          y: 20
+        }} whileInView={{
+          opacity: 1,
+          y: 0
+        }} viewport={{
+          once: true
+        }} transition={{
+          duration: 0.5
+        }}>
             <h2 className="text-3xl font-bold mb-4">השירותים שלי</h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
               תחומי העיסוק והמומחיות העיקריים שלי בעולם הבינה המלאכותית
@@ -103,13 +110,18 @@ const About = () => {
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mt-8">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-              className="bg-white p-6 rounded-xl shadow-sm"
-            >
+            <motion.div initial={{
+            opacity: 0,
+            y: 20
+          }} whileInView={{
+            opacity: 1,
+            y: 0
+          }} viewport={{
+            once: true
+          }} transition={{
+            duration: 0.5,
+            delay: 0.1
+          }} className="bg-white p-6 rounded-xl shadow-sm">
               <div className="bg-purple-100 p-4 rounded-full w-16 h-16 flex items-center justify-center mb-4 text-primary">
                 <Users className="h-8 w-8" />
               </div>
@@ -119,13 +131,18 @@ const About = () => {
               </p>
             </motion.div>
 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="bg-white p-6 rounded-xl shadow-sm"
-            >
+            <motion.div initial={{
+            opacity: 0,
+            y: 20
+          }} whileInView={{
+            opacity: 1,
+            y: 0
+          }} viewport={{
+            once: true
+          }} transition={{
+            duration: 0.5,
+            delay: 0.2
+          }} className="bg-white p-6 rounded-xl shadow-sm">
               <div className="bg-purple-100 p-4 rounded-full w-16 h-16 flex items-center justify-center mb-4 text-primary">
                 <Lightbulb className="h-8 w-8" />
               </div>
@@ -135,13 +152,18 @@ const About = () => {
               </p>
             </motion.div>
 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-              className="bg-white p-6 rounded-xl shadow-sm"
-            >
+            <motion.div initial={{
+            opacity: 0,
+            y: 20
+          }} whileInView={{
+            opacity: 1,
+            y: 0
+          }} viewport={{
+            once: true
+          }} transition={{
+            duration: 0.5,
+            delay: 0.3
+          }} className="bg-white p-6 rounded-xl shadow-sm">
               <div className="bg-purple-100 p-4 rounded-full w-16 h-16 flex items-center justify-center mb-4 text-primary">
                 <BookOpen className="h-8 w-8" />
               </div>
@@ -151,13 +173,18 @@ const About = () => {
               </p>
             </motion.div>
 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.4 }}
-              className="bg-white p-6 rounded-xl shadow-sm"
-            >
+            <motion.div initial={{
+            opacity: 0,
+            y: 20
+          }} whileInView={{
+            opacity: 1,
+            y: 0
+          }} viewport={{
+            once: true
+          }} transition={{
+            duration: 0.5,
+            delay: 0.4
+          }} className="bg-white p-6 rounded-xl shadow-sm">
               <div className="bg-purple-100 p-4 rounded-full w-16 h-16 flex items-center justify-center mb-4 text-primary">
                 <Youtube className="h-8 w-8" />
               </div>
@@ -174,13 +201,18 @@ const About = () => {
       <section className="py-16 bg-white">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-            >
-              <h2 className="text-3xl font-bold mb-6">הייתרון שלי</h2>
+            <motion.div initial={{
+            opacity: 0,
+            x: -20
+          }} whileInView={{
+            opacity: 1,
+            x: 0
+          }} viewport={{
+            once: true
+          }} transition={{
+            duration: 0.5
+          }}>
+              <h2 className="text-3xl font-bold mb-6">היתרון שלי</h2>
               <p className="text-lg mb-6 text-muted-foreground">
                 היכולת שלי למקד את התוכן לקהל היעד הספציפי ולהציג נושאים מורכבים בצורה נגישה ופשוטה היא מה שמייחד את ההרצאות והסדנאות שלי.
               </p>
@@ -236,23 +268,24 @@ const About = () => {
               </div>
             </motion.div>
             
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-              className="relative"
-            >
+            <motion.div initial={{
+            opacity: 0,
+            x: 20
+          }} whileInView={{
+            opacity: 1,
+            x: 0
+          }} viewport={{
+            once: true
+          }} transition={{
+            duration: 0.5,
+            delay: 0.3
+          }} className="relative">
               <div className="aspect-square bg-gray-50 rounded-2xl p-8 shadow-inner">
                 <div className="absolute -top-6 -right-6 bg-purple-100 p-4 rounded-xl shadow-lg transform rotate-6">
                   <h3 className="text-2xl font-bold text-primary">150+</h3>
                   <p className="text-sm">הרצאות וסדנאות</p>
                 </div>
-                <img
-                  src="https://images.unsplash.com/photo-1551818255-e6e10975bc17"
-                  alt="הרצאה"
-                  className="w-full h-full object-cover rounded-xl shadow-lg"
-                />
+                <img src="https://images.unsplash.com/photo-1551818255-e6e10975bc17" alt="הרצאה" className="w-full h-full object-cover rounded-xl shadow-lg" />
                 <div className="absolute -bottom-6 -left-6 bg-gradient-to-r from-purple-500 to-purple-700 p-4 rounded-xl shadow-lg text-white transform -rotate-3">
                   <h3 className="text-lg font-bold">המורכב לפשוט</h3>
                   <p className="text-sm">בינה מלאכותית לכל אחד</p>
@@ -266,13 +299,17 @@ const About = () => {
       {/* Testimonials */}
       <section className="py-20 bg-gray-50">
         <div className="container mx-auto px-4">
-          <motion.div
-            className="text-center mb-12"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-          >
+          <motion.div className="text-center mb-12" initial={{
+          opacity: 0,
+          y: 20
+        }} whileInView={{
+          opacity: 1,
+          y: 0
+        }} viewport={{
+          once: true
+        }} transition={{
+          duration: 0.5
+        }}>
             <h2 className="text-3xl font-bold mb-4">מה אומרים עליי</h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
               משוב מארגונים וחברות שעבדתי איתם
@@ -280,13 +317,17 @@ const About = () => {
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-              className="bg-white p-8 rounded-xl shadow-sm"
-            >
+            <motion.div initial={{
+            opacity: 0,
+            x: -20
+          }} whileInView={{
+            opacity: 1,
+            x: 0
+          }} viewport={{
+            once: true
+          }} transition={{
+            duration: 0.5
+          }} className="bg-white p-8 rounded-xl shadow-sm">
               <div className="flex flex-col h-full">
                 <div className="mb-6">
                   <svg className="h-8 w-8 text-purple-500" fill="currentColor" viewBox="0 0 24 24">
@@ -303,13 +344,18 @@ const About = () => {
               </div>
             </motion.div>
 
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="bg-white p-8 rounded-xl shadow-sm"
-            >
+            <motion.div initial={{
+            opacity: 0,
+            x: 20
+          }} whileInView={{
+            opacity: 1,
+            x: 0
+          }} viewport={{
+            once: true
+          }} transition={{
+            duration: 0.5,
+            delay: 0.2
+          }} className="bg-white p-8 rounded-xl shadow-sm">
               <div className="flex flex-col h-full">
                 <div className="mb-6">
                   <svg className="h-8 w-8 text-purple-500" fill="currentColor" viewBox="0 0 24 24">
@@ -345,8 +391,6 @@ const About = () => {
           </Button>
         </div>
       </section>
-    </div>
-  );
+    </div>;
 };
-
 export default About;
