@@ -169,7 +169,7 @@ const Index = () => {
             delay: 0.4
           }} className="hidden lg:block">
               <div className="relative rounded-2xl overflow-hidden shadow-xl">
-                <img src="https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d" alt="שחר גולן" className="w-full h-auto object-cover" />
+                <img src="/lovable-uploads/567d39ec-198d-4613-b728-b29ef0187284.png" alt="שחר גולן מרצה על במה" className="w-full h-auto object-cover" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-6">
                   <div className="text-white">
                     <p className="text-xl font-bold">שחר גולן</p>
@@ -215,7 +215,6 @@ const Index = () => {
           }} transition={{
             duration: 0.5
           }} className="relative aspect-video rounded-xl overflow-hidden shadow-2xl">
-              {/* כאן תוכל להחליף את סרטון הדוגמה בסרטון השואוריל האמיתי שלך */}
               <video ref={videoRef} poster="https://images.unsplash.com/photo-1551818255-e6e10975bc17" className="w-full h-full object-cover" controls={isVideoPlaying}>
                 <source src="https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_1mb.mp4" type="video/mp4" />
                 הדפדפן שלך לא תומך בתגית וידאו.
