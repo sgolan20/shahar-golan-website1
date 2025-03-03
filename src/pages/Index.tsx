@@ -137,7 +137,7 @@ const Index = () => {
             delay: 0.2
           }}>
               <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
-                <span className="text-gradient">בינה מלאכותית בשבילך</span>
+                <span className="text-gradient">הגיע הזמן ללמוד AI</span>
               </h1>
               
               <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto lg:mr-0 lg:ml-auto">
@@ -401,7 +401,7 @@ const Index = () => {
                 <Card className="h-full card-hover">
                   <CardContent className="p-6">
                     <p className="text-sm text-muted-foreground mb-3">{post.date}</p>
-                    <h3 className="text-xl font-semibold mb-3">{post.title}</h3 >
+                    <h3 className="text-xl font-semibold mb-3">{post.title}</h3>
                     <p className="text-muted-foreground mb-4">{post.excerpt}</p>
                     <Button asChild variant="link" className="p-0 h-auto">
                       <Link to={post.slug} className="flex items-center text-primary">
