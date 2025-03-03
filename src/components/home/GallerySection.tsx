@@ -18,8 +18,8 @@ const GallerySection = () => {
             className="overflow-hidden rounded-xl shadow-md"
           >
             <img 
-              src="https://images.unsplash.com/photo-1551818255-e6e10975bc17" 
-              alt="הרצאה 1" 
+              src="/lovable-uploads/a5b256ad-cf40-49cd-99c6-ae7d3c14a9f5.png" 
+              alt="הרצאה בכנס LetsAI" 
               className="w-full h-64 md:h-72 object-cover hover:scale-105 transition-transform duration-500" 
             />
           </motion.div>
@@ -28,8 +28,8 @@ const GallerySection = () => {
             className="overflow-hidden rounded-xl shadow-md"
           >
             <img 
-              src="https://images.unsplash.com/photo-1488590528505-98d2b5aba04b" 
-              alt="הרצאה 2" 
+              src="/lovable-uploads/1d82bd9e-eb91-4db4-b869-725201b8bc83.png" 
+              alt="הרצאה על בינה מלאכותית" 
               className="w-full h-64 md:h-72 object-cover hover:scale-105 transition-transform duration-500" 
             />
           </motion.div>
@@ -38,8 +38,8 @@ const GallerySection = () => {
             className="overflow-hidden rounded-xl shadow-md"
           >
             <img 
-              src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6" 
-              alt="סדנה" 
+              src="/lovable-uploads/c6b40b45-c57a-4fb5-8855-cfca13a31f8a.png" 
+              alt="הרצאה באודיטוריום" 
               className="w-full h-64 md:h-72 object-cover hover:scale-105 transition-transform duration-500" 
             />
           </motion.div>
