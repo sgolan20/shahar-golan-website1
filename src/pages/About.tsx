@@ -1,3 +1,4 @@
+
 import { motion } from "framer-motion";
 import { BookOpen, Users, Lightbulb, Youtube } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -285,7 +286,7 @@ const About = () => {
                   <h3 className="text-2xl font-bold text-primary">150+</h3>
                   <p className="text-sm">הרצאות וסדנאות</p>
                 </div>
-                <img src="https://images.unsplash.com/photo-1551818255-e6e10975bc17" alt="הרצאה" className="w-full h-full object-cover rounded-xl shadow-lg" />
+                <img src="/lovable-uploads/76f2cafb-36e3-43b9-a0a5-a5fb11f41703.png" alt="הרצאה" className="w-full h-full object-cover rounded-xl shadow-lg" />
                 <div className="absolute -bottom-6 -left-6 bg-gradient-to-r from-purple-500 to-purple-700 p-4 rounded-xl shadow-lg text-white transform -rotate-3">
                   <h3 className="text-lg font-bold">המורכב לפשוט</h3>
                   <p className="text-sm">בינה מלאכותית לכל אחד</p>
