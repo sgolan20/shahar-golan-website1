@@ -17,12 +17,32 @@ const OrganizationsSection = () => {
       logo: "/lovable-uploads/dfd9084b-250e-4bb9-b0a0-c412184506b2.png",
     },
     {
-      name: "האוניברסיטה הפתוחה",
-      logo: "/lovable-uploads/0cb50cd7-9d54-4530-acb8-beba1a51512b.png",
+      name: "חשיפה",
+      logo: "/lovable-uploads/f5c1b97f-470f-419a-8100-660bfded6922.png",
     },
     {
       name: "האוניברסיטה העברית בירושלים",
       logo: "/lovable-uploads/2575eb9a-85bd-400f-810c-9356095fe2f6.png",
+    },
+    {
+      name: "הטכניון מכון טכנולוגי לישראל",
+      logo: "/lovable-uploads/ef9f5456-d3a1-4689-beda-0620c91e21f1.png",
+    },
+    {
+      name: "יקב טפרברג",
+      logo: "/lovable-uploads/7402b778-1c4a-408a-9865-5614d70292f6.png",
+    },
+    {
+      name: "התעשייה האווירית",
+      logo: "/lovable-uploads/33777d11-e7bd-4dd2-b576-92b13e179bab.png",
+    },
+    {
+      name: "אמית",
+      logo: "/lovable-uploads/1db7290b-8d99-4c5c-8de5-8509e53bb531.png",
+    },
+    {
+      name: "המרכז האקדמי פרס",
+      logo: "/lovable-uploads/fd9606b2-7d21-4add-a303-aca7ac8e6fe1.png",
     },
   ];
 
