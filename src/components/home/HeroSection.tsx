@@ -1,12 +1,18 @@
+
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+
 const HeroSection = () => {
   return <section className="relative min-h-[90vh] flex items-center">
       {/* Background Image with Darkened Overlay */}
       <div className="absolute inset-0 z-0">
-        <img src="/lovable-uploads/567d39ec-198d-4613-b728-b29ef0187284.png" alt="שחר גולן מרצה על במה" className="w-full h-full object-cover" />
+        <img 
+          src="/lovable-uploads/567d39ec-198d-4613-b728-b29ef0187284.png" 
+          alt="שחר גולן מרצה על במה" 
+          className="w-full h-full object-cover object-top" // Added object-top to keep the top part of the image visible
+        />
         <div className="absolute inset-0 bg-black/60" /> {/* Darkened transparent overlay */}
       </div>
       
@@ -74,4 +80,5 @@ const HeroSection = () => {
       </div>
     </section>;
 };
+
 export default HeroSection;
