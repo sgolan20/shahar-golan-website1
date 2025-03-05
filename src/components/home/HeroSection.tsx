@@ -1,19 +1,12 @@
-
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-
 const HeroSection = () => {
-  return (
-    <section className="relative min-h-[90vh] flex items-center">
+  return <section className="relative min-h-[90vh] flex items-center">
       {/* Background Image with Darkened Overlay */}
       <div className="absolute inset-0 z-0">
-        <img 
-          src="/lovable-uploads/567d39ec-198d-4613-b728-b29ef0187284.png" 
-          alt="שחר גולן מרצה על במה" 
-          className="w-full h-full object-cover"
-        />
+        <img src="/lovable-uploads/567d39ec-198d-4613-b728-b29ef0187284.png" alt="שחר גולן מרצה על במה" className="w-full h-full object-cover" />
         <div className="absolute inset-0 bg-black/60" /> {/* Darkened transparent overlay */}
       </div>
       
@@ -26,14 +19,19 @@ const HeroSection = () => {
       
       <div className="container mx-auto px-4 py-24 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          <motion.div 
-            className="max-w-3xl mx-auto lg:mx-0 text-center lg:text-right text-white" 
-            initial={{ opacity: 0, y: 20 }} 
-            animate={{ opacity: 1, y: 0 }} 
-            transition={{ duration: 0.5, delay: 0.2 }}
-          >
+          <motion.div className="max-w-3xl mx-auto lg:mx-0 text-center lg:text-right text-white" initial={{
+          opacity: 0,
+          y: 20
+        }} animate={{
+          opacity: 1,
+          y: 0
+        }} transition={{
+          duration: 0.5,
+          delay: 0.2
+        }}>
             <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
-              <span className="text-gradient">בינה מלאכותית בשבילך</span>
+              <span className="text-gradient">שחר גולן
+בינה מלאכותית</span>
             </h1>
             
             <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto lg:mr-0 lg:ml-auto">
@@ -55,12 +53,16 @@ const HeroSection = () => {
           </motion.div>
 
           {/* We're removing the separate image display since it's now the background */}
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.95 }} 
-            animate={{ opacity: 1, scale: 1 }} 
-            transition={{ duration: 0.5, delay: 0.4 }} 
-            className="hidden lg:flex justify-center items-center"
-          >
+          <motion.div initial={{
+          opacity: 0,
+          scale: 0.95
+        }} animate={{
+          opacity: 1,
+          scale: 1
+        }} transition={{
+          duration: 0.5,
+          delay: 0.4
+        }} className="hidden lg:flex justify-center items-center">
             <div className="text-white p-8 rounded-xl bg-black/40 backdrop-blur-sm border border-white/10 max-w-md">
               <h3 className="text-2xl font-bold mb-3">שחר גולן</h3>
               <p className="text-white/80">
@@ -70,8 +72,6 @@ const HeroSection = () => {
           </motion.div>
         </div>
       </div>
-    </section>
-  );
+    </section>;
 };
-
 export default HeroSection;
