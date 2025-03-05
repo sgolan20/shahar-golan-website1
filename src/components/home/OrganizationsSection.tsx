@@ -44,6 +44,14 @@ const OrganizationsSection = () => {
       name: "המרכז האקדמי פרס",
       logo: "/lovable-uploads/fd9606b2-7d21-4add-a303-aca7ac8e6fe1.png",
     },
+    {
+      name: "אמונה",
+      logo: "/lovable-uploads/9518f027-9c20-4f37-a5f2-eece147e3ad1.png",
+    },
+    {
+      name: "המרכז האקדמי הרב תחומי ירושלים",
+      logo: "/lovable-uploads/de7e2267-cc70-4a7d-9c8e-047faa05ed67.png",
+    },
   ];
 
   return (
