@@ -30,8 +30,16 @@ const Contact = () => {
     setIsSubmitting(true);
 
     try {
-      // Netlify Forms will automatically collect this data when the form is submitted
-      // No need for a fetch request as Netlify handles this automatically
+      // יצירת אובייקט FormData מהטופס
+      const form = e.target as HTMLFormElement;
+      const formData = new FormData(form);
+      
+      // שליחת הנתונים לנטליפיי
+      await fetch("/", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams(formData as any).toString()
+      });
       
       toast({
         title: "הודעה נשלחה בהצלחה",
