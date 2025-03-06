@@ -41,18 +41,18 @@ const SEOHelmet = ({
     
     updateMetaProperty("og:title", title);
     updateMetaProperty("og:description", description);
-    updateMetaProperty("og:url", `https://shahar-golan-ai.netlify.app${location.pathname}`);
+    updateMetaProperty("og:url", `https://shahar-golan-website1.netlify.app${location.pathname}`);
     updateMetaProperty("og:image", ogImage);
     
     updateMetaProperty("twitter:title", title);
     updateMetaProperty("twitter:description", description);
-    updateMetaProperty("twitter:url", `https://shahar-golan-ai.netlify.app${location.pathname}`);
+    updateMetaProperty("twitter:url", `https://shahar-golan-website1.netlify.app${location.pathname}`);
     updateMetaProperty("twitter:image", ogImage);
     
     // Update canonical URL
     let link = document.querySelector('link[rel="canonical"]') as HTMLLinkElement;
     if (link) {
-      link.href = `https://shahar-golan-ai.netlify.app${location.pathname}`;
+      link.href = `https://shahar-golan-website1.netlify.app${location.pathname}`;
     }
   }, [title, description, keywords, ogImage, location]);
   

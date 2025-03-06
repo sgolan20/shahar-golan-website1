@@ -13,10 +13,10 @@ const StructuredData = () => {
       "@type": "ProfessionalService",
       "name": "שחר גולן - מרצה ומומחה לבינה מלאכותית",
       "description": "מרצה ומדריך לבינה מלאכותית וכלי AI, מלמד כיצד להשתמש בכלים מתקדמים בחיי היום יום והעבודה",
-      "url": "https://shahar-golan-ai.netlify.app",
+      "url": "https://shahar-golan-website1.netlify.app",
       "telephone": "+972527332838",
       "email": "sgolan20@gmail.com",
-      "image": "https://shahar-golan-ai.netlify.app/og-image.png",
+      "image": "https://shahar-golan-website1.netlify.app/og-image.png",
       "address": {
         "@type": "PostalAddress",
         "addressCountry": "IL"

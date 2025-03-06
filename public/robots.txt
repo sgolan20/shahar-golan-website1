@@ -3,4 +3,4 @@ User-agent: *
 Allow: /
 
 # Sitemap location
-Sitemap: https://shahar-golan-ai.netlify.app/sitemap.xml
+Sitemap: https://shahar-golan-website1.netlify.app/sitemap.xml
