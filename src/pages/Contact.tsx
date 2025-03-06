@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Mail, PhoneCall, MapPin, Send } from "lucide-react";
@@ -6,10 +5,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
+
 const Contact = () => {
-  const {
-    toast
-  } = useToast();
+  const { toast } = useToast();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -18,26 +16,28 @@ const Contact = () => {
     message: ""
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const {
-      name,
-      value
-    } = e.target;
+    const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
       [name]: value
     }));
   };
-  const handleSubmit = (e: React.FormEvent) => {
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simulate form submission
-    setTimeout(() => {
+    try {
+      // Netlify Forms will automatically collect this data when the form is submitted
+      // No need for a fetch request as Netlify handles this automatically
+      
       toast({
         title: "הודעה נשלחה בהצלחה",
         description: "תודה על פנייתך! אחזור אליך בהקדם האפשרי."
       });
+      
       setFormData({
         name: "",
         email: "",
@@ -45,9 +45,18 @@ const Contact = () => {
         subject: "",
         message: ""
       });
+    } catch (error) {
+      toast({
+        title: "שגיאה בשליחת הטופס",
+        description: "אירעה שגיאה בעת שליחת הטופס. אנא נסה שוב מאוחר יותר.",
+        variant: "destructive"
+      });
+      console.error("Form submission error:", error);
+    } finally {
       setIsSubmitting(false);
-    }, 1500);
+    }
   };
+
   return <div dir="rtl">
       {/* Hero Section */}
       <section className="pt-20 pb-16 md:pt-28 md:pb-20 bg-gray-50">
@@ -84,7 +93,22 @@ const Contact = () => {
             delay: 0.2
           }}>
               <h2 className="text-2xl font-bold mb-6">פנייה כללית</h2>
-              <form onSubmit={handleSubmit} className="space-y-6">
+              <form 
+                name="contact" 
+                method="POST" 
+                data-netlify="true" 
+                netlify-honeypot="bot-field"
+                onSubmit={handleSubmit} 
+                className="space-y-6"
+              >
+                {/* Hidden fields for Netlify */}
+                <input type="hidden" name="form-name" value="contact" />
+                <p className="hidden">
+                  <label>
+                    Don't fill this out if you're human: <input name="bot-field" />
+                  </label>
+                </p>
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <label htmlFor="name" className="block text-sm font-medium mb-2">
@@ -187,7 +211,7 @@ const Contact = () => {
                 <div className="mt-8">
                   <h3 className="text-lg font-medium mb-3">עקבו אחריי</h3>
                   <div className="flex space-x-4 rtl:space-x-reverse">
-                    <a href="https://www.youtube.com/channel/UCxxxxxxxx" target="_blank" rel="noopener noreferrer" className="bg-white p-3 rounded-full shadow-sm text-gray-600 hover:text-primary transition-colors" aria-label="ערוץ יוטיוב">
+                    <a href="https://www.youtube.com/channel/UCxxxxxxxx" target="_blank" rel="noopener noreferrer" className="bg-red-600 p-3 rounded-full shadow-sm text-white hover:bg-red-700 transition-colors" aria-label="ערוץ יוטיוב">
                       <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
                         <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z" />
                       </svg>

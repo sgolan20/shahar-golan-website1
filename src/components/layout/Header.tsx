@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X, Youtube } from "lucide-react";
@@ -72,14 +71,14 @@ const Header = () => {
             ))}
             <Button 
               asChild 
-              className="mr-4 btn-shine"
+              variant="outline" 
               size="sm"
             >
               <a 
                 href="https://www.youtube.com/channel/UCxxxxxxxx" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="flex items-center"
+                className="flex items-center bg-red-600 text-white hover:bg-red-700 border-red-600 hover:border-red-700"
               >
                 <Youtube className="ml-2 h-4 w-4" />
                 ערוץ היוטיוב
@@ -122,13 +121,14 @@ const Header = () => {
             ))}
             <Button 
               asChild 
-              className="mt-4 mx-4 btn-shine"
+              variant="outline" 
+              size="sm"
             >
               <a 
                 href="https://www.youtube.com/channel/UCxxxxxxxx" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="flex items-center justify-center"
+                className="flex items-center justify-center bg-red-600 text-white hover:bg-red-700 border-red-600 hover:border-red-700"
               >
                 <Youtube className="ml-2 h-4 w-4" />
                 ערוץ היוטיוב
