@@ -29,6 +29,7 @@ const Header = () => {
   const navLinks = [
     { title: "בית", path: "/" },
     { title: "אודות", path: "/about" },
+    { title: "למה אני?", path: "/why-me" },
     { title: "בלוג", path: "/blog" },
     { title: "צור קשר", path: "/contact" },
   ];

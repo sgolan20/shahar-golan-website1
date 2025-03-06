@@ -10,6 +10,7 @@ import Index from "./pages/Index";
 import About from "./pages/About";
 import Blog from "./pages/Blog";
 import Contact from "./pages/Contact";
+import WhyMe from "./pages/WhyMe";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -26,6 +27,7 @@ const App = () => (
             <Route path="/about" element={<Layout><About /></Layout>} />
             <Route path="/blog" element={<Layout><Blog /></Layout>} />
             <Route path="/contact" element={<Layout><Contact /></Layout>} />
+            <Route path="/why-me" element={<Layout><WhyMe /></Layout>} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AnimatePresence>
