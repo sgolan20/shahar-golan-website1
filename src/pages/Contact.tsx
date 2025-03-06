@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Mail, PhoneCall, MapPin, Send } from "lucide-react";
@@ -155,7 +156,7 @@ const Contact = () => {
                     </div>
                     <div>
                       <h3 className="text-lg font-medium mb-1">אימייל</h3>
-                      <a href="mailto:contact@shahargolan.com" className="text-muted-foreground hover:text-primary transition-colors">sgolan20@gmail.com</a>
+                      <a href="mailto:sgolan20@gmail.com" className="text-muted-foreground hover:text-primary transition-colors">sgolan20@gmail.com</a>
                     </div>
                   </div>
                   
@@ -165,7 +166,7 @@ const Contact = () => {
                     </div>
                     <div>
                       <h3 className="text-lg font-medium mb-1">טלפון</h3>
-                      <a href="tel:+972501234567" className="text-muted-foreground hover:text-primary transition-colors">052-733-2838</a>
+                      <a href="tel:+972527332838" className="text-muted-foreground hover:text-primary transition-colors">052-733-2838</a>
                     </div>
                   </div>
                   

@@ -1,3 +1,4 @@
+
 import { Link } from "react-router-dom";
 import { Youtube, Linkedin, Mail, ArrowUp } from "lucide-react";
 const Footer = () => {
@@ -24,7 +25,7 @@ const Footer = () => {
               <a href="https://www.linkedin.com/in/shahargolan" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-primary transition-colors" aria-label="לינקדאין">
                 <Linkedin size={20} />
               </a>
-              <a href="mailto:contact@shahargolan.com" className="text-gray-600 hover:text-primary transition-colors" aria-label="אימייל">
+              <a href="mailto:sgolan20@gmail.com" className="text-gray-600 hover:text-primary transition-colors" aria-label="אימייל">
                 <Mail size={20} />
               </a>
             </div>
@@ -35,6 +36,7 @@ const Footer = () => {
             <nav className="flex flex-col space-y-2">
               <Link to="/" className="text-muted-foreground hover:text-primary transition-colors">בית</Link>
               <Link to="/about" className="text-muted-foreground hover:text-primary transition-colors">אודות</Link>
+              <Link to="/why-me" className="text-muted-foreground hover:text-primary transition-colors">למה אני?</Link>
               <Link to="/blog" className="text-muted-foreground hover:text-primary transition-colors">בלוג</Link>
               <Link to="/contact" className="text-muted-foreground hover:text-primary transition-colors">צור קשר</Link>
             </nav>
@@ -45,7 +47,7 @@ const Footer = () => {
             <p className="text-muted-foreground mb-2">
               מעוניינים בהרצאה, סדנה או קורס מותאם אישית?
             </p>
-            <a href="mailto:contact@shahargolan.com" className="text-primary font-medium hover:underline">sgolan20@gmail.com</a>
+            <a href="mailto:sgolan20@gmail.com" className="text-primary font-medium hover:underline">sgolan20@gmail.com</a>
           </div>
         </div>
         
