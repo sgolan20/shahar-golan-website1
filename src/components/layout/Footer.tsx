@@ -1,3 +1,4 @@
+
 import { Link } from "react-router-dom";
 import { Youtube, Linkedin, Mail, ArrowUp } from "lucide-react";
 const Footer = () => {
@@ -18,10 +19,10 @@ const Footer = () => {
               מרצה ל-GEN-AI ובינה מלאכותית, מלמד כיצד להשתמש בכלים מתקדמים בחיי היום יום והעבודה.
             </p>
             <div className="flex space-x-4 space-x-reverse">
-              <a href="https://www.youtube.com/channel/UCxxxxxxxx" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-primary transition-colors" aria-label="ערוץ יוטיוב">
+              <a href="https://www.youtube.com/@sgolan20" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-primary transition-colors" aria-label="ערוץ יוטיוב">
                 <Youtube size={20} />
               </a>
-              <a href="https://www.linkedin.com/in/shahargolan" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-primary transition-colors" aria-label="לינקדאין">
+              <a href="https://www.linkedin.com/in/sgolan20" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-primary transition-colors" aria-label="לינקדאין">
                 <Linkedin size={20} />
               </a>
               <a href="mailto:sgolan20@gmail.com" className="text-gray-600 hover:text-primary transition-colors" aria-label="אימייל">

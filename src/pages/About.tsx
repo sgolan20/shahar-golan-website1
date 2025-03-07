@@ -1,3 +1,4 @@
+
 import { motion } from "framer-motion";
 import { BookOpen, Users, Lightbulb, Youtube } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -79,7 +80,7 @@ const About = () => {
                   <Link to="/contact">צור קשר</Link>
                 </Button>
                 <Button asChild variant="outline">
-                  <a href="https://www.youtube.com/channel/UCxxxxxxxx" target="_blank" rel="noopener noreferrer" className="bg-red-600 text-white hover:bg-red-700 border-red-600 hover:border-red-700 flex items-center">
+                  <a href="https://www.youtube.com/@sgolan20" target="_blank" rel="noopener noreferrer" className="bg-red-600 text-white hover:bg-red-700 border-red-600 hover:border-red-700 flex items-center">
                     <Youtube className="ml-2 h-5 w-5" />
                     לערוץ היוטיוב
                   </a>
@@ -186,7 +187,7 @@ const About = () => {
             duration: 0.5,
             delay: 0.4
           }} className="bg-white p-6 rounded-xl shadow-sm">
-              <div className="bg-red-600 p-4 rounded-full w-16 h-16 flex items-center justify-center mb-4 text-white">
+              <div className="bg-purple-100 p-4 rounded-full w-16 h-16 flex items-center justify-center mb-4 text-primary">
                 <Youtube className="h-8 w-8" />
               </div>
               <h3 className="text-xl font-semibold mb-3">תוכן דיגיטלי</h3>

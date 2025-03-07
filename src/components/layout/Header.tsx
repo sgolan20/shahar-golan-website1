@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X, Youtube } from "lucide-react";
@@ -79,7 +80,7 @@ const Header = () => {
               size="sm"
             >
               <a 
-                href="https://www.youtube.com/channel/UCxxxxxxxx" 
+                href="https://www.youtube.com/@sgolan20" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="flex items-center bg-red-600 text-white hover:bg-red-700 border-red-600 hover:border-red-700"
@@ -129,7 +130,7 @@ const Header = () => {
               size="sm"
             >
               <a 
-                href="https://www.youtube.com/channel/UCxxxxxxxx" 
+                href="https://www.youtube.com/@sgolan20" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="flex items-center justify-center bg-red-600 text-white hover:bg-red-700 border-red-600 hover:border-red-700"
