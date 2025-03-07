@@ -1,4 +1,3 @@
-
 import { ReactNode } from "react";
 import Header from "./Header";
 import Footer from "./Footer";
@@ -54,6 +53,30 @@ const Layout = ({
           title: title || "צור קשר - שחר גולן | הרצאות וסדנאות בינה מלאכותית",
           description: description || "רוצים לקבוע הרצאה, סדנה או קורס בינה מלאכותית? צרו קשר עם שחר גולן עוד היום",
           keywords: keywords || "צור קשר, הזמנת הרצאות, סדנאות AI, ייעוץ בינה מלאכותית"
+        };
+      case "/focused-course":
+        return {
+          title: title || "קורס ממוקד בהתאמה אישית - שחר גולן",
+          description: description || "קורס בינה מלאכותית בהתאמה מיוחדת לצרכים הספציפיים של הארגון שלך, עם דגש על כלים פרקטיים",
+          keywords: keywords || "קורס AI, קורס בינה מלאכותית, הדרכה מותאמת אישית, קורס לארגונים"
+        };
+      case "/focused-workshop":
+        return {
+          title: title || "סדנה ממוקדת - שחר גולן | סדנת AI מותאמת לארגונים",
+          description: description || "סדנה מעשית וממוקדת של מספר שעות המותאמת לצרכים הספציפיים של הארגון שלך",
+          keywords: keywords || "סדנת AI, סדנה מעשית, בינה מלאכותית לארגונים, כלים פרקטיים"
+        };
+      case "/custom-lecture":
+        return {
+          title: title || "הרצאה מותאמת - שחר גולן | הרצאות AI מותאמות אישית",
+          description: description || "הרצאה מרתקת ועדכנית על עולם הבינה המלאכותית, מותאמת במיוחד לקהל היעד שלכם",
+          keywords: keywords || "הרצאות AI, הרצאות בינה מלאכותית, הרצאה מותאמת, מרצה טכנולוגיה"
+        };
+      case "/intro-workshop":
+        return {
+          title: title || "סדנת היכרות עם עולם ה-AI - שחר גולן",
+          description: description || "סדנה מקוונת להיכרות ראשונית עם עולם הבינה המלאכותית והכלים שמשנים את חיינו",
+          keywords: keywords || "סדנת היכרות AI, מבוא לבינה מלאכותית, סדנה מקוונת, כלי AI למתחילים"
         };
       default:
         return {

@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -12,6 +11,10 @@ import Blog from "./pages/Blog";
 import Contact from "./pages/Contact";
 import WhyMe from "./pages/WhyMe";
 import NotFound from "./pages/NotFound";
+import FocusedCourse from "./pages/FocusedCourse";
+import FocusedWorkshop from "./pages/FocusedWorkshop";
+import CustomLecture from "./pages/CustomLecture";
+import IntroWorkshop from "./pages/IntroWorkshop";
 
 const queryClient = new QueryClient();
 
@@ -28,6 +31,10 @@ const App = () => (
             <Route path="/blog" element={<Layout><Blog /></Layout>} />
             <Route path="/contact" element={<Layout><Contact /></Layout>} />
             <Route path="/why-me" element={<Layout><WhyMe /></Layout>} />
+            <Route path="/focused-course" element={<Layout><FocusedCourse /></Layout>} />
+            <Route path="/focused-workshop" element={<Layout><FocusedWorkshop /></Layout>} />
+            <Route path="/custom-lecture" element={<Layout><CustomLecture /></Layout>} />
+            <Route path="/intro-workshop" element={<Layout><IntroWorkshop /></Layout>} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AnimatePresence>

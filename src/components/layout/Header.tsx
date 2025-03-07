@@ -29,6 +29,10 @@ const Header = () => {
     { title: "בית", path: "/" },
     { title: "אודות", path: "/about" },
     { title: "למה אני?", path: "/why-me" },
+    { title: "קורס ממוקד", path: "/focused-course" },
+    { title: "סדנה ממוקדת", path: "/focused-workshop" },
+    { title: "הרצאה מותאמת", path: "/custom-lecture" },
+    { title: "סדנת היכרות", path: "/intro-workshop" },
     { title: "בלוג", path: "/blog" },
     { title: "צור קשר", path: "/contact" },
   ];
