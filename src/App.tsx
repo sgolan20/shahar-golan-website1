@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -15,6 +16,8 @@ import FocusedCourse from "./pages/FocusedCourse";
 import FocusedWorkshop from "./pages/FocusedWorkshop";
 import CustomLecture from "./pages/CustomLecture";
 import IntroWorkshop from "./pages/IntroWorkshop";
+import AutoScrollTop from "./components/common/AutoScrollTop";
+import ScrollToTop from "./components/common/ScrollToTop";
 
 const queryClient = new QueryClient();
 
@@ -24,6 +27,8 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
+        <AutoScrollTop />
+        <ScrollToTop />
         <AnimatePresence mode="wait">
           <Routes>
             <Route path="/" element={<Layout><Index /></Layout>} />
