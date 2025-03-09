@@ -52,6 +52,10 @@ const OrganizationsSection = () => {
       name: "המרכז האקדמי הרב תחומי ירושלים",
       logo: "/lovable-uploads/de7e2267-cc70-4a7d-9c8e-047faa05ed67.png",
     },
+    {
+      name: "עיריית תל אביב-יפו",
+      logo: "/lovable-uploads/tel-aviv-logo.png",
+    },
   ];
 
   return (
