@@ -1,4 +1,3 @@
-
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { ArrowRight, Users, Lightbulb, BookOpen } from "lucide-react";
@@ -66,7 +65,7 @@ const ServicesSection = () => {
                   הרצאות מרתקות לארגונים וחברות, מותאמות לצרכים הספציפיים של הקהל והארגון.
                 </p>
                 <Button asChild variant="link" className="p-0 h-auto">
-                  <Link to="/contact" className="flex items-center text-primary">
+                  <Link to="/custom-lecture" className="flex items-center text-primary">
                     תיאום הרצאה
                     <ArrowRight className="mr-2 h-4 w-4" />
                   </Link>
@@ -86,7 +85,7 @@ const ServicesSection = () => {
                   סדנאות פרקטיות ומעשיות להקניית כלים ומיומנויות בעבודה עם טכנולוגיות AI.
                 </p>
                 <Button asChild variant="link" className="p-0 h-auto">
-                  <Link to="/contact" className="flex items-center text-primary">
+                  <Link to="/focused-workshop" className="flex items-center text-primary">
                     מידע על סדנאות
                     <ArrowRight className="mr-2 h-4 w-4" />
                   </Link>
@@ -106,7 +105,7 @@ const ServicesSection = () => {
                   קורסים ממוקדים בכלי בינה מלאכותית שונים, מותאמים לקהל היעד ולרמת הידע הקיימת.
                 </p>
                 <Button asChild variant="link" className="p-0 h-auto">
-                  <Link to="/contact" className="flex items-center text-primary">
+                  <Link to="/focused-course" className="flex items-center text-primary">
                     פרטים על קורסים
                     <ArrowRight className="mr-2 h-4 w-4" />
                   </Link>

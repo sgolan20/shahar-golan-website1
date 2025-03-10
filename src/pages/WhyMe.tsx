@@ -119,11 +119,9 @@ const WhyMe = () => {
                       <p className="text-muted-foreground">{reason.description}</p>
                       
                       {/* Placeholder for potential video or image */}
-                      {reason.id === 5 && (
-                        <div className="w-full h-56 bg-gray-100 rounded-md flex items-center justify-center my-4">
-                          <p className="text-muted-foreground">מקום לוידאו או תמונה</p>
-                        </div>
-                      )}
+                      {/* {reason.id === 5 && (
+                        
+                      )} */}
                     </div>
                   </CardContent>
                 </Card>

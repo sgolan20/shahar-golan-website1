@@ -1,6 +1,5 @@
-
 import { motion } from "framer-motion";
-import { BookOpen, Users, Lightbulb, Youtube } from "lucide-react";
+import { BookOpen, Users, Lightbulb, Youtube, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 const About = () => {
@@ -60,19 +59,19 @@ const About = () => {
               <h2 className="text-3xl font-bold mb-6">שחר גולן</h2>
 
               <p className="text-lg mb-4 text-muted-foreground">
-                שלום! אני שחר, מרצה ומומחה לבינה מלאכותית ו-GEN-AI, עם התמחות בהנגשת הטכנולוגיות החדשניות ביותר לקהל הרחב.
+                שלום! אני שחר, מרצה ומלמד בינה מלאכותית ו-GEN-AI. אני אוהב לחלוק ידע ולהפוך טכנולוגיות חדשניות לנגישות ומובנות לכולם.
               </p>
 
               <p className="text-lg mb-4 text-muted-foreground">
-                במשך השנים האחרונות, הקדשתי את עצמי ללימוד, מחקר והוראה של כלי AI מתקדמים, במטרה לעזור לאנשים וארגונים להשתמש בהם באופן יעיל ומועיל בחיי היום יום והעבודה.
+                בשנים האחרונות, שקעתי בלימוד, ניסוי והוראה של כלי AI מתקדמים. המטרה שלי פשוטה - לעזור לאנשים וארגונים להשתמש בטכנולוגיה בצורה חכמה שתשפר את חיי היומיום והעבודה שלהם.
               </p>
 
               <p className="text-lg mb-4 text-muted-foreground">
-                אני בעל יכולת ייחודית למקד את התוכן והמסרים לקהל היעד הספציפי, ולהנגיש מידע מורכב בצורה פשוטה וברורה לכל מי שמעוניין ללמוד.
+                נהנה במיוחד להתאים את התוכן לקהל היעד ולקחת נושאים מורכבים ולהפוך אותם לקלים להבנה. זה פשוט משהו שאני טוב בו וכיף לי לעשות.
               </p>
 
               <p className="text-lg mb-8 text-muted-foreground">
-                אני מאמין שהבינה המלאכותית היא לא רק עתיד הטכנולוגיה, אלא ההווה שלה, וחשוב לי להנגיש את הידע הזה לכמה שיותר אנשים בצורה ברורה ומעשית.
+                אני חי ונושם AI ואת האפשרויות המעשיות שהוא מביא לחיינו. בוא נגלה יחד איך אפשר לרתום את הטכנולוגיה הזו לפרויקטים מעניינים, לפתרון בעיות אמיתיות, ולהפוך רעיונות לתוצאות מוחשיות.
               </p>
 
               <div className="flex flex-wrap gap-4">
@@ -121,7 +120,7 @@ const About = () => {
           }} viewport={{
             once: true
           }} transition={{
-            duration: 0.5,
+            duration: 0.3,
             delay: 0.1
           }} className="bg-white p-6 rounded-xl shadow-sm">
               <div className="bg-purple-100 p-4 rounded-full w-16 h-16 flex items-center justify-center mb-4 text-primary">
@@ -131,6 +130,10 @@ const About = () => {
               <p className="text-muted-foreground">
                 הרצאות מותאמות אישית לארגונים וחברות, המציגות את עולם הבינה המלאכותית בצורה נגישה ומרתקת.
               </p>
+              <Link to="/custom-lecture" className="inline-flex items-center mt-4 text-primary hover:underline">
+                למידע נוסף
+                <ArrowRight className="mr-2 h-4 w-4" />
+              </Link>
             </motion.div>
 
             <motion.div initial={{
@@ -142,7 +145,7 @@ const About = () => {
           }} viewport={{
             once: true
           }} transition={{
-            duration: 0.5,
+            duration: 0.3,
             delay: 0.2
           }} className="bg-white p-6 rounded-xl shadow-sm">
               <div className="bg-purple-100 p-4 rounded-full w-16 h-16 flex items-center justify-center mb-4 text-primary">
@@ -152,6 +155,10 @@ const About = () => {
               <p className="text-muted-foreground">
                 סדנאות פרקטיות המקנות כלים ומיומנויות מעשיות לשימוש בטכנולוגיות AI בעולם העבודה והחיים האישיים.
               </p>
+              <Link to="/focused-workshop" className="inline-flex items-center mt-4 text-primary hover:underline">
+                לפרטי הסדנאות
+                <ArrowRight className="mr-2 h-4 w-4" />
+              </Link>
             </motion.div>
 
             <motion.div initial={{
@@ -163,7 +170,7 @@ const About = () => {
           }} viewport={{
             once: true
           }} transition={{
-            duration: 0.5,
+            duration: 0.3,
             delay: 0.3
           }} className="bg-white p-6 rounded-xl shadow-sm">
               <div className="bg-purple-100 p-4 rounded-full w-16 h-16 flex items-center justify-center mb-4 text-primary">
@@ -173,6 +180,10 @@ const About = () => {
               <p className="text-muted-foreground">
                 קורסים ייעודיים בנושאי בינה מלאכותית, המותאמים לרמת הידע וצרכי הלומדים, ומשלבים תיאוריה עם יישום מעשי.
               </p>
+              <Link to="/focused-course" className="inline-flex items-center mt-4 text-primary hover:underline">
+                לתוכן הקורסים
+                <ArrowRight className="mr-2 h-4 w-4" />
+              </Link>
             </motion.div>
 
             <motion.div initial={{
@@ -184,7 +195,7 @@ const About = () => {
           }} viewport={{
             once: true
           }} transition={{
-            duration: 0.5,
+            duration: 0.3,
             delay: 0.4
           }} className="bg-white p-6 rounded-xl shadow-sm">
               <div className="bg-purple-100 p-4 rounded-full w-16 h-16 flex items-center justify-center mb-4 text-primary">
@@ -194,6 +205,10 @@ const About = () => {
               <p className="text-muted-foreground">
                 תוכן מקצועי ואיכותי בערוץ היוטיוב שלי, המציע מדריכים, טיפים וסקירות על כלי AI חדשניים לקהל הרחב.
               </p>
+              <a href="https://www.youtube.com/@sgolan20" target="_blank" rel="noopener noreferrer" className="inline-flex items-center mt-4 text-primary hover:underline">
+                לערוץ היוטיוב
+                <ArrowRight className="mr-2 h-4 w-4" />
+              </a>
             </motion.div>
           </div>
         </div>
