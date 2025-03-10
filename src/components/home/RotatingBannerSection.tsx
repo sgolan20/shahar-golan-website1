@@ -22,33 +22,36 @@ const RotatingBannerSection = () => {
       title: "קורס ממוקד",
       description: "קורס AI מקיף המותאם לצרכים הספציפיים של הארגון שלך",
       path: "/focused-course",
-      bgImage: "/lovable-uploads/f5c1b97f-470f-419a-8100-660bfded6922.png",
-      position: "center top",
+      bgImage: "/lovable-uploads/96348fd7-1c9e-49f8-b9c6-4ea486dfd787.png",
+      position: "center",
     },
     {
       title: "סדנה ממוקדת",
       description: "סדנה מעשית וממוקדת להטמעת כלי AI בארגון",
       path: "/focused-workshop",
-      bgImage: "/lovable-uploads/de7e2267-cc70-4a7d-9c8e-047faa05ed67.png",
+      bgImage: "/lovable-uploads/8bdd9e5e-cba8-433d-881f-2701802d539e.png",
+      position: "center top",
     },
     {
       title: "הרצאה מותאמת",
       description: "הרצאה מרתקת על עולם ה-AI המותאמת לקהל היעד שלך",
       path: "/custom-lecture",
-      bgImage: "/lovable-uploads/dfd9084b-250e-4bb9-b0a0-c412184506b2.png",
+      bgImage: "/lovable-uploads/0d68aedf-beb7-45ae-a23f-322fa1fa7d84.png",
+      position: "center",
     },
     {
       title: "סדנת היכרות",
       description: "צעד ראשון להיכרות עם עולם הבינה המלאכותית",
       path: "/intro-workshop",
-      bgImage: "/lovable-uploads/c6b40b45-c57a-4fb5-8855-cfca13a31f8a.png",
+      bgImage: "/lovable-uploads/3ad19a3f-7fcb-4dec-b9ff-7dc0a5aaa713.png",
+      position: "center",
     },
   ];
 
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentIndex((prevIndex) => (prevIndex + 1) % banners.length);
-    }, 7000); // Changed to 7 seconds as requested
+    }, 7000); // Already set to 7 seconds
 
     return () => clearInterval(interval);
   }, [banners.length]);
