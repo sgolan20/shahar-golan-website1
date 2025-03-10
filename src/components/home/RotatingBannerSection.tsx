@@ -29,15 +29,15 @@ const RotatingBannerSection = () => {
       title: "סדנה ממוקדת",
       description: "סדנה מעשית וממוקדת להטמעת כלי AI בארגון",
       path: "/focused-workshop",
-      bgImage: "/lovable-uploads/8bdd9e5e-cba8-433d-881f-2701802d539e.png",
+      bgImage: "/lovable-uploads/0d68aedf-beb7-45ae-a23f-322fa1fa7d84.png",
       position: "center top",
     },
     {
       title: "הרצאה מותאמת",
       description: "הרצאה מרתקת על עולם ה-AI המותאמת לקהל היעד שלך",
       path: "/custom-lecture",
-      bgImage: "/lovable-uploads/0d68aedf-beb7-45ae-a23f-322fa1fa7d84.png",
-      position: "center",
+      bgImage: "/lovable-uploads/8bdd9e5e-cba8-433d-881f-2701802d539e.png",
+      position: "center bottom",
     },
     {
       title: "סדנת היכרות",
