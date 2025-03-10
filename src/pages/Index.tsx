@@ -1,3 +1,4 @@
+
 import HeroSection from "@/components/home/HeroSection";
 import StatsSection from "@/components/home/StatsSection";
 import VideoSection from "@/components/home/VideoSection";
@@ -8,6 +9,7 @@ import BlogSection from "@/components/home/BlogSection";
 import ValueSection from "@/components/home/ValueSection";
 import CtaSection from "@/components/home/CtaSection";
 import StructuredData from "@/components/home/StructuredData";
+import RotatingBannerSection from "@/components/home/RotatingBannerSection";
 
 const Index = () => {
   return (
@@ -15,6 +17,7 @@ const Index = () => {
       <StructuredData />
       <HeroSection />
       <StatsSection />
+      <RotatingBannerSection />
       <VideoSection />
       <GallerySection />
       <OrganizationsSection />
