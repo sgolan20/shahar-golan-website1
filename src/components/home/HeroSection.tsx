@@ -1,18 +1,13 @@
-
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-
 const HeroSection = () => {
   return <section className="relative min-h-[90vh] flex items-center">
       {/* Background Image with Darkened Overlay */}
       <div className="absolute inset-0 z-0">
-        <img 
-          src="/lovable-uploads/567d39ec-198d-4613-b728-b29ef0187284.png" 
-          alt="שחר גולן מרצה על במה" 
-          className="w-full h-full object-cover object-top" // Added object-top to keep the top part of the image visible
-        />
+        <img src="/lovable-uploads/567d39ec-198d-4613-b728-b29ef0187284.png" alt="שחר גולן מרצה על במה" className="w-full h-full object-cover object-top" // Added object-top to keep the top part of the image visible
+      />
         <div className="absolute inset-0 bg-black/60" /> {/* Darkened transparent overlay */}
       </div>
       
@@ -36,13 +31,10 @@ const HeroSection = () => {
           delay: 0.2
         }}>
             <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
-              <span className="text-gradient">שחר גולן
-בינה מלאכותית</span>
+              <span className="text-gradient">בואו נכיר את עולם ה-AI</span>
             </h1>
             
-            <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto lg:mr-0 lg:ml-auto">
-              מרצה ל-GEN-AI ומומחה להטמעת כלים חדשניים בעולם העבודה והחיים האישיים
-            </p>
+            <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto lg:mr-0 lg:ml-auto">הרצאות וסדנאות מותאמות אישית לארגונים.</p>
             
             <div className="flex flex-wrap justify-center lg:justify-end gap-4">
               <Button asChild size="lg" className="btn-shine">
@@ -71,14 +63,11 @@ const HeroSection = () => {
         }} className="hidden lg:flex justify-center items-center">
             <div className="text-white p-8 rounded-xl bg-black/40 backdrop-blur-sm border border-white/10 max-w-md">
               <h3 className="text-2xl font-bold mb-3">שחר גולן</h3>
-              <p className="text-white/80">
-                מרצה ומומחה ל-GEN-AI ובינה מלאכותית, מלווה ארגונים וחברות בהטמעת טכנולוגיות חדשניות לשיפור התפוקה, היצירתיות והיעילות.
-              </p>
+              <p className="text-white/80">מרצה ל-GEN-AI ובינה מלאכותית, מלווה ארגונים וחברות בהטמעת טכנולוגיות חדשניות לשיפור היצירתיות והיעילות.</p>
             </div>
           </motion.div>
         </div>
       </div>
     </section>;
 };
-
 export default HeroSection;
