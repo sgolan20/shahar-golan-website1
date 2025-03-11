@@ -57,8 +57,8 @@ const VideoSection = () => {
 
     return () => clearTimeout(timer);
   }, []);
-  return <section className="py-20 bg-gradient-to-r from-purple-700 to-purple-500 text-white">
-      <div className="container mx-auto px-4">
+  return <section className="bg-gradient-to-r from-purple-700 to-purple-500 text-white py-[18px]">
+      <div className="container mx-auto py-0 px-[16px]">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold mb-4"></h2>
           <p className="text-lg opacity-90 max-w-2xl mx-auto">
