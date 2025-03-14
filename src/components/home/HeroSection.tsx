@@ -45,7 +45,7 @@ const HeroSection = () => {
               </Button>
               
               <Button asChild size="lg" variant="outline" className="bg-black/40 border-white/30 text-white hover:bg-black/60">
-                <Link to="/about">למד עוד עליי</Link>
+                <Link to="/about">מי אני?</Link>
               </Button>
             </div>
           </motion.div>

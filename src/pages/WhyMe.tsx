@@ -1,4 +1,3 @@
-
 import { motion } from "framer-motion";
 import { 
   Lightbulb, 
@@ -10,9 +9,12 @@ import {
   Target,
   Clock,
   BarChart3,
-  Handshake
+  Handshake,
+  ArrowRight
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 
 const WhyMe = () => {
   const reasons = [
@@ -139,32 +141,13 @@ const WhyMe = () => {
             <p className="text-xl mb-8">
               צרו קשר עוד היום ונתחיל את המסע שלכם לעולם חדש של אפשרויות עם בינה מלאכותית
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <motion.div
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <a 
-                  href="/contact" 
-                  className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 w-full sm:w-auto"
-                >
+            <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto justify-center">
+              <Button asChild className="w-full sm:w-auto">
+                <Link to="/contact">
                   צרו קשר
-                </a>
-              </motion.div>
-              <motion.div
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <a 
-                  href="https://www.youtube.com/channel/UCxxxxxxxx" 
-                  target="_blank" 
-                  rel="noopener noreferrer" 
-                  className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 w-full sm:w-auto"
-                >
-                  <Handshake className="h-4 w-4" />
-                  הקהילה שלנו
-                </a>
-              </motion.div>
+                  <ArrowRight className="mr-2 h-4 w-4" />
+                </Link>
+              </Button>
             </div>
           </div>
         </div>
