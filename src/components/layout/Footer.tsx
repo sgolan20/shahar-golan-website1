@@ -72,6 +72,7 @@ const Footer = () => {
     });
   };
   return <footer className="bg-gray-50 pt-16 pb-8">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
           <div className="md:col-span-1">
@@ -178,6 +179,23 @@ const Footer = () => {
           <p className="text-muted-foreground text-sm">
             &copy; {new Date().getFullYear()} שחר גולן. כל הזכויות שמורות.
           </p>
+          <div className="mt-4">
+            <h3 className="text-lg font-bold mb-2">הצטרפו לקהילה שלי</h3>
+            <div className="flex gap-4">
+              <a href="https://www.youtube.com/@sgolan20" target="_blank" rel="noopener noreferrer">
+                <i className="fab fa-youtube text-xl hover:opacity-80 transition-opacity"></i>
+              </a>
+              <a href="https://t.me/sgolanai" target="_blank" rel="noopener noreferrer">
+                <i className="fab fa-telegram text-xl hover:opacity-80 transition-opacity"></i>
+              </a>
+              <a href="https://chat.whatsapp.com/CuYj1dsmrcH80cbfAOsotQ" target="_blank" rel="noopener noreferrer">
+                <i className="fab fa-whatsapp text-xl hover:opacity-80 transition-opacity"></i>
+              </a>
+              <a href="https://www.facebook.com/groups/976255830459659/" target="_blank" rel="noopener noreferrer">
+                <i className="fab fa-facebook text-xl hover:opacity-80 transition-opacity"></i>
+              </a>
+            </div>
+          </div>
           <button onClick={scrollToTop} className="mt-4 md:mt-0 flex items-center text-sm text-muted-foreground hover:text-primary transition-colors" aria-label="חזרה למעלה">
             חזרה למעלה
             <ArrowUp size={16} className="mr-1" />
