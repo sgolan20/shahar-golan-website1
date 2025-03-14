@@ -88,7 +88,7 @@ const Footer = () => {
             <nav className="flex flex-col space-y-2">
               <Link to="/" className="text-muted-foreground hover:text-primary transition-colors">בית</Link>
               <Link to="/about" className="text-muted-foreground hover:text-primary transition-colors">אודות</Link>
-              <Link to="/why-me" className="text-muted-foreground hover:text-primary transition-colors">למה אני?</Link>
+              <Link to="/why-me" className="text-muted-foreground hover:text-primary transition-colors">למה מרצה לבינה מלאכותית?</Link>
               <Link to="/blog" className="text-muted-foreground hover:text-primary transition-colors">בלוג</Link>
               <Link to="/contact" className="text-muted-foreground hover:text-primary transition-colors">צור קשר</Link>
             </nav>

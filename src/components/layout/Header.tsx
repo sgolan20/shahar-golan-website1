@@ -28,7 +28,7 @@ const Header = () => {
 
   const navLinks = [
     { title: "אודות", path: "/about" },
-    { title: "למה אני?", path: "/why-me" },
+    { title: "למה מרצה לבינה מלאכותית?", path: "/why-me" },
     { title: "קורס ממוקד", path: "/focused-course" },
     { title: "סדנה ממוקדת", path: "/focused-workshop" },
     { title: "הרצאה מותאמת", path: "/custom-lecture" },
