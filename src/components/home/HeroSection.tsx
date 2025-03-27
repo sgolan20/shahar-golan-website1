@@ -6,7 +6,7 @@ const HeroSection = () => {
   return <section className="relative min-h-[90vh] flex items-center">
       {/* Background Image with Darkened Overlay */}
       <div className="absolute inset-0 z-0">
-        <img src="/lovable-uploads/567d39ec-198d-4613-b728-b29ef0187284.png" alt="שחר גולן מרצה על במה" className="w-full h-full object-cover object-top" // Added object-top to keep the top part of the image visible
+        <img src="/lovable-uploads/567d39ec-198d-4613-b728-b29ef0187284.png" alt="שחר גולן מרצה על במה" className="w-full h-full object-cover object-left md:object-top" // Changed object-top to object-left for mobile screens
       />
         <div className="absolute inset-0 bg-black/60" /> {/* Darkened transparent overlay */}
       </div>
@@ -45,7 +45,7 @@ const HeroSection = () => {
               </Button>
               
               <Button asChild size="lg" variant="outline" className="bg-black/40 border-white/30 text-white hover:bg-black/60">
-                <Link to="/about">למד עוד עליי</Link>
+                <Link to="/about">מי אני?</Link>
               </Button>
             </div>
           </motion.div>
@@ -61,7 +61,7 @@ const HeroSection = () => {
           duration: 0.5,
           delay: 0.4
         }} className="hidden lg:flex justify-center items-center">
-            <div className="text-white p-8 rounded-xl bg-black/40 backdrop-blur-sm border border-white/10 max-w-md">
+            <div className="text-white p-8 rounded-xl bg-black/40 backdrop-blur-sm border border-white/10 max-w-md mt-24">
               <h3 className="text-2xl font-bold mb-3">שחר גולן</h3>
               <p className="text-white/80">מרצה ל-GEN-AI ובינה מלאכותית, מלווה ארגונים וחברות בהטמעת טכנולוגיות חדשניות לשיפור היצירתיות והיעילות.</p>
             </div>

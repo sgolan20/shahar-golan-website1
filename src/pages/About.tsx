@@ -18,7 +18,7 @@ const About = () => {
         }}>
             <h1 className="text-4xl md:text-5xl font-bold mb-6">אודות</h1>
             <p className="text-xl text-muted-foreground">
-              קצת על הרקע שלי, הניסיון והמומחיות בעולם הבינה המלאכותית
+              מי אני? אני שחר, מרצה לבינה מלאכותית, חוקר ולומד כל יום את עולם ה-AI ומוביל את קהילת לומדים AI
             </p>
           </motion.div>
         </div>
