@@ -35,7 +35,8 @@ export interface YouTubePlaylist {
 const getFunctionsBaseUrl = (): string => {
   // בסביבת פיתוח מקומית
   if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-    return 'http://localhost:8888/.netlify/functions';
+    // השתמש בפורט של האתר הנוכחי, כי netlify dev מפנה את הפונקציות לאותו פורט
+    return `${window.location.origin}/.netlify/functions`;
   }
   // בסביבת ייצור
   return '/.netlify/functions';

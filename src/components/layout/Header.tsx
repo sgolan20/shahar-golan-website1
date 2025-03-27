@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X, Youtube } from "lucide-react";
@@ -33,7 +32,7 @@ const Header = () => {
     { title: "סדנה ממוקדת", path: "/focused-workshop" },
     { title: "הרצאה מותאמת", path: "/custom-lecture" },
     { title: "סדנת היכרות", path: "/intro-workshop" },
-    { title: "בלוג", path: "/blog" },
+    { title: "בלוג וידאו", path: "/blog" },
     { title: "צור קשר", path: "/contact" },
   ];
 

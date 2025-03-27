@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Search } from "lucide-react";
+import { Search, ChevronRight, ChevronLeft } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import YouTubeVideoList from "@/components/youtube/YouTubeVideoList";
 import YouTubePlaylistCategories from "@/components/youtube/YouTubePlaylistCategories";
 import { 
@@ -12,6 +13,8 @@ import {
   YouTubePlaylist
 } from "@/services/youtubeService";
 
+const VIDEOS_PER_PAGE = 6; 
+
 const Blog = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [videos, setVideos] = useState<YouTubeVideo[]>([]);
@@ -20,8 +23,8 @@ const Blog = () => {
   const [isLoadingVideos, setIsLoadingVideos] = useState(true);
   const [isLoadingPlaylists, setIsLoadingPlaylists] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
 
-  // טעינת פלייליסטים
   useEffect(() => {
     const fetchPlaylists = async () => {
       try {
@@ -39,20 +42,18 @@ const Blog = () => {
     fetchPlaylists();
   }, []);
 
-  // טעינת סרטונים בהתאם לפלייליסט שנבחר
   useEffect(() => {
     const fetchVideos = async () => {
       try {
         setIsLoadingVideos(true);
         setError(null);
+        setCurrentPage(1); 
         
         let videosData: YouTubeVideo[];
         
         if (selectedPlaylistId) {
-          // טעינת סרטונים מפלייליסט ספציפי
           videosData = await getPlaylistVideos(selectedPlaylistId);
         } else {
-          // טעינת כל הסרטונים בערוץ
           videosData = await getChannelVideos();
         }
         
@@ -68,15 +69,38 @@ const Blog = () => {
     fetchVideos();
   }, [selectedPlaylistId]);
 
-  // סינון סרטונים לפי חיפוש
   const filteredVideos = videos.filter(video => 
     video.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
     video.description.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  const totalPages = Math.ceil(filteredVideos.length / VIDEOS_PER_PAGE);
+  
+  const currentVideos = filteredVideos.slice(
+    (currentPage - 1) * VIDEOS_PER_PAGE,
+    currentPage * VIDEOS_PER_PAGE
+  );
+
+  const nextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
+  const prevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm]);
+
   return (
     <div dir="rtl">
-      {/* Hero Section */}
       <section className="pt-20 pb-16 md:pt-28 md:pb-20 bg-gray-50">
         <div className="container mx-auto px-4">
           <motion.div
@@ -85,7 +109,7 @@ const Blog = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">הסרטונים שלי</h1>
+            <h1 className="text-4xl md:text-5xl font-bold mb-6">בלוג וידאו</h1>
             <p className="text-xl text-muted-foreground">
               צפו בסרטונים העדכניים ביותר מערוץ היוטיוב שלי
             </p>
@@ -93,7 +117,6 @@ const Blog = () => {
         </div>
       </section>
 
-      {/* Search and Filter */}
       <section className="py-12">
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row gap-4 items-center justify-between mb-12">
@@ -116,16 +139,48 @@ const Blog = () => {
             />
           </div>
 
-          {/* YouTube Videos */}
           <YouTubeVideoList 
-            videos={filteredVideos} 
+            videos={currentVideos} 
             isLoading={isLoadingVideos} 
             error={error} 
           />
+
+          {!isLoadingVideos && filteredVideos.length > 0 && (
+            <div className="flex justify-center items-center mt-12 gap-2">
+              <Button 
+                variant="outline" 
+                onClick={prevPage} 
+                disabled={currentPage === 1}
+                className="flex items-center gap-1"
+              >
+                <ChevronRight size={16} />
+                הקודם
+              </Button>
+              
+              <div className="mx-4 text-sm">
+                עמוד {currentPage} מתוך {totalPages}
+              </div>
+              
+              <Button 
+                variant="outline" 
+                onClick={nextPage} 
+                disabled={currentPage === totalPages}
+                className="flex items-center gap-1"
+              >
+                הבא
+                <ChevronLeft size={16} />
+              </Button>
+            </div>
+          )}
+
+          {!isLoadingVideos && filteredVideos.length === 0 && !error && (
+            <div className="text-center py-12">
+              <p className="text-xl text-muted-foreground">לא נמצאו סרטונים התואמים לחיפוש שלך</p>
+            </div>
+          )}
         </div>
       </section>
 
-      {/* Newsletter Section */}
       <section className="py-20 bg-gray-50">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center">
