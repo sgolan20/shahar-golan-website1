@@ -63,8 +63,8 @@ const OrganizationsSection = () => {
         }} viewport={{
           once: true
         }}>
-              <Card className="flex items-center justify-center p-6 h-32 w-32 md:h-36 md:w-36 bg-white hover:shadow-md transition-shadow duration-300">
-                <img src={org.logo} alt={`לוגו ${org.name}`} className="max-h-20 max-w-20 md:max-h-24 md:max-w-24 object-contain" />
+              <Card className="flex items-center justify-center p-6 h-40 w-40 md:h-48 md:w-48 bg-white hover:shadow-md transition-shadow duration-300">
+                <img src={org.logo} alt={`לוגו ${org.name}`} className="max-h-28 max-w-28 md:max-h-36 md:max-w-36 object-contain" />
               </Card>
             </motion.div>)}
         </div>
