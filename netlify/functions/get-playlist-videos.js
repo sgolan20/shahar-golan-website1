@@ -1,5 +1,10 @@
 const axios = require('axios');
 
+// טעינת משתני סביבה מקובץ .env בסביבת פיתוח
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config();
+}
+
 // מפתח ה-API של YouTube (יהיה מוסתר בסביבת Netlify)
 const API_KEY = process.env.YOUTUBE_API_KEY;
 
