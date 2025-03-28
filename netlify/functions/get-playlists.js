@@ -39,7 +39,7 @@ exports.handler = async function(event, context) {
       const playlists = response.data.items.map(item => ({
         id: item.id,
         title: item.snippet.title,
-        description: item.snippet.description,
+        description: item.snippet.description || "", // וידוא שיש תיאור
         thumbnails: item.snippet.thumbnails,
         itemCount: item.contentDetails.itemCount
       }));
@@ -70,7 +70,7 @@ exports.handler = async function(event, context) {
         const playlists = playlistsResponse.data.items.map(item => ({
           id: item.id,
           title: item.snippet.title,
-          description: item.snippet.description,
+          description: item.snippet.description || "", // וידוא שיש תיאור
           thumbnails: item.snippet.thumbnails,
           itemCount: item.contentDetails.itemCount
         }));
@@ -91,10 +91,11 @@ exports.handler = async function(event, context) {
     };
   } catch (error) {
     console.error('Error fetching playlists:', error);
+    // במקרה של שגיאה, להחזיר מערך ריק במקום אובייקט שגיאה
     return {
-      statusCode: 500,
+      statusCode: 200, // שינוי מ-500 ל-200 כדי שהקליינט יקבל תגובה תקינה
       headers,
-      body: JSON.stringify({ error: 'Error fetching playlists' })
+      body: JSON.stringify([])
     };
   }
 };

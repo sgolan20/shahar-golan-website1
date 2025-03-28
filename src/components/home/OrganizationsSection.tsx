@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { Card } from "@/components/ui/card";
+
 const OrganizationsSection = () => {
   const organizations = [{
     name: "סודהסטרים",
@@ -40,6 +41,9 @@ const OrganizationsSection = () => {
   }, {
     name: "עיריית תל אביב-יפו",
     logo: "/lovable-uploads/b83c5736-541f-4bbb-87e2-a2690c78c276.png"
+  }, {
+    name: "ערוץ 7",
+    logo: "/lovable-uploads/CHANNEL7.jpg"
   }];
   return <section className="py-16 bg-gray-50">
       <div className="container mx-auto px-4">

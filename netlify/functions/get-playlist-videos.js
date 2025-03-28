@@ -30,10 +30,11 @@ exports.handler = async function(event, context) {
   const playlistId = params && params.playlistId;
 
   if (!playlistId) {
+    // במקרה שלא התקבל מזהה פלייליסט, להחזיר מערך ריק במקום שגיאה
     return {
-      statusCode: 400,
+      statusCode: 200,
       headers,
-      body: JSON.stringify({ error: 'Playlist ID is required' })
+      body: JSON.stringify([])
     };
   }
 
@@ -48,7 +49,7 @@ exports.handler = async function(event, context) {
       const videos = response.data.items.map(item => ({
         id: item.snippet.resourceId.videoId,
         title: item.snippet.title,
-        description: item.snippet.description,
+        description: item.snippet.description || "", // וידוא שיש תיאור
         publishedAt: item.snippet.publishedAt,
         thumbnails: item.snippet.thumbnails,
         channelTitle: item.snippet.channelTitle,
@@ -70,10 +71,11 @@ exports.handler = async function(event, context) {
     };
   } catch (error) {
     console.error('Error fetching playlist videos:', error);
+    // במקרה של שגיאה, להחזיר מערך ריק במקום אובייקט שגיאה
     return {
-      statusCode: 500,
+      statusCode: 200, // שינוי מ-500 ל-200 כדי שהקליינט יקבל תגובה תקינה
       headers,
-      body: JSON.stringify({ error: 'Error fetching playlist videos' })
+      body: JSON.stringify([])
     };
   }
 };

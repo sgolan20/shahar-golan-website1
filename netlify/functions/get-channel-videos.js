@@ -49,7 +49,7 @@ exports.handler = async function(event, context) {
         const videos = response.data.items.map(item => ({
           id: item.snippet.resourceId.videoId,
           title: item.snippet.title,
-          description: item.snippet.description,
+          description: item.snippet.description || "", // וידוא שיש תיאור
           publishedAt: item.snippet.publishedAt,
           thumbnails: item.snippet.thumbnails,
           channelTitle: item.snippet.channelTitle
@@ -83,7 +83,7 @@ exports.handler = async function(event, context) {
         const videos = response.data.items.map(item => ({
           id: item.snippet.resourceId.videoId,
           title: item.snippet.title,
-          description: item.snippet.description,
+          description: item.snippet.description || "", // וידוא שיש תיאור
           publishedAt: item.snippet.publishedAt,
           thumbnails: item.snippet.thumbnails,
           channelTitle: item.snippet.channelTitle
@@ -108,7 +108,7 @@ exports.handler = async function(event, context) {
       const videos = searchResponse.data.items.map(item => ({
         id: item.id.videoId,
         title: item.snippet.title,
-        description: item.snippet.description,
+        description: item.snippet.description || "", // וידוא שיש תיאור
         publishedAt: item.snippet.publishedAt,
         thumbnails: item.snippet.thumbnails,
         channelTitle: item.snippet.channelTitle
@@ -122,6 +122,7 @@ exports.handler = async function(event, context) {
     }
     
     console.log('No videos found with any method');
+    // תמיד להחזיר מערך ריק במקרה שלא נמצאו סרטונים
     return {
       statusCode: 200,
       headers,
@@ -129,10 +130,11 @@ exports.handler = async function(event, context) {
     };
   } catch (error) {
     console.error('Error fetching channel videos:', error);
+    // במקרה של שגיאה, להחזיר מערך ריק במקום אובייקט שגיאה
     return {
-      statusCode: 500,
+      statusCode: 200, // שינוי מ-500 ל-200 כדי שהקליינט יקבל תגובה תקינה
       headers,
-      body: JSON.stringify({ error: 'Error fetching channel videos' })
+      body: JSON.stringify([])
     };
   }
 };

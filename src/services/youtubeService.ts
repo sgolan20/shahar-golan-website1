@@ -47,7 +47,14 @@ export const getChannelPlaylists = async (): Promise<YouTubePlaylist[]> => {
   try {
     console.log('Fetching playlists from Netlify function');
     const response = await axios.get(`${getFunctionsBaseUrl()}/get-playlists`);
-    return response.data;
+    
+    // וידוא שהתגובה היא מערך
+    if (Array.isArray(response.data)) {
+      return response.data;
+    } else {
+      console.error('Response is not an array:', response.data);
+      return [];
+    }
   } catch (error) {
     console.error('Error fetching playlists:', error);
     return [];
@@ -61,7 +68,14 @@ export const getPlaylistVideos = async (playlistId: string): Promise<YouTubeVide
     const response = await axios.get(`${getFunctionsBaseUrl()}/get-playlist-videos`, {
       params: { playlistId }
     });
-    return response.data;
+    
+    // וידוא שהתגובה היא מערך
+    if (Array.isArray(response.data)) {
+      return response.data;
+    } else {
+      console.error('Response is not an array:', response.data);
+      return [];
+    }
   } catch (error) {
     console.error('Error fetching playlist videos:', error);
     return [];
@@ -73,7 +87,14 @@ export const getChannelVideos = async (): Promise<YouTubeVideo[]> => {
   try {
     console.log('Fetching videos for channel from Netlify function');
     const response = await axios.get(`${getFunctionsBaseUrl()}/get-channel-videos`);
-    return response.data;
+    
+    // וידוא שהתגובה היא מערך
+    if (Array.isArray(response.data)) {
+      return response.data;
+    } else {
+      console.error('Response is not an array:', response.data);
+      return [];
+    }
   } catch (error) {
     console.error('Error fetching channel videos:', error);
     return [];

@@ -57,10 +57,18 @@ const Blog = () => {
           videosData = await getChannelVideos();
         }
         
-        setVideos(videosData);
+        // וידוא שהנתונים שהתקבלו הם אכן מערך
+        if (!Array.isArray(videosData)) {
+          console.error("התקבלו נתוני סרטונים שאינם מערך:", videosData);
+          setVideos([]);
+          setError("התקבלו נתונים לא תקינים מהשרת. אנא נסה שוב מאוחר יותר.");
+        } else {
+          setVideos(videosData);
+        }
       } catch (err) {
         console.error("שגיאה בטעינת סרטונים:", err);
         setError("לא ניתן לטעון את הסרטונים. אנא נסה שוב מאוחר יותר.");
+        setVideos([]);
       } finally {
         setIsLoadingVideos(false);
       }
@@ -69,10 +77,13 @@ const Blog = () => {
     fetchVideos();
   }, [selectedPlaylistId]);
 
-  const filteredVideos = videos.filter(video => 
-    video.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
-    video.description.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  // וידוא שהמשתנה videos הוא מערך לפני השימוש ב-filter
+  const filteredVideos = Array.isArray(videos) 
+    ? videos.filter(video => 
+        video.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
+        video.description.toLowerCase().includes(searchTerm.toLowerCase())
+      )
+    : [];
 
   const totalPages = Math.ceil(filteredVideos.length / VIDEOS_PER_PAGE);
   
