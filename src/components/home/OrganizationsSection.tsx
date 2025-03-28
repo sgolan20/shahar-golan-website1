@@ -47,6 +47,9 @@ const OrganizationsSection = () => {
   }, {
     name: "אקט",
     logo: "/lovable-uploads/אקט.png"
+  }, {
+    name: "הבט",
+    logo: "/lovable-uploads/Hebet.png"
   }];
   return <section className="py-16 bg-gray-50">
       <div className="container mx-auto px-4">
