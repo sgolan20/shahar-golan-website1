@@ -44,6 +44,9 @@ const OrganizationsSection = () => {
   }, {
     name: "ערוץ 7",
     logo: "/lovable-uploads/CHANNEL7.jpg"
+  }, {
+    name: "אקט",
+    logo: "/lovable-uploads/אקט.png"
   }];
   return <section className="py-16 bg-gray-50">
       <div className="container mx-auto px-4">
