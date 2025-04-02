@@ -27,13 +27,13 @@ const Header = () => {
   };
 
   const navLinks = [
-    { title: "אודות", path: "/about" },
     { title: "קורס ממוקד", path: "/focused-course" },
     { title: "סדנה ממוקדת", path: "/focused-workshop" },
     { title: "הרצאה מותאמת", path: "/custom-lecture" },
     { title: "סדנת היכרות", path: "/intro-workshop" },
     { title: "למה מרצה לבינה מלאכותית?", path: "/why-me" },
     { title: "בלוג וידאו", path: "/blog" },
+    { title: "אודות", path: "/about" },
     { title: "צור קשר", path: "/contact" },
   ];
 
