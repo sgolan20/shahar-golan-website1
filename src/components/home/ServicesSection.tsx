@@ -32,6 +32,13 @@ const itemVariants = {
 };
 const ServicesSection = () => {
   const services = [{
+    icon: <BookOpen className="h-8 w-8" />,
+    title: "קורסים ממוקדים",
+    description: "קורסים ממוקדים בכלי בינה מלאכותית שונים, מותאמים לקהל היעד ולרמת הידע הקיימת.",
+    link: "/focused-course",
+    linkText: "פרטים על קורסים",
+    bgImage: "/lovable-uploads/96348fd7-1c9e-49f8-b9c6-4ea486dfd787.png"
+  }, {
     icon: <Users className="h-8 w-8" />,
     title: "הרצאות לארגונים",
     description: "הרצאות מרתקות לארגונים וחברות, מותאמות לצרכים הספציפיים של הקהל והארגון.",
@@ -45,13 +52,6 @@ const ServicesSection = () => {
     link: "/focused-workshop",
     linkText: "מידע על סדנאות",
     bgImage: "/lovable-uploads/8bdd9e5e-cba8-433d-881f-2701802d539e.png"
-  }, {
-    icon: <BookOpen className="h-8 w-8" />,
-    title: "קורסים ממוקדים",
-    description: "קורסים ממוקדים בכלי בינה מלאכותית שונים, מותאמים לקהל היעד ולרמת הידע הקיימת.",
-    link: "/focused-course",
-    linkText: "פרטים על קורסים",
-    bgImage: "/lovable-uploads/96348fd7-1c9e-49f8-b9c6-4ea486dfd787.png"
   }, {
     icon: <Coffee className="h-8 w-8" />,
     title: "סדנת היכרות",
