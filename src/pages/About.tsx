@@ -40,7 +40,7 @@ const About = () => {
             duration: 0.5
           }}>
               <div className="aspect-square rounded-2xl overflow-hidden shadow-lg">
-                <img src="https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d" alt="שחר גולן" className="w-full h-full object-cover" />
+                <img src="/lovable-uploads/IMG-20250219-WA0074.jpg" alt="שחר גולן" className="w-full h-full object-cover" />
               </div>
             </motion.div>
 
