@@ -74,7 +74,7 @@ const ServicesSection = () => {
         duration: 0.5
       }}>
           <h2 className="text-3xl md:text-4xl font-bold mb-4">מה מתאים לכם?</h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">פתרונות מותאמים אישית להטמעת בינה מלאכותית בארגון שלכם</p>
+          <p className="text-muted-foreground max-w-2xl mx-auto">הדרכות מותאמות אישית להטמעת בינה מלאכותית בחברה שלכם</p>
         </motion.div>
 
         <motion.div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8" variants={containerVariants} initial="hidden" whileInView="visible" viewport={{
