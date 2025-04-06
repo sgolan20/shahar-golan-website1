@@ -11,7 +11,7 @@ const CtaSection = () => {
           מוכנים להכיר את עולם הבינה המלאכותית?
         </h2>
         <p className="text-xl mb-8 max-w-2xl mx-auto opacity-90">
-          צרו קשר היום להזמנת הרצאה, סדנה או לכל שאלה אחרת
+          אני מזמין אתכם לשיחת היכרות קצרה, בואו נכיר ונשמע איך אני יכול לעזור לכם - ללא כל התחייבות
         </p>
         <Button asChild size="lg" variant="outline" className="bg-transparent text-white border-white hover:bg-white/10">
           <Link to="/contact">

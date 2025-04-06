@@ -34,7 +34,7 @@ const HeroSection = () => {
               <span className="text-gradient">בואו נכיר את עולם ה-AI</span>
             </h1>
             
-            <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto lg:mr-0 lg:ml-auto">הרצאות וסדנאות מותאמות אישית לארגונים.</p>
+            <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto lg:mr-0 lg:ml-auto">הרצאות וסדנאות AI מותאמות אישית לארגונים.</p>
             
             <div className="flex flex-wrap justify-center lg:justify-end gap-4">
               <Button asChild size="lg" className="btn-shine">
@@ -63,7 +63,7 @@ const HeroSection = () => {
         }} className="hidden lg:flex justify-center items-center">
             <div className="text-white p-8 rounded-xl bg-black/40 backdrop-blur-sm border border-white/10 max-w-md mt-24">
               <h3 className="text-2xl font-bold mb-3">שחר גולן</h3>
-              <p className="text-white/80">מרצה ל-GEN-AI ובינה מלאכותית. מלווה ארגונים וחברות לשיפור היצירתיות והיעילות.</p>
+              <p className="text-white/80">מרצה ל-GEN-AI ובינה מלאכותית. מעביר הדרכות וסדנאות AI לשיפור היצירתיות והיעילות בארגונים.</p>
             </div>
           </motion.div>
         </div>

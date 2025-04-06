@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { Card } from "@/components/ui/card";
+import { useEffect, useState } from "react";
 
 const OrganizationsSection = () => {
   const organizations = [{
@@ -51,6 +52,53 @@ const OrganizationsSection = () => {
     name: "הבט",
     logo: "/lovable-uploads/Hebet.png"
   }];
+
+  // State for storing visible organizations and grid columns
+  const [visibleOrgs, setVisibleOrgs] = useState(organizations);
+  const [gridCols, setGridCols] = useState(5);
+
+  // Function to adjust visible organizations based on screen width
+  const adjustVisibleOrgs = () => {
+    let columns = 5; // Default for large screens
+    
+    if (window.innerWidth < 768) {
+      columns = 2; // Mobile
+    } else if (window.innerWidth < 1024) {
+      columns = 3; // Tablet
+    }
+    
+    setGridCols(columns);
+    
+    // Calculate how many complete rows we can display
+    const totalOrgs = organizations.length;
+    const rowsNeeded = Math.floor(totalOrgs / columns);
+    const orgsToShow = rowsNeeded * columns;
+    
+    // Ensure we show at least 4 organizations (minimum requirement)
+    const finalOrgsToShow = Math.max(orgsToShow, 4);
+    
+    // Adjust if we need to show a complete row
+    if (totalOrgs > finalOrgsToShow && totalOrgs < finalOrgsToShow + columns) {
+      // If there are leftover items but not enough for a full row, hide them
+      setVisibleOrgs(organizations.slice(0, finalOrgsToShow));
+    } else {
+      // Otherwise show all organizations
+      setVisibleOrgs(organizations);
+    }
+  };
+
+  // Add resize listener on component mount
+  useEffect(() => {
+    adjustVisibleOrgs(); // Initial adjustment
+    
+    const handleResize = () => {
+      adjustVisibleOrgs();
+    };
+    
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   return <section className="py-16 bg-gray-50">
       <div className="container mx-auto px-4">
         <div className="text-center mb-10">
@@ -60,8 +108,8 @@ const OrganizationsSection = () => {
           </p>
         </div>
         
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 items-center justify-items-center">
-          {organizations.map((org, index) => <motion.div key={index} initial={{
+        <div className={`grid grid-cols-2 md:grid-cols-3 lg:grid-cols-${gridCols} gap-6 items-center justify-items-center`}>
+          {visibleOrgs.map((org, index) => <motion.div key={index} initial={{
           opacity: 0,
           y: 20
         }} whileInView={{
@@ -81,4 +129,5 @@ const OrganizationsSection = () => {
       </div>
     </section>;
 };
+
 export default OrganizationsSection;
