@@ -32,7 +32,7 @@ const Header = () => {
     { title: "הרצאה מותאמת", path: "/custom-lecture" },
     { title: "סדנת היכרות", path: "/intro-workshop" },
     { title: "למה מרצה לבינה מלאכותית?", path: "/why-me" },
-    { title: "בלוג וידאו", path: "/blog" },
+    { title: "בלוג", path: "/blog" },
     { title: "אודות", path: "/about" },
     { title: "צור קשר", path: "/contact" },
   ];
