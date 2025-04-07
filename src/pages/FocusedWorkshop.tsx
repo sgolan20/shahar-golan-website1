@@ -11,14 +11,27 @@ const FocusedWorkshop = () => {
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.5 }}
     >
+      <div className="relative">
+        <div className="w-full h-[300px] md:h-[400px] relative overflow-hidden">
+          <img 
+            src="/lovable-uploads/WhatsApp Image 2024-12-04 at 08.29.07 (1).jpeg" 
+            alt="תמונה המדגימה סדנה ממוקדת" 
+            className="w-full h-full object-cover" 
+            style={{ objectPosition: "center 20%" }}
+          />
+          <div className="absolute inset-0 bg-black/40"></div>
+          <div className="absolute inset-0 flex flex-col justify-center items-center text-center p-4">
+            <h1 className="text-3xl md:text-5xl font-bold mb-6 text-white">
+              סדנה ממוקדת
+            </h1>
+            <p className="text-xl mb-8 text-white/90 max-w-2xl">
+              סדנה מעשית וממוקדת של מספר שעות המותאמת לצרכים הספציפיים של הארגון שלך
+            </p>
+          </div>
+        </div>
+      </div>
       <section className="container mx-auto px-4 py-12 md:py-20">
         <div className="max-w-4xl mx-auto">
-          <h1 className="text-3xl md:text-5xl font-bold mb-6 text-gradient">
-            סדנה ממוקדת
-          </h1>
-          <p className="text-xl mb-8 text-muted-foreground">
-            סדנה מעשית וממוקדת של מספר שעות המותאמת לצרכים הספציפיים של הארגון שלך
-          </p>
 
           <div className="bg-primary/5 p-6 rounded-lg mb-12 border border-primary/10">
             <div className="flex items-center mb-4">

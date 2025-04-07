@@ -11,14 +11,27 @@ const FocusedCourse = () => {
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.5 }}
     >
+      <div className="relative">
+        <div className="w-full h-[300px] md:h-[400px] relative overflow-hidden">
+          <img 
+            src="/lovable-uploads/3ad19a3f-7fcb-4dec-b9ff-7dc0a5aaa713.png" 
+            alt="תמונה המדגימה קורס ממוקד" 
+            className="w-full h-full object-cover" 
+            style={{ objectPosition: "center 20%" }}
+          />
+          <div className="absolute inset-0 bg-black/40"></div>
+          <div className="absolute inset-0 flex flex-col justify-center items-center text-center p-4">
+            <h1 className="text-3xl md:text-5xl font-bold mb-6 text-white">
+              קורס ממוקד בהתאמה אישית
+            </h1>
+            <p className="text-xl mb-8 text-white/90 max-w-2xl">
+              קורס בינה מלאכותית בהתאמה מיוחדת לצרכים הספציפיים של הארגון שלך
+            </p>
+          </div>
+        </div>
+      </div>
       <section className="container mx-auto px-4 py-12 md:py-20">
         <div className="max-w-4xl mx-auto">
-          <h1 className="text-3xl md:text-5xl font-bold mb-6 text-gradient">
-            קורס ממוקד בהתאמה אישית
-          </h1>
-          <p className="text-xl mb-8 text-muted-foreground">
-            קורס בינה מלאכותית בהתאמה מיוחדת לצרכים הספציפיים של הארגון שלך
-          </p>
 
           <div className="grid gap-8 md:grid-cols-2 mb-12">
             <Card className="bg-card/50 backdrop-blur border border-primary/10">

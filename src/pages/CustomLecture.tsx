@@ -11,14 +11,27 @@ const CustomLecture = () => {
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.5 }}
     >
+      <div className="relative">
+        <div className="w-full h-[300px] md:h-[400px] relative overflow-hidden">
+          <img 
+            src="/lovable-uploads/76f2cafb-36e3-43b9-a0a5-a5fb11f41703.png" 
+            alt="תמונה המדגימה הרצאה מותאמת" 
+            className="w-full h-full object-cover" 
+            style={{ objectPosition: "center 20%" }}
+          />
+          <div className="absolute inset-0 bg-black/40"></div>
+          <div className="absolute inset-0 flex flex-col justify-center items-center text-center p-4">
+            <h1 className="text-3xl md:text-5xl font-bold mb-6 text-white">
+              הרצאה מותאמת
+            </h1>
+            <p className="text-xl mb-8 text-white/90 max-w-2xl">
+              הרצאה מרתקת ועדכנית על עולם הבינה המלאכותית, מותאמת במיוחד לקהל היעד שלכם
+            </p>
+          </div>
+        </div>
+      </div>
       <section className="container mx-auto px-4 py-12 md:py-20">
         <div className="max-w-4xl mx-auto">
-          <h1 className="text-3xl md:text-5xl font-bold mb-6 text-gradient">
-            הרצאה מותאמת
-          </h1>
-          <p className="text-xl mb-8 text-muted-foreground">
-            הרצאה מרתקת ועדכנית על עולם הבינה המלאכותית, מותאמת במיוחד לקהל היעד שלכם
-          </p>
 
           <div className="bg-primary/5 p-6 rounded-lg mb-12 border border-primary/10">
             <div className="flex items-center mb-4">
