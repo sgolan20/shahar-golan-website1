@@ -2,8 +2,8 @@
 import { supabase } from "@/integrations/supabase/client";
 import { BlogPost } from "@/lib/models/BlogPost";
 
-// Function to get all blog posts (published ones for the public view)
-export const getPublishedBlogPosts = async () => {
+// Get all published blog posts
+export const getPublishedBlogPosts = async (): Promise<BlogPost[]> => {
   const { data, error } = await supabase
     .from("blog_posts")
     .select("*")
@@ -11,64 +11,82 @@ export const getPublishedBlogPosts = async () => {
     .order("publish_date", { ascending: false });
 
   if (error) {
-    console.error("Error fetching blog posts:", error);
-    throw error;
+    console.error("Error fetching published blog posts:", error);
+    throw new Error("Failed to fetch published blog posts");
   }
 
-  return data as BlogPost[];
+  return data || [];
 };
 
-// Function to get a single blog post by ID
-export const getBlogPostById = async (id: string) => {
+// Get recent blog posts (for admin page)
+export const getRecentBlogPosts = async (): Promise<BlogPost[]> => {
   const { data, error } = await supabase
     .from("blog_posts")
     .select("*")
-    .eq("id", id)
-    .maybeSingle();
+    .order("created_at", { ascending: false });
 
   if (error) {
-    console.error("Error fetching blog post:", error);
-    throw error;
+    console.error("Error fetching recent blog posts:", error);
+    throw new Error("Failed to fetch recent blog posts");
   }
 
-  return data as BlogPost | null;
+  return data || [];
 };
 
-// Function to create a new blog post
-export const createBlogPost = async (post: Omit<BlogPost, "id" | "created_at" | "updated_at">) => {
+// Create a new blog post
+export const createBlogPost = async (post: Omit<BlogPost, "id" | "created_at" | "updated_at">): Promise<BlogPost> => {
   const { data, error } = await supabase
     .from("blog_posts")
-    .insert([{ ...post }])
+    .insert({
+      title: post.title,
+      content: post.content,
+      summary: post.summary,
+      author: post.author,
+      image_url: post.image_url,
+      is_published: post.is_published,
+      publish_date: post.publish_date,
+      tags: post.tags
+    })
     .select()
     .single();
 
   if (error) {
     console.error("Error creating blog post:", error);
-    throw error;
+    throw new Error("Failed to create blog post");
   }
 
-  return data as BlogPost;
+  return data;
 };
 
-// Function to update a blog post
-export const updateBlogPost = async (id: string, post: Partial<BlogPost>) => {
+// Update an existing blog post
+export const updateBlogPost = async (id: string, post: Partial<Omit<BlogPost, "id" | "created_at" | "updated_at">>): Promise<BlogPost> => {
   const { data, error } = await supabase
     .from("blog_posts")
-    .update({ ...post, updated_at: new Date() })
+    .update({
+      title: post.title,
+      content: post.content,
+      summary: post.summary,
+      author: post.author,
+      image_url: post.image_url,
+      is_published: post.is_published,
+      publish_date: typeof post.publish_date === 'object' ? post.publish_date.toISOString() : post.publish_date,
+      tags: post.tags,
+      updated_at: new Date().toISOString()
+    })
     .eq("id", id)
     .select()
     .single();
 
   if (error) {
     console.error("Error updating blog post:", error);
-    throw error;
+    throw new Error("Failed to update blog post");
   }
 
-  return data as BlogPost;
+  return data;
 };
 
-// Function to delete a blog post
-export const deleteBlogPost = async (id: string) => {
+// Delete a blog post
+export const deleteBlogPost = async (id: string): Promise<void> => {
   const { error } = await supabase
     .from("blog_posts")
     .delete()
@@ -76,25 +94,39 @@ export const deleteBlogPost = async (id: string) => {
 
   if (error) {
     console.error("Error deleting blog post:", error);
-    throw error;
+    throw new Error("Failed to delete blog post");
   }
-
-  return true;
 };
 
-// Function to get blog posts by tag
-export const getBlogPostsByTag = async (tag: string) => {
+// Get a single blog post by ID
+export const getBlogPostById = async (id: string): Promise<BlogPost> => {
   const { data, error } = await supabase
     .from("blog_posts")
     .select("*")
-    .contains("tags", [tag])
+    .eq("id", id)
+    .single();
+
+  if (error) {
+    console.error("Error fetching blog post:", error);
+    throw new Error("Failed to fetch blog post");
+  }
+
+  return data;
+};
+
+// Get blog posts by tag
+export const getBlogPostsByTag = async (tag: string): Promise<BlogPost[]> => {
+  const { data, error } = await supabase
+    .from("blog_posts")
+    .select("*")
     .eq("is_published", true)
+    .contains("tags", [tag])
     .order("publish_date", { ascending: false });
 
   if (error) {
     console.error("Error fetching blog posts by tag:", error);
-    throw error;
+    throw new Error("Failed to fetch blog posts by tag");
   }
 
-  return data as BlogPost[];
+  return data || [];
 };

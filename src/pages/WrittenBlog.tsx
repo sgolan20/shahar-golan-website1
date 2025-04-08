@@ -186,10 +186,10 @@ const WrittenBlog = () => {
                   transition={{ duration: 0.3 }}
                 >
                   <Card className="h-full flex flex-col">
-                    {post.imageUrl && (
+                    {post.image_url && (
                       <div className="h-48 overflow-hidden">
                         <img 
-                          src={post.imageUrl} 
+                          src={post.image_url} 
                           alt={post.title} 
                           className="w-full h-full object-cover transition-transform hover:scale-105 duration-300"
                         />
@@ -202,7 +202,7 @@ const WrittenBlog = () => {
                       <p className="text-muted-foreground mb-4">{post.summary}</p>
                       <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
                         <Calendar size={14} />
-                        <span>{formatDate(post.publishDate)}</span>
+                        <span>{formatDate(post.publish_date)}</span>
                       </div>
                       <div className="flex items-center gap-2 text-sm text-muted-foreground">
                         <User size={14} />

@@ -1,206 +1,194 @@
+
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Plus, Pencil, Trash2, Eye, EyeOff, Save, X, Tag, Calendar, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
+import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Skeleton } from "@/components/ui/skeleton";
-import { useToast } from "@/components/ui/use-toast";
-import { supabase } from "@/integrations/supabase/client";
+import { Switch } from "@/components/ui/switch";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "@/components/ui/collapsible";
+import { toast } from "sonner";
+import { getRecentBlogPosts, createBlogPost, updateBlogPost, deleteBlogPost } from "@/services/blogService";
 import { BlogPost } from "@/lib/models/BlogPost";
+import Layout from "@/components/layout/Layout";
 
 const BlogAdmin = () => {
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState("posts");
-  const [selectedPost, setSelectedPost] = useState<BlogPost | null>(null);
+  const [activeTab, setActiveTab] = useState("all");
+  const [isCreatingPost, setIsCreatingPost] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const [isCreating, setIsCreating] = useState(false);
-  const [newTag, setNewTag] = useState("");
+  const [editingPostId, setEditingPostId] = useState<string | null>(null);
   
-  // שדות עבור פוסט חדש/עריכה
-  const [editTitle, setEditTitle] = useState("");
-  const [editContent, setEditContent] = useState("");
-  const [editSummary, setEditSummary] = useState("");
-  const [editAuthor, setEditAuthor] = useState("");
-  const [editImageUrl, setEditImageUrl] = useState("");
-  const [editTags, setEditTags] = useState<string[]>([]);
-  const [editIsPublished, setEditIsPublished] = useState(true);
+  const [formData, setFormData] = useState<{
+    title: string;
+    content: string;
+    summary: string;
+    author: string;
+    image_url?: string;
+    is_published: boolean;
+    publish_date: string;
+    tags: string[];
+    newTag: string;
+  }>({
+    title: "",
+    content: "",
+    summary: "",
+    author: "שחר גולן",
+    image_url: "",
+    is_published: false,
+    publish_date: new Date().toISOString().split('T')[0],
+    tags: [],
+    newTag: ""
+  });
   
-  const { toast } = useToast();
-
   useEffect(() => {
     fetchPosts();
   }, []);
-
+  
   const fetchPosts = async () => {
     try {
       setIsLoading(true);
-      setError(null);
-      
-      const { data, error } = await supabase
-        .from("blog_posts")
-        .select("*")
-        .order("created_at", { ascending: false });
-        
-      if (error) throw error;
-      
-      setPosts(data as BlogPost[]);
-    } catch (err) {
-      console.error("שגיאה בטעינת פוסטים:", err);
-      setError("לא ניתן לטעון את הפוסטים. אנא נסה שוב מאוחר יותר.");
+      const data = await getRecentBlogPosts();
+      setPosts(data);
+    } catch (error) {
+      console.error("Error fetching posts:", error);
+      toast.error("שגיאה בטעינת הפוסטים");
     } finally {
       setIsLoading(false);
     }
   };
-
-  const handleViewPost = (post: BlogPost) => {
-    setSelectedPost(post);
-    setActiveTab("view");
-  };
-
-  const handleCreatePost = () => {
-    setEditTitle("");
-    setEditContent("");
-    setEditSummary("");
-    setEditAuthor("שחר גולן"); // ערך ברירת מחדל
-    setEditImageUrl("");
-    setEditTags([]);
-    setEditIsPublished(true);
-    setIsCreating(true);
-    setActiveTab("edit");
-  };
-
-  const handleEditPost = (post: BlogPost) => {
-    setSelectedPost(post);
-    setEditTitle(post.title);
-    setEditContent(post.content);
-    setEditSummary(post.summary);
-    setEditAuthor(post.author);
-    setEditImageUrl(post.imageUrl || "");
-    setEditTags(post.tags || []);
-    setEditIsPublished(post.isPublished);
-    setIsEditing(true);
-    setActiveTab("edit");
-  };
-
-  const handleDeletePost = async (postId: string) => {
-    if (!postId) return;
-    
+  
+  const handleCreatePost = async () => {
     try {
-      const { error } = await supabase
-        .from("blog_posts")
-        .delete()
-        .eq("id", postId);
-        
-      if (error) throw error;
+      const { newTag, ...postData } = formData;
       
-      setPosts(posts.filter(post => post.id !== postId));
-      toast({
-        title: "פוסט נמחק בהצלחה",
-        description: "הפוסט נמחק מהמערכת",
+      const newPost = await createBlogPost({
+        ...postData,
+        publish_date: new Date(formData.publish_date).toISOString()
       });
-      setActiveTab("posts");
-    } catch (err) {
-      console.error("שגיאה במחיקת פוסט:", err);
-      toast({
-        title: "שגיאה במחיקת פוסט",
-        description: "לא ניתן למחוק את הפוסט. אנא נסה שוב מאוחר יותר.",
-        variant: "destructive",
-      });
+      
+      setPosts([newPost, ...posts]);
+      resetForm();
+      setIsCreatingPost(false);
+      toast.success("הפוסט נוצר בהצלחה");
+    } catch (error) {
+      console.error("Error creating post:", error);
+      toast.error("שגיאה ביצירת הפוסט");
     }
   };
-
-  const handleSavePost = async () => {
-    const postData = {
-      title: editTitle,
-      content: editContent,
-      summary: editSummary,
-      author: editAuthor,
-      imageUrl: editImageUrl,
-      tags: editTags,
-      isPublished: editIsPublished,
-      publishDate: new Date()
-    };
+  
+  const handleUpdatePost = async () => {
+    if (!editingPostId) return;
     
     try {
-      let result;
+      const { newTag, ...postData } = formData;
       
-      if (isEditing && selectedPost?.id) {
-        const { data, error } = await supabase
-          .from("blog_posts")
-          .update({ 
-            ...postData,
-            updated_at: new Date()
-          })
-          .eq("id", selectedPost.id)
-          .select()
-          .single();
-          
-        if (error) throw error;
-        result = data;
-        
-        setPosts(posts.map(post => 
-          post.id === selectedPost.id 
-            ? { ...post, ...postData, id: selectedPost.id } 
-            : post
-        ));
-        
-        toast({
-          title: "פוסט עודכן בהצלחה",
-          description: "השינויים נשמרו בהצלחה",
-        });
-      } else {
-        const { data, error } = await supabase
-          .from("blog_posts")
-          .insert([postData])
-          .select()
-          .single();
-          
-        if (error) throw error;
-        result = data;
-        
-        setPosts([...posts, result as BlogPost]);
-        
-        toast({
-          title: "פוסט חדש נוצר בהצלחה",
-          description: "הפוסט נוסף למערכת",
-        });
-      }
+      const updatedPost = await updateBlogPost(editingPostId, {
+        ...postData,
+        publish_date: new Date(formData.publish_date).toISOString()
+      });
       
-      setActiveTab("posts");
+      setPosts(posts.map(post => post.id === editingPostId ? updatedPost : post));
+      resetForm();
       setIsEditing(false);
-      setIsCreating(false);
-    } catch (err) {
-      console.error("שגיאה בשמירת פוסט:", err);
-      toast({
-        title: "שגיאה בשמירת פוסט",
-        description: "לא ניתן לשמור את הפוסט. אנא נסה שוב מאוחר יותר.",
-        variant: "destructive",
-      });
+      setEditingPostId(null);
+      toast.success("הפוסט עודכן בהצלחה");
+    } catch (error) {
+      console.error("Error updating post:", error);
+      toast.error("שגיאה בעדכון הפוסט");
     }
   };
-
-  const handleAddTag = () => {
-    if (newTag.trim() && !editTags.includes(newTag.trim())) {
-      setEditTags([...editTags, newTag.trim()]);
-      setNewTag("");
+  
+  const handleDeletePost = async (id: string) => {
+    if (!confirm("האם אתה בטוח שברצונך למחוק את הפוסט הזה?")) return;
+    
+    try {
+      await deleteBlogPost(id);
+      setPosts(posts.filter(post => post.id !== id));
+      toast.success("הפוסט נמחק בהצלחה");
+    } catch (error) {
+      console.error("Error deleting post:", error);
+      toast.error("שגיאה במחיקת הפוסט");
     }
   };
-
-  const handleRemoveTag = (tagToRemove: string) => {
-    setEditTags(editTags.filter(tag => tag !== tagToRemove));
+  
+  const startEditing = (post: BlogPost) => {
+    setFormData({
+      title: post.title,
+      content: post.content,
+      summary: post.summary,
+      author: post.author,
+      image_url: post.image_url || "",
+      is_published: post.is_published,
+      publish_date: new Date(post.publish_date).toISOString().split('T')[0],
+      tags: post.tags || [],
+      newTag: ""
+    });
+    setIsEditing(true);
+    setEditingPostId(post.id);
   };
-
-  const formatDate = (date: Date | string) => {
+  
+  const resetForm = () => {
+    setFormData({
+      title: "",
+      content: "",
+      summary: "",
+      author: "שחר גולן",
+      image_url: "",
+      is_published: false,
+      publish_date: new Date().toISOString().split('T')[0],
+      tags: [],
+      newTag: ""
+    });
+    setIsEditing(false);
+    setEditingPostId(null);
+    setIsCreatingPost(false);
+  };
+  
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+  
+  const handleSwitchChange = (checked: boolean) => {
+    setFormData(prev => ({ ...prev, is_published: checked }));
+  };
+  
+  const addTag = () => {
+    if (formData.newTag.trim() && !formData.tags.includes(formData.newTag.trim())) {
+      setFormData(prev => ({
+        ...prev,
+        tags: [...prev.tags, prev.newTag.trim()],
+        newTag: ""
+      }));
+    }
+  };
+  
+  const removeTag = (tagToRemove: string) => {
+    setFormData(prev => ({
+      ...prev,
+      tags: prev.tags.filter(tag => tag !== tagToRemove)
+    }));
+  };
+  
+  const handleTagKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      addTag();
+    }
+  };
+  
+  const filteredPosts = activeTab === "all" 
+    ? posts 
+    : activeTab === "published" 
+      ? posts.filter(post => post.is_published) 
+      : posts.filter(post => !post.is_published);
+  
+  const formatDate = (date: string | Date) => {
     if (!date) return "";
     
     const dateObj = typeof date === 'string' ? new Date(date) : date;
@@ -212,398 +200,274 @@ const BlogAdmin = () => {
   };
 
   return (
-    <div dir="rtl">
-      <section className="pt-20 pb-10 md:pt-28 md:pb-14 bg-gray-50">
+    <Layout title="ניהול בלוג - שחר גולן">
+      <div className="py-12" dir="rtl">
         <div className="container mx-auto px-4">
           <motion.div
-            className="max-w-3xl mx-auto text-center"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
+            className="mb-12"
           >
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">ניהול בלוג</h1>
-            <p className="text-xl text-muted-foreground">
-              הוספה, עריכה וניהול פוסטים בבלוג
-            </p>
+            <h1 className="text-3xl md:text-4xl font-bold mb-4">ניהול בלוג</h1>
+            <p className="text-muted-foreground">צור, ערוך ונהל את פוסטי הבלוג שלך</p>
           </motion.div>
-        </div>
-      </section>
-
-      <section className="py-10">
-        <div className="container mx-auto px-4">
-          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <div className="flex justify-between items-center mb-6">
+          
+          <div className="flex justify-between items-center mb-8">
+            <Tabs defaultValue="all" value={activeTab} onValueChange={setActiveTab}>
               <TabsList>
-                <TabsTrigger value="posts">כל הפוסטים</TabsTrigger>
-                {selectedPost && <TabsTrigger value="view">צפייה בפוסט</TabsTrigger>}
-                {(isEditing || isCreating) && <TabsTrigger value="edit">{isCreating ? "פוסט חדש" : "עריכת פוסט"}</TabsTrigger>}
+                <TabsTrigger value="all">הכל ({posts.length})</TabsTrigger>
+                <TabsTrigger value="published">
+                  פורסמו ({posts.filter(post => post.is_published).length})
+                </TabsTrigger>
+                <TabsTrigger value="draft">
+                  טיוטות ({posts.filter(post => !post.is_published).length})
+                </TabsTrigger>
               </TabsList>
-              
-              <div className="flex gap-2">
-                {activeTab === "posts" && (
-                  <Button onClick={handleCreatePost} className="flex items-center gap-1">
-                    <Plus size={16} />
-                    פוסט חדש
-                  </Button>
-                )}
-                {activeTab === "view" && selectedPost && (
-                  <Button onClick={() => handleEditPost(selectedPost)} className="flex items-center gap-1">
-                    <Pencil size={16} />
-                    ערוך פוסט
-                  </Button>
-                )}
-                {activeTab === "edit" && (
-                  <Button onClick={handleSavePost} className="flex items-center gap-1">
-                    <Save size={16} />
-                    שמור
-                  </Button>
-                )}
-              </div>
-            </div>
-
-            <TabsContent value="posts" className="mt-6">
-              {isLoading ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {Array.from({ length: 6 }).map((_, index) => (
-                    <Card key={index} className="overflow-hidden">
-                      <CardHeader className="pb-2">
-                        <Skeleton className="h-6 w-3/4 mb-2" />
-                        <Skeleton className="h-4 w-1/2" />
-                      </CardHeader>
-                      <CardContent>
-                        <Skeleton className="h-32 w-full mb-4" />
-                        <div className="flex gap-2">
-                          <Skeleton className="h-4 w-20" />
-                          <Skeleton className="h-4 w-20" />
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
-              ) : error ? (
-                <Alert variant="destructive" className="mb-6">
-                  <AlertTitle>שגיאה</AlertTitle>
-                  <AlertDescription>{error}</AlertDescription>
-                </Alert>
-              ) : posts.length > 0 ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {posts.map((post) => (
-                    <Card key={post.id} className="overflow-hidden">
-                      {post.imageUrl && (
-                        <div className="h-40 overflow-hidden">
+            </Tabs>
+            
+            <Button 
+              onClick={() => setIsCreatingPost(true)} 
+              className="flex items-center gap-2"
+            >
+              <Plus size={16} />
+              פוסט חדש
+            </Button>
+          </div>
+          
+          {isCreatingPost || isEditing ? (
+            <Card className="mb-8">
+              <CardHeader>
+                <CardTitle>{isEditing ? "עריכת פוסט" : "יצירת פוסט חדש"}</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <form className="space-y-6">
+                  <div className="space-y-4">
+                    <div>
+                      <label htmlFor="title" className="block text-sm font-medium mb-1">כותרת</label>
+                      <Input
+                        id="title"
+                        name="title"
+                        value={formData.title}
+                        onChange={handleChange}
+                        placeholder="הכנס כותרת..."
+                        required
+                      />
+                    </div>
+                    
+                    <div>
+                      <label htmlFor="summary" className="block text-sm font-medium mb-1">תקציר</label>
+                      <Textarea
+                        id="summary"
+                        name="summary"
+                        value={formData.summary}
+                        onChange={handleChange}
+                        placeholder="הכנס תקציר קצר..."
+                        rows={2}
+                        required
+                      />
+                    </div>
+                    
+                    <div>
+                      <label htmlFor="content" className="block text-sm font-medium mb-1">תוכן</label>
+                      <Textarea
+                        id="content"
+                        name="content"
+                        value={formData.content}
+                        onChange={handleChange}
+                        placeholder="הכנס את תוכן הפוסט..."
+                        rows={10}
+                        required
+                      />
+                    </div>
+                    
+                    <div>
+                      <label htmlFor="image_url" className="block text-sm font-medium mb-1">קישור לתמונה</label>
+                      <Input
+                        id="image_url"
+                        name="image_url"
+                        value={formData.image_url || ""}
+                        onChange={handleChange}
+                        placeholder="הכנס קישור לתמונה..."
+                      />
+                      {formData.image_url && (
+                        <div className="mt-2 w-40 h-40 rounded-md overflow-hidden">
                           <img 
-                            src={post.imageUrl} 
-                            alt={post.title} 
+                            src={formData.image_url} 
+                            alt="תצוגה מקדימה" 
                             className="w-full h-full object-cover"
+                            onError={(e) => {
+                              (e.target as HTMLImageElement).src = "https://placehold.co/600x400/e2e8f0/64748b?text=תמונה+לא+נמצאה";
+                            }}
                           />
                         </div>
                       )}
-                      <CardHeader className="pb-2">
-                        <div className="flex justify-between items-start">
-                          <CardTitle className="text-xl line-clamp-2">{post.title}</CardTitle>
-                          {!post.isPublished && (
-                            <Badge variant="outline" className="text-yellow-600 border-yellow-600">
-                              טיוטה
-                            </Badge>
-                          )}
-                        </div>
-                      </CardHeader>
-                      <CardContent className="pb-2">
-                        <p className="text-muted-foreground line-clamp-3 mb-4">{post.summary}</p>
-                        <div className="flex flex-wrap gap-2 mb-2">
-                          {post.tags && post.tags.map(tag => (
-                            <Badge key={tag} variant="secondary">
+                    </div>
+                    
+                    <div>
+                      <label htmlFor="tags" className="block text-sm font-medium mb-1">תגיות</label>
+                      <div className="flex items-center gap-2">
+                        <Input
+                          id="newTag"
+                          name="newTag"
+                          value={formData.newTag}
+                          onChange={handleChange}
+                          onKeyDown={handleTagKeyDown}
+                          placeholder="הוסף תגית..."
+                          className="flex-grow"
+                        />
+                        <Button type="button" onClick={addTag} variant="outline">הוסף</Button>
+                      </div>
+                      {formData.tags.length > 0 && (
+                        <div className="flex flex-wrap gap-2 mt-2">
+                          {formData.tags.map(tag => (
+                            <Badge key={tag} className="flex items-center gap-1">
                               {tag}
+                              <button
+                                type="button"
+                                onClick={() => removeTag(tag)}
+                                className="ml-1 hover:text-destructive"
+                              >
+                                <X size={14} />
+                              </button>
                             </Badge>
                           ))}
                         </div>
-                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                          <Calendar size={14} />
-                          <span>{formatDate(post.publishDate)}</span>
-                        </div>
-                      </CardContent>
-                      <CardFooter className="flex justify-between pt-2">
-                        <Button 
-                          variant="ghost" 
-                          size="sm"
-                          onClick={() => handleViewPost(post)}
-                        >
-                          צפייה
-                        </Button>
-                        <div className="flex gap-2">
-                          <Button 
-                            variant="ghost" 
-                            size="sm"
-                            onClick={() => handleEditPost(post)}
-                          >
-                            <Pencil size={16} />
-                          </Button>
-                          <Dialog>
-                            <DialogTrigger asChild>
-                              <Button 
-                                variant="ghost" 
-                                size="sm"
-                                className="text-red-500 hover:text-red-700 hover:bg-red-50"
-                              >
-                                <Trash2 size={16} />
-                              </Button>
-                            </DialogTrigger>
-                            <DialogContent>
-                              <DialogHeader>
-                                <DialogTitle>מחיקת פוסט</DialogTitle>
-                                <DialogDescription>
-                                  האם אתה בטוח שברצונך למחוק את הפוסט "{post.title}"? פעולה זו אינה ניתנת לביטול.
-                                </DialogDescription>
-                              </DialogHeader>
-                              <DialogFooter className="flex justify-end gap-2 mt-4">
-                                <Button variant="outline" onClick={() => {}}>ביטול</Button>
-                                <Button 
-                                  variant="destructive" 
-                                  onClick={() => post.id && handleDeletePost(post.id)}
-                                >
-                                  מחק
-                                </Button>
-                              </DialogFooter>
-                            </DialogContent>
-                          </Dialog>
-                        </div>
-                      </CardFooter>
-                    </Card>
-                  ))}
-                </div>
-              ) : (
-                <div className="text-center py-12">
-                  <p className="text-xl text-muted-foreground mb-6">אין פוסטים במערכת</p>
-                  <Button onClick={handleCreatePost}>
-                    יצירת פוסט חדש
-                  </Button>
-                </div>
-              )}
-            </TabsContent>
-
-            <TabsContent value="view" className="mt-6">
-              {selectedPost && (
-                <div className="max-w-4xl mx-auto">
-                  {selectedPost.imageUrl && (
-                    <div className="h-80 overflow-hidden rounded-lg mb-8">
-                      <img 
-                        src={selectedPost.imageUrl} 
-                        alt={selectedPost.title} 
-                        className="w-full h-full object-cover"
+                      )}
+                    </div>
+                    
+                    <div>
+                      <label htmlFor="publish_date" className="block text-sm font-medium mb-1">תאריך פרסום</label>
+                      <Input
+                        id="publish_date"
+                        name="publish_date"
+                        type="date"
+                        value={formData.publish_date}
+                        onChange={handleChange}
                       />
                     </div>
-                  )}
-                  
-                  <div className="flex justify-between items-center mb-6">
-                    <h1 className="text-3xl font-bold">{selectedPost.title}</h1>
-                    {!selectedPost.isPublished && (
-                      <Badge variant="outline" className="text-yellow-600 border-yellow-600">
-                        טיוטה
-                      </Badge>
-                    )}
-                  </div>
-                  
-                  <div className="flex items-center gap-6 mb-8 text-muted-foreground">
-                    <div className="flex items-center gap-2">
-                      <User size={16} />
-                      <span>{selectedPost.author}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Calendar size={16} />
-                      <span>{formatDate(selectedPost.publishDate)}</span>
-                    </div>
-                  </div>
-                  
-                  <div className="flex flex-wrap gap-2 mb-8">
-                    {selectedPost.tags && selectedPost.tags.map(tag => (
-                      <Badge key={tag} variant="secondary">
-                        {tag}
-                      </Badge>
-                    ))}
-                  </div>
-                  
-                  <div className="prose prose-lg max-w-none mb-8">
-                    <p className="text-xl font-medium text-muted-foreground mb-8">
-                      {selectedPost.summary}
-                    </p>
                     
-                    <div className="whitespace-pre-wrap">
-                      {selectedPost.content}
+                    <div className="flex items-center space-x-2 space-x-reverse">
+                      <Switch
+                        id="is_published"
+                        checked={formData.is_published}
+                        onCheckedChange={handleSwitchChange}
+                      />
+                      <label 
+                        htmlFor="is_published" 
+                        className="text-sm font-medium cursor-pointer"
+                      >
+                        {formData.is_published ? "פורסם" : "טיוטה"}
+                      </label>
                     </div>
                   </div>
-                  
-                  <div className="flex justify-between mt-12">
-                    <Button 
-                      variant="outline" 
-                      onClick={() => setActiveTab("posts")}
-                    >
-                      חזרה לרשימה
-                    </Button>
-                    <Button 
-                      onClick={() => handleEditPost(selectedPost)}
-                      className="flex items-center gap-1"
-                    >
-                      <Pencil size={16} />
-                      ערוך פוסט
-                    </Button>
-                  </div>
-                </div>
-              )}
-            </TabsContent>
-
-            <TabsContent value="edit" className="mt-6">
-              <div className="max-w-4xl mx-auto">
-                <div className="grid gap-6">
-                  <div>
-                    <Label htmlFor="title">כותרת</Label>
-                    <Input 
-                      id="title" 
-                      value={editTitle} 
-                      onChange={(e) => setEditTitle(e.target.value)} 
-                      placeholder="הזן כותרת לפוסט"
+                </form>
+              </CardContent>
+              <CardFooter className="flex justify-end gap-3">
+                <Button variant="outline" onClick={resetForm}>
+                  ביטול
+                </Button>
+                <Button onClick={isEditing ? handleUpdatePost : handleCreatePost}>
+                  {isEditing ? "עדכן פוסט" : "צור פוסט"}
+                </Button>
+              </CardFooter>
+            </Card>
+          ) : null}
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredPosts.map((post) => (
+              <Card key={post.id} className="h-full flex flex-col relative">
+                {post.image_url && (
+                  <div className="h-40 overflow-hidden">
+                    <img 
+                      src={post.image_url} 
+                      alt={post.title} 
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src = "https://placehold.co/600x400/e2e8f0/64748b?text=תמונה+לא+נמצאה";
+                      }}
                     />
                   </div>
-                  
-                  <div>
-                    <Label htmlFor="summary">תקציר</Label>
-                    <Textarea 
-                      id="summary" 
-                      value={editSummary} 
-                      onChange={(e) => setEditSummary(e.target.value)} 
-                      placeholder="הזן תקציר קצר לפוסט"
-                      rows={3}
-                    />
-                  </div>
-                  
-                  <div>
-                    <Label htmlFor="content">תוכן</Label>
-                    <Textarea 
-                      id="content" 
-                      value={editContent} 
-                      onChange={(e) => setEditContent(e.target.value)} 
-                      placeholder="הזן את תוכן הפוסט"
-                      rows={15}
-                    />
-                  </div>
-                  
-                  <div>
-                    <Label htmlFor="author">מחבר</Label>
-                    <Input 
-                      id="author" 
-                      value={editAuthor} 
-                      onChange={(e) => setEditAuthor(e.target.value)} 
-                      placeholder="הזן את שם המחבר"
-                    />
-                  </div>
-                  
-                  <div>
-                    <Label htmlFor="imageUrl">קישור לתמונה</Label>
-                    <Input 
-                      id="imageUrl" 
-                      value={editImageUrl} 
-                      onChange={(e) => setEditImageUrl(e.target.value)} 
-                      placeholder="הזן קישור לתמונה (אופציונלי)"
-                    />
-                    {editImageUrl && (
-                      <div className="mt-2 h-40 overflow-hidden rounded-md">
-                        <img 
-                          src={editImageUrl} 
-                          alt="תצוגה מקדימה" 
-                          className="w-full h-full object-cover"
-                          onError={(e) => {
-                            e.currentTarget.src = "https://placehold.co/600x400?text=תמונה+לא+זמינה";
-                          }}
-                        />
-                      </div>
-                    )}
-                  </div>
-                  
-                  <div>
-                    <Label>תגיות</Label>
+                )}
+                <Badge 
+                  variant={post.is_published ? "default" : "outline"}
+                  className="absolute top-2 right-2"
+                >
+                  {post.is_published ? "פורסם" : "טיוטה"}
+                </Badge>
+                <CardHeader>
+                  <CardTitle className="line-clamp-2">{post.title}</CardTitle>
+                </CardHeader>
+                <CardContent className="flex-grow">
+                  <p className="line-clamp-3 text-muted-foreground mb-4">{post.summary}</p>
+                  <Collapsible className="space-y-2">
                     <div className="flex flex-wrap gap-2 mb-2">
-                      {editTags.map(tag => (
-                        <Badge key={tag} variant="secondary" className="flex items-center gap-1">
+                      {post.tags && post.tags.map(tag => (
+                        <Badge key={tag} variant="secondary">
                           {tag}
-                          <button 
-                            onClick={() => handleRemoveTag(tag)}
-                            className="ml-1 hover:text-red-500"
-                          >
-                            <X size={14} />
-                          </button>
                         </Badge>
                       ))}
                     </div>
-                    <div className="flex gap-2">
-                      <Input 
-                        value={newTag} 
-                        onChange={(e) => setNewTag(e.target.value)} 
-                        placeholder="הוסף תגית חדשה"
-                        onKeyDown={(e) => {
-                          if (e.key === 'Enter') {
-                            e.preventDefault();
-                            handleAddTag();
-                          }
-                        }}
-                      />
-                      <Button 
-                        type="button" 
-                        onClick={handleAddTag}
-                        variant="outline"
-                        className="flex items-center gap-1"
-                      >
-                        <Tag size={16} />
-                        הוסף
-                      </Button>
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                      <Calendar size={14} />
+                      <span>{formatDate(post.publish_date)}</span>
                     </div>
-                  </div>
-                  
-                  <div className="flex items-center space-x-2 space-x-reverse">
-                    <Switch 
-                      id="isPublished" 
-                      checked={editIsPublished} 
-                      onCheckedChange={setEditIsPublished}
-                    />
-                    <Label htmlFor="isPublished" className="flex items-center gap-2">
-                      {editIsPublished ? (
-                        <>
-                          <Eye size={16} />
-                          פוסט מפורסם
-                        </>
-                      ) : (
-                        <>
-                          <EyeOff size={16} />
-                          טיוטה
-                        </>
-                      )}
-                    </Label>
-                  </div>
-                  
-                  <div className="flex justify-between mt-8">
+                    <CollapsibleTrigger asChild>
+                      <Button variant="ghost" size="sm" className="w-full mt-2">
+                        פרטים נוספים
+                      </Button>
+                    </CollapsibleTrigger>
+                    <CollapsibleContent className="mt-2 pt-2 border-t">
+                      <div className="prose prose-sm max-w-none line-clamp-3 mb-2">
+                        {post.content}
+                      </div>
+                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                        <User size={14} />
+                        <span>{post.author}</span>
+                      </div>
+                    </CollapsibleContent>
+                  </Collapsible>
+                </CardContent>
+                <CardFooter className="flex justify-between pt-2 border-t">
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={() => handleDeletePost(post.id)}
+                    className="text-destructive border-destructive hover:bg-destructive/10"
+                  >
+                    <Trash2 size={16} />
+                  </Button>
+                  <div className="flex gap-2">
                     <Button 
                       variant="outline" 
-                      onClick={() => {
-                        setActiveTab("posts");
-                        setIsEditing(false);
-                        setIsCreating(false);
-                      }}
+                      size="sm"
+                      onClick={() => startEditing(post)}
                     >
-                      ביטול
+                      <Pencil size={16} />
                     </Button>
-                    <Button 
-                      onClick={handleSavePost}
-                      className="flex items-center gap-1"
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      asChild
                     >
-                      <Save size={16} />
-                      שמור
+                      <a href={`/blog/${post.id}`} target="_blank" rel="noopener noreferrer">
+                        {post.is_published ? <Eye size={16} /> : <EyeOff size={16} />}
+                      </a>
                     </Button>
                   </div>
-                </div>
+                </CardFooter>
+              </Card>
+            ))}
+
+            {filteredPosts.length === 0 && !isLoading && (
+              <div className="col-span-full text-center py-12">
+                <p className="text-muted-foreground">אין פוסטים להצגה</p>
               </div>
-            </TabsContent>
-          </Tabs>
+            )}
+          </div>
         </div>
-      </section>
-    </div>
+      </div>
+    </Layout>
   );
 };
 

@@ -96,7 +96,7 @@ const Header = () => {
                       >
                         {link.title}
                       </NavigationMenuTrigger>
-                      <NavigationMenuContent className="origin-top">
+                      <NavigationMenuContent className="relative left-auto right-0 origin-top-right">
                         <ul className="grid gap-3 p-4 md:w-[200px]">
                           {link.subLinks.map((subLink) => (
                             <li key={subLink.path}>
