@@ -5,10 +5,10 @@ export interface BlogPost {
   content: string;
   summary: string;
   author: string;
-  imageUrl?: string;
+  image_url?: string;
   tags?: string[];
-  isPublished: boolean;
-  publishDate: Date | string;
+  is_published: boolean;
+  publish_date: Date | string;
   created_at?: Date | string;
   updated_at?: Date | string;
 }

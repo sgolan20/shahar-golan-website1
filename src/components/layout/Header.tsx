@@ -35,6 +35,7 @@ const Header = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
+  // Corrected order of navigation links from right to left
   const navLinks = [
     { title: "קורס ממוקד", path: "/focused-course" },
     { title: "סדנה ממוקדת", path: "/focused-workshop" },
@@ -86,7 +87,7 @@ const Header = () => {
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-1 space-x-reverse">
             <NavigationMenu dir="rtl">
-              <NavigationMenuList className="flex-row-reverse">
+              <NavigationMenuList>
                 {navLinks.map((link) => (
                   link.isDropdown ? (
                     <NavigationMenuItem key={link.title}>
@@ -95,7 +96,7 @@ const Header = () => {
                       >
                         {link.title}
                       </NavigationMenuTrigger>
-                      <NavigationMenuContent>
+                      <NavigationMenuContent className="origin-top">
                         <ul className="grid gap-3 p-4 md:w-[200px]">
                           {link.subLinks.map((subLink) => (
                             <li key={subLink.path}>
@@ -115,13 +116,14 @@ const Header = () => {
                       </NavigationMenuContent>
                     </NavigationMenuItem>
                   ) : (
-                    <Link
-                      key={link.path}
-                      to={link.path}
-                      className={`nav-link ${isLinkActive(link.path) ? "active" : ""}`}
-                    >
-                      {link.title}
-                    </Link>
+                    <NavigationMenuItem key={link.path}>
+                      <Link
+                        to={link.path}
+                        className={`nav-link ${isLinkActive(link.path) ? "active" : ""}`}
+                      >
+                        {link.title}
+                      </Link>
+                    </NavigationMenuItem>
                   )
                 ))}
               </NavigationMenuList>
