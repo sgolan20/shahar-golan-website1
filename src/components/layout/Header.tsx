@@ -86,34 +86,38 @@ const Header = () => {
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-1 space-x-reverse">
-            <NavigationMenu dir="rtl">
-              <NavigationMenuList>
+            <NavigationMenu dir="rtl" className="rtl">
+              <NavigationMenuList className="rtl">
                 {navLinks.map((link) => (
                   link.isDropdown ? (
                     <NavigationMenuItem key={link.title}>
-                      <NavigationMenuTrigger 
-                        className={`nav-link ${isParentActive(link.subLinks) ? "active" : ""}`}
-                      >
-                        {link.title}
-                      </NavigationMenuTrigger>
-                      <NavigationMenuContent className="relative left-auto right-0 origin-top-right">
-                        <ul className="grid gap-3 p-4 md:w-[200px]">
-                          {link.subLinks.map((subLink) => (
-                            <li key={subLink.path}>
-                              <NavigationMenuLink asChild>
+                      <div className="group relative">
+                        <button 
+                          className={`nav-link group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 ${isParentActive(link.subLinks) ? "active" : ""}`}
+                        >
+                          {link.title}
+                          <ChevronDown
+                            className="relative top-[1px] mr-1 h-3 w-3 transition duration-200 group-hover:rotate-180"
+                            aria-hidden="true"
+                          />
+                        </button>
+                        <div className="absolute right-0 top-full z-50 mt-0 hidden w-[200px] rounded-md border bg-popover p-2 shadow-md group-hover:block transition-all duration-300 opacity-0 group-hover:opacity-100 [transition-delay:0ms] group-hover:[transition-delay:200ms]">
+                          <ul className="grid gap-1">
+                            {link.subLinks.map((subLink) => (
+                              <li key={subLink.path}>
                                 <Link
                                   to={subLink.path}
-                                  className={`flex items-center p-2 rounded-md hover:bg-accent ${
+                                  className={`block w-full rounded-md p-2 text-right hover:bg-accent ${
                                     isLinkActive(subLink.path) ? "bg-accent" : ""
                                   }`}
                                 >
                                   {subLink.title}
                                 </Link>
-                              </NavigationMenuLink>
-                            </li>
-                          ))}
-                        </ul>
-                      </NavigationMenuContent>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      </div>
                     </NavigationMenuItem>
                   ) : (
                     <NavigationMenuItem key={link.path}>
