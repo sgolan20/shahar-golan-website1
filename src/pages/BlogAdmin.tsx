@@ -1,5 +1,5 @@
+
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Plus, Pencil, Trash2, Eye, EyeOff, Save, X, Tag, Calendar, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -14,15 +14,8 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useToast } from "@/components/ui/use-toast";
-import { 
-  getAllBlogPosts, 
-  getBlogPostById, 
-  addBlogPost, 
-  updateBlogPost, 
-  deleteBlogPost 
-} from "@/services/blogService";
+import { supabase } from "@/integrations/supabase/client";
 import { BlogPost } from "@/lib/models/BlogPost";
-import { initializeFirestore } from "@/scripts/initializeFirestore";
 
 const BlogAdmin = () => {
   const [posts, setPosts] = useState<BlogPost[]>([]);
@@ -33,7 +26,6 @@ const BlogAdmin = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
   const [newTag, setNewTag] = useState("");
-  const [isInitializing, setIsInitializing] = useState(false);
   
   // שדות עבור פוסט חדש/עריכה
   const [editTitle, setEditTitle] = useState("");
@@ -45,7 +37,6 @@ const BlogAdmin = () => {
   const [editIsPublished, setEditIsPublished] = useState(true);
   
   const { toast } = useToast();
-  const navigate = useNavigate();
 
   useEffect(() => {
     fetchPosts();
@@ -55,34 +46,20 @@ const BlogAdmin = () => {
     try {
       setIsLoading(true);
       setError(null);
-      const postsData = await getAllBlogPosts();
-      setPosts(postsData);
+      
+      const { data, error } = await supabase
+        .from("blog_posts")
+        .select("*")
+        .order("created_at", { ascending: false });
+        
+      if (error) throw error;
+      
+      setPosts(data as BlogPost[]);
     } catch (err) {
       console.error("שגיאה בטעינת פוסטים:", err);
       setError("לא ניתן לטעון את הפוסטים. אנא נסה שוב מאוחר יותר.");
     } finally {
       setIsLoading(false);
-    }
-  };
-
-  const handleInitializeFirestore = async () => {
-    try {
-      setIsInitializing(true);
-      const postId = await initializeFirestore();
-      toast({
-        title: "אתחול בוצע בהצלחה",
-        description: `פוסט ראשון נוצר עם מזהה: ${postId}`,
-      });
-      fetchPosts();
-    } catch (err) {
-      console.error("שגיאה באתחול Firestore:", err);
-      toast({
-        title: "שגיאה באתחול",
-        description: "לא ניתן לאתחל את Firestore. אנא נסה שוב מאוחר יותר.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsInitializing(false);
     }
   };
 
@@ -120,7 +97,13 @@ const BlogAdmin = () => {
     if (!postId) return;
     
     try {
-      await deleteBlogPost(postId);
+      const { error } = await supabase
+        .from("blog_posts")
+        .delete()
+        .eq("id", postId);
+        
+      if (error) throw error;
+      
       setPosts(posts.filter(post => post.id !== postId));
       toast({
         title: "פוסט נמחק בהצלחה",
@@ -150,25 +133,50 @@ const BlogAdmin = () => {
     };
     
     try {
+      let result;
+      
       if (isEditing && selectedPost?.id) {
-        await updateBlogPost(selectedPost.id, postData);
+        const { data, error } = await supabase
+          .from("blog_posts")
+          .update({ 
+            ...postData,
+            updated_at: new Date()
+          })
+          .eq("id", selectedPost.id)
+          .select()
+          .single();
+          
+        if (error) throw error;
+        result = data;
+        
         setPosts(posts.map(post => 
           post.id === selectedPost.id 
             ? { ...post, ...postData, id: selectedPost.id } 
             : post
         ));
+        
         toast({
           title: "פוסט עודכן בהצלחה",
           description: "השינויים נשמרו בהצלחה",
         });
       } else {
-        const newPostId = await addBlogPost(postData);
-        setPosts([...posts, { ...postData, id: newPostId }]);
+        const { data, error } = await supabase
+          .from("blog_posts")
+          .insert([postData])
+          .select()
+          .single();
+          
+        if (error) throw error;
+        result = data;
+        
+        setPosts([...posts, result as BlogPost]);
+        
         toast({
           title: "פוסט חדש נוצר בהצלחה",
           description: "הפוסט נוסף למערכת",
         });
       }
+      
       setActiveTab("posts");
       setIsEditing(false);
       setIsCreating(false);
@@ -234,19 +242,10 @@ const BlogAdmin = () => {
               
               <div className="flex gap-2">
                 {activeTab === "posts" && (
-                  <>
-                    <Button onClick={handleCreatePost} className="flex items-center gap-1">
-                      <Plus size={16} />
-                      פוסט חדש
-                    </Button>
-                    <Button 
-                      variant="outline" 
-                      onClick={handleInitializeFirestore} 
-                      disabled={isInitializing}
-                    >
-                      {isInitializing ? "מאתחל..." : "אתחל Firestore"}
-                    </Button>
-                  </>
+                  <Button onClick={handleCreatePost} className="flex items-center gap-1">
+                    <Plus size={16} />
+                    פוסט חדש
+                  </Button>
                 )}
                 {activeTab === "view" && selectedPost && (
                   <Button onClick={() => handleEditPost(selectedPost)} className="flex items-center gap-1">
@@ -376,8 +375,8 @@ const BlogAdmin = () => {
               ) : (
                 <div className="text-center py-12">
                   <p className="text-xl text-muted-foreground mb-6">אין פוסטים במערכת</p>
-                  <Button onClick={handleInitializeFirestore} disabled={isInitializing}>
-                    {isInitializing ? "מאתחל..." : "אתחל Firestore עם פוסט לדוגמה"}
+                  <Button onClick={handleCreatePost}>
+                    יצירת פוסט חדש
                   </Button>
                 </div>
               )}

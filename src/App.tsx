@@ -9,6 +9,8 @@ import Layout from "./components/layout/Layout";
 import Index from "./pages/Index";
 import About from "./pages/About";
 import Blog from "./pages/Blog";
+import WrittenBlog from "./pages/WrittenBlog";
+import BlogAdmin from "./pages/BlogAdmin";
 import Contact from "./pages/Contact";
 import WhyMe from "./pages/WhyMe";
 import NotFound from "./pages/NotFound";
@@ -34,6 +36,8 @@ const App = () => (
             <Route path="/" element={<Layout><Index /></Layout>} />
             <Route path="/about" element={<Layout><About /></Layout>} />
             <Route path="/blog" element={<Layout><Blog /></Layout>} />
+            <Route path="/written-blog" element={<Layout><WrittenBlog /></Layout>} />
+            <Route path="/blog-admin" element={<Layout><BlogAdmin /></Layout>} />
             <Route path="/contact" element={<Layout><Contact /></Layout>} />
             <Route path="/why-me" element={<Layout><WhyMe /></Layout>} />
             <Route path="/focused-course" element={<Layout><FocusedCourse /></Layout>} />

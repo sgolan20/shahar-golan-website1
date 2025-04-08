@@ -1,135 +1,100 @@
-import { 
-  collection, 
-  getDocs, 
-  getDoc, 
-  addDoc, 
-  updateDoc, 
-  deleteDoc, 
-  doc, 
-  query, 
-  orderBy, 
-  where, 
-  Timestamp,
-  serverTimestamp
-} from "firebase/firestore";
-import { db } from "@/lib/firebase";
+
+import { supabase } from "@/integrations/supabase/client";
 import { BlogPost } from "@/lib/models/BlogPost";
 
-const COLLECTION_NAME = "blogPosts";
-const blogCollection = collection(db, COLLECTION_NAME);
+// Function to get all blog posts (published ones for the public view)
+export const getPublishedBlogPosts = async () => {
+  const { data, error } = await supabase
+    .from("blog_posts")
+    .select("*")
+    .eq("is_published", true)
+    .order("publish_date", { ascending: false });
 
-// קבלת כל הפוסטים
-export const getAllBlogPosts = async (): Promise<BlogPost[]> => {
-  try {
-    const q = query(blogCollection, orderBy("publishDate", "desc"));
-    const querySnapshot = await getDocs(q);
-    
-    return querySnapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data() as Omit<BlogPost, 'id'>
-    }));
-  } catch (error) {
-    console.error("שגיאה בטעינת פוסטים:", error);
+  if (error) {
+    console.error("Error fetching blog posts:", error);
     throw error;
   }
+
+  return data as BlogPost[];
 };
 
-// קבלת פוסטים מפורסמים בלבד
-export const getPublishedBlogPosts = async (): Promise<BlogPost[]> => {
-  try {
-    const q = query(
-      blogCollection, 
-      where("isPublished", "==", true),
-      orderBy("publishDate", "desc")
-    );
-    const querySnapshot = await getDocs(q);
-    
-    return querySnapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data() as Omit<BlogPost, 'id'>
-    }));
-  } catch (error) {
-    console.error("שגיאה בטעינת פוסטים מפורסמים:", error);
+// Function to get a single blog post by ID
+export const getBlogPostById = async (id: string) => {
+  const { data, error } = await supabase
+    .from("blog_posts")
+    .select("*")
+    .eq("id", id)
+    .maybeSingle();
+
+  if (error) {
+    console.error("Error fetching blog post:", error);
     throw error;
   }
+
+  return data as BlogPost | null;
 };
 
-// קבלת פוסט לפי מזהה
-export const getBlogPostById = async (id: string): Promise<BlogPost | null> => {
-  try {
-    const docRef = doc(db, COLLECTION_NAME, id);
-    const docSnap = await getDoc(docRef);
-    
-    if (docSnap.exists()) {
-      return {
-        id: docSnap.id,
-        ...docSnap.data() as Omit<BlogPost, 'id'>
-      };
-    } else {
-      return null;
-    }
-  } catch (error) {
-    console.error("שגיאה בטעינת פוסט:", error);
+// Function to create a new blog post
+export const createBlogPost = async (post: Omit<BlogPost, "id" | "created_at" | "updated_at">) => {
+  const { data, error } = await supabase
+    .from("blog_posts")
+    .insert([{ ...post }])
+    .select()
+    .single();
+
+  if (error) {
+    console.error("Error creating blog post:", error);
     throw error;
   }
+
+  return data as BlogPost;
 };
 
-// הוספת פוסט חדש
-export const addBlogPost = async (blogPost: Omit<BlogPost, 'id'>): Promise<string> => {
-  try {
-    // וידוא שיש תאריך פרסום, אחרת שימוש בתאריך הנוכחי
-    const postWithTimestamp = {
-      ...blogPost,
-      publishDate: blogPost.publishDate || serverTimestamp()
-    };
-    
-    const docRef = await addDoc(blogCollection, postWithTimestamp);
-    return docRef.id;
-  } catch (error) {
-    console.error("שגיאה בהוספת פוסט:", error);
+// Function to update a blog post
+export const updateBlogPost = async (id: string, post: Partial<BlogPost>) => {
+  const { data, error } = await supabase
+    .from("blog_posts")
+    .update({ ...post, updated_at: new Date() })
+    .eq("id", id)
+    .select()
+    .single();
+
+  if (error) {
+    console.error("Error updating blog post:", error);
     throw error;
   }
+
+  return data as BlogPost;
 };
 
-// עדכון פוסט קיים
-export const updateBlogPost = async (id: string, blogPost: Partial<BlogPost>): Promise<void> => {
-  try {
-    const docRef = doc(db, COLLECTION_NAME, id);
-    await updateDoc(docRef, blogPost);
-  } catch (error) {
-    console.error("שגיאה בעדכון פוסט:", error);
+// Function to delete a blog post
+export const deleteBlogPost = async (id: string) => {
+  const { error } = await supabase
+    .from("blog_posts")
+    .delete()
+    .eq("id", id);
+
+  if (error) {
+    console.error("Error deleting blog post:", error);
     throw error;
   }
+
+  return true;
 };
 
-// מחיקת פוסט
-export const deleteBlogPost = async (id: string): Promise<void> => {
-  try {
-    const docRef = doc(db, COLLECTION_NAME, id);
-    await deleteDoc(docRef);
-  } catch (error) {
-    console.error("שגיאה במחיקת פוסט:", error);
-    throw error;
-  }
-};
+// Function to get blog posts by tag
+export const getBlogPostsByTag = async (tag: string) => {
+  const { data, error } = await supabase
+    .from("blog_posts")
+    .select("*")
+    .contains("tags", [tag])
+    .eq("is_published", true)
+    .order("publish_date", { ascending: false });
 
-// חיפוש פוסטים לפי תגיות
-export const getBlogPostsByTag = async (tag: string): Promise<BlogPost[]> => {
-  try {
-    const q = query(
-      blogCollection, 
-      where("tags", "array-contains", tag),
-      where("isPublished", "==", true),
-      orderBy("publishDate", "desc")
-    );
-    const querySnapshot = await getDocs(q);
-    
-    return querySnapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data() as Omit<BlogPost, 'id'>
-    }));
-  } catch (error) {
-    console.error("שגיאה בחיפוש פוסטים לפי תגית:", error);
+  if (error) {
+    console.error("Error fetching blog posts by tag:", error);
     throw error;
   }
+
+  return data as BlogPost[];
 };
