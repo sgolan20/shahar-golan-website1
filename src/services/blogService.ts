@@ -35,18 +35,17 @@ export const getRecentBlogPosts = async (): Promise<BlogPost[]> => {
 
 // Create a new blog post
 export const createBlogPost = async (post: Omit<BlogPost, "id" | "created_at" | "updated_at">): Promise<BlogPost> => {
+  // Ensure publish_date is a string when sending to Supabase
+  const formattedPost = {
+    ...post,
+    publish_date: typeof post.publish_date === 'object' 
+      ? (post.publish_date as Date).toISOString() 
+      : post.publish_date
+  };
+
   const { data, error } = await supabase
     .from("blog_posts")
-    .insert({
-      title: post.title,
-      content: post.content,
-      summary: post.summary,
-      author: post.author,
-      image_url: post.image_url,
-      is_published: post.is_published,
-      publish_date: post.publish_date,
-      tags: post.tags
-    })
+    .insert(formattedPost)
     .select()
     .single();
 
@@ -60,19 +59,18 @@ export const createBlogPost = async (post: Omit<BlogPost, "id" | "created_at" | 
 
 // Update an existing blog post
 export const updateBlogPost = async (id: string, post: Partial<Omit<BlogPost, "id" | "created_at" | "updated_at">>): Promise<BlogPost> => {
+  // Ensure publish_date is a string when sending to Supabase
+  const formattedPost = {
+    ...post,
+    publish_date: post.publish_date && typeof post.publish_date === 'object'
+      ? (post.publish_date as Date).toISOString()
+      : post.publish_date,
+    updated_at: new Date().toISOString()
+  };
+
   const { data, error } = await supabase
     .from("blog_posts")
-    .update({
-      title: post.title,
-      content: post.content,
-      summary: post.summary,
-      author: post.author,
-      image_url: post.image_url,
-      is_published: post.is_published,
-      publish_date: typeof post.publish_date === 'object' ? post.publish_date.toISOString() : post.publish_date,
-      tags: post.tags,
-      updated_at: new Date().toISOString()
-    })
+    .update(formattedPost)
     .eq("id", id)
     .select()
     .single();

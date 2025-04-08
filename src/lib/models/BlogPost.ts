@@ -8,7 +8,7 @@ export interface BlogPost {
   image_url?: string;
   tags?: string[];
   is_published: boolean;
-  publish_date: Date | string;
-  created_at?: Date | string;
-  updated_at?: Date | string;
+  publish_date: string | Date;
+  created_at?: string | Date;
+  updated_at?: string | Date;
 }
