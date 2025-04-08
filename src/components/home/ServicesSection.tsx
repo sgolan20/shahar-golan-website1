@@ -60,7 +60,7 @@ const ServicesSection = () => {
     linkText: "הרשמה לסדנה",
     bgImage: "/lovable-uploads/3ad19a3f-7fcb-4dec-b9ff-7dc0a5aaa713.png"
   }];
-  return <section className="py-20 bg-gray-50">
+  return <section className="py-20 bg-gray-50" id="services">
       <div className="container mx-auto px-4">
         <motion.div className="text-center mb-12" initial={{
         opacity: 0,
@@ -73,8 +73,8 @@ const ServicesSection = () => {
       }} transition={{
         duration: 0.5
       }}>
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">מה מתאים לכם?</h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">הדרכות מותאמות אישית להטמעת בינה מלאכותית בחברה שלכם</p>
+          <h2 className="text-4xl md:text-5xl font-extrabold mb-5 bg-clip-text text-transparent bg-gradient-to-l from-purple-700 to-purple-500">מה מתאים לכם?</h2>
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto font-light">הדרכות <span className="font-semibold">מותאמות אישית</span> להטמעת בינה מלאכותית בחברה שלכם</p>
         </motion.div>
 
         <motion.div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8" variants={containerVariants} initial="hidden" whileInView="visible" viewport={{
@@ -88,22 +88,22 @@ const ServicesSection = () => {
         }}>
               <Link to={service.link} className="block h-full">
                 <Card className="h-full overflow-hidden border-primary/10 hover:border-primary transition-colors duration-300">
-                  <div className="h-48 bg-cover bg-center relative" style={{
+                  <div className="h-60 bg-cover bg-center relative transition-all group-hover:scale-105 duration-700" style={{
                 backgroundImage: `url(${service.bgImage})`
               }}>
-                    <div className="absolute inset-0 bg-primary/30 group-hover:bg-primary/20 transition-colors duration-300"></div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-primary/20 group-hover:from-black/60 group-hover:to-primary/10 transition-colors duration-300"></div>
                   </div>
                   <CardContent className="pt-6 relative">
-                    <div className="bg-purple-100 p-4 rounded-full w-16 h-16 flex items-center justify-center mb-4 text-primary absolute -top-8 right-6 border-4 border-white shadow-md">
+                    <div className="bg-gradient-to-br from-purple-500 to-purple-700 p-4 rounded-full w-18 h-18 flex items-center justify-center mb-4 text-white absolute -top-9 right-6 border-4 border-white shadow-lg hover-scale glow">
                       {service.icon}
                     </div>
                     <div className="pt-8">
-                      <h3 className="text-xl font-semibold mb-3">{service.title}</h3>
-                      <p className="text-muted-foreground mb-4">
+                      <h3 className="text-2xl font-bold mb-4 text-gray-800">{service.title}</h3>
+                      <p className="text-gray-500 mb-5 text-base font-light leading-relaxed">
                         {service.description}
                       </p>
-                      <Button asChild variant="link" className="p-0 h-auto group-hover:underline">
-                        <span className="flex items-center text-primary">
+                      <Button asChild className="tech-button rounded-full py-2 px-5 text-sm md:text-base mt-2 shadow-md hover:shadow-xl transition-all w-full justify-center">
+                        <span className="flex items-center text-white font-medium">
                           {service.linkText}
                           <ArrowRight className="mr-2 h-4 w-4 transition-transform group-hover:translate-x-1 rtl:group-hover:-translate-x-1" />
                         </span>
