@@ -142,10 +142,8 @@ const BlogPost = () => {
           </div>
         )}
         
-        <div className="prose prose-lg max-w-none mb-8">
-          {post.content.split('\n').map((paragraph, index) => (
-            <p key={index}>{paragraph}</p>
-          ))}
+        <div className="prose prose-lg max-w-none mb-8 rtl" dir="rtl">
+          <div dangerouslySetInnerHTML={{ __html: post.content }} />
         </div>
         
         {post.tags && post.tags.length > 0 && (

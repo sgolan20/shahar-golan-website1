@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X, Youtube, ChevronDown } from "lucide-react";
@@ -45,6 +44,7 @@ const Header = () => {
     { title: "הרצאה מותאמת", path: "/custom-lecture" },
     { title: "סדנת היכרות", path: "/intro-workshop" },
     { title: "קורסים דיגיטלים", path: "/digital-courses" },
+    { title: "למה מרצה לבינה מלאכותית?", path: "/why-me" },
     { 
       title: "בלוג", 
       path: "#",
@@ -54,7 +54,6 @@ const Header = () => {
         { title: "בלוג מאמרים", path: "/written-blog" }
       ]
     },
-    { title: "למה מרצה לבינה מלאכותית?", path: "/why-me" },
     { title: "אודות", path: "/about" },
     { title: "צור קשר", path: "/contact" },
   ];
@@ -98,11 +97,11 @@ const Header = () => {
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-1 space-x-reverse">
             <NavigationMenu dir="rtl" className="rtl">
-              <NavigationMenuList className="rtl">
+              <NavigationMenuList className="rtl flex items-center">
                 {navLinks.map((link) => (
                   link.isDropdown ? (
-                    <NavigationMenuItem key={link.title}>
-                      <div className="group relative">
+                    <NavigationMenuItem key={link.title} className="h-10">
+                      <div className="group relative h-full flex items-center justify-center">
                         <button 
                           className={`nav-link group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 ${isParentActive(link.subLinks) ? "active" : ""}`}
                         >
@@ -131,10 +130,10 @@ const Header = () => {
                       </div>
                     </NavigationMenuItem>
                   ) : (
-                    <NavigationMenuItem key={link.path}>
+                    <NavigationMenuItem key={link.path} className="h-10">
                       <Link
                         to={link.path}
-                        className={`nav-link ${isLinkActive(link.path) ? "active" : ""}`}
+                        className={`nav-link h-10 flex items-center ${isLinkActive(link.path) ? "active" : ""}`}
                       >
                         {link.title}
                       </Link>
@@ -205,7 +204,7 @@ const Header = () => {
             {navLinks.map((link) => (
               link.isDropdown ? (
                 <div key={link.title} className="py-2">
-                  <div className="flex items-center justify-between px-4 py-2 text-lg font-medium">
+                  <div className="flex items-center justify-between px-4 py-2 text-lg font-medium border-r-2 border-primary/20">
                     {link.title}
                     <ChevronDown className="h-4 w-4" />
                   </div>
@@ -217,7 +216,7 @@ const Header = () => {
                         onClick={closeMobileMenu}
                         className={`block py-2 px-4 text-lg ${
                           isLinkActive(subLink.path)
-                            ? "text-primary font-medium"
+                            ? "text-primary font-medium border-r-2 border-primary"
                             : "text-foreground"
                         }`}
                       >
@@ -231,9 +230,9 @@ const Header = () => {
                   key={link.path}
                   to={link.path}
                   onClick={closeMobileMenu}
-                  className={`py-2 px-4 text-lg ${
+                  className={`py-3 px-4 text-lg flex items-center ${
                     isLinkActive(link.path)
-                      ? "text-primary font-medium"
+                      ? "text-primary font-medium border-r-2 border-primary"
                       : "text-foreground"
                   }`}
                 >

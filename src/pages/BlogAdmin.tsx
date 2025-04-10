@@ -3,8 +3,10 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Plus, Pencil, Trash2, Eye, EyeOff, Save, X, Tag, Calendar, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import ReactQuill from "react-quill";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import "react-quill/dist/quill.snow.css";
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
@@ -270,15 +272,53 @@ const BlogAdmin = () => {
                     
                     <div>
                       <label htmlFor="content" className="block text-sm font-medium mb-1">תוכן</label>
-                      <Textarea
-                        id="content"
-                        name="content"
-                        value={formData.content}
-                        onChange={handleChange}
-                        placeholder="הכנס את תוכן הפוסט..."
-                        rows={10}
-                        required
-                      />
+                      <div className="rtl quill-container" dir="rtl">
+                        <style dangerouslySetInnerHTML={{ __html: `
+                          .quill-container .ql-editor {
+                            direction: rtl;
+                            text-align: right;
+                          }
+                          .quill-container .ql-snow.ql-toolbar {
+                            direction: rtl;
+                          }
+                          .quill-container .ql-snow .ql-picker:not(.ql-color-picker):not(.ql-icon-picker) .ql-picker-label {
+                            padding-right: 8px;
+                          }
+                        `}} />
+                        <ReactQuill
+                          theme="snow"
+                          value={formData.content}
+                          onChange={(content) => {
+                            setFormData(prev => ({
+                              ...prev,
+                              content: content
+                            }));
+                          }}
+                          placeholder="הכנס את תוכן הפוסט..."
+                          modules={{
+                            toolbar: [
+                              [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+                              ['bold', 'italic', 'underline', 'strike'],
+                              [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                              [{ 'align': [] }],
+                              [{ 'direction': 'rtl' }],
+                              [{ 'color': [] }, { 'background': [] }],
+                              ['link', 'image'],
+                              ['clean']
+                            ],
+                          }}
+                          formats={[
+                            'header',
+                            'bold', 'italic', 'underline', 'strike',
+                            'list', 'bullet',
+                            'align',
+                            'direction',
+                            'color', 'background',
+                            'link', 'image'
+                          ]}
+                          style={{ height: '300px', marginBottom: '50px' }}
+                        />
+                      </div>
                     </div>
                     
                     <div>
