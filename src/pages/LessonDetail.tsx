@@ -115,108 +115,112 @@ const LessonDetail = () => {
     );
   }
 
-  // Only allow access if user has permission
+  // Instead of using the ProtectedRoute component with custom props,
+  // we'll implement the access control logic directly
+  if (!checkUserAccess(lesson)) {
+    redirectToCoursePage();
+    return null;
+  }
+
   return (
-    <ProtectedRoute checkFunction={() => checkUserAccess(lesson)} fallback={redirectToCoursePage}>
-      <div className="container mx-auto py-16 md:py-24">
-        <div className="max-w-5xl mx-auto">
-          <div className="flex justify-between items-center mb-8">
-            <Button
-              variant="ghost"
-              asChild
-              className="mb-4"
+    <div className="container mx-auto py-16 md:py-24">
+      <div className="max-w-5xl mx-auto">
+        <div className="flex justify-between items-center mb-8">
+          <Button
+            variant="ghost"
+            asChild
+            className="mb-4"
+          >
+            <Link to={`/digital-courses/${courseSlug}`} className="flex items-center">
+              <ChevronRight className="ml-2 h-5 w-5" />
+              חזרה ל{course.title}
+            </Link>
+          </Button>
+          
+          {isAdmin && (
+            <Button 
+              asChild 
+              variant="outline" 
+              size="sm"
+              className="gap-2"
             >
-              <Link to={`/digital-courses/${courseSlug}`} className="flex items-center">
-                <ChevronRight className="ml-2 h-5 w-5" />
-                חזרה ל{course.title}
+              <Link to="/course-admin" state={{ selectedCourseId: course.id, editingLessonId: lesson.id }}>
+                <Settings className="h-4 w-4" />
+                ערוך שיעור
               </Link>
             </Button>
-            
-            {isAdmin && (
-              <Button 
-                asChild 
-                variant="outline" 
-                size="sm"
-                className="gap-2"
-              >
-                <Link to="/course-admin" state={{ selectedCourseId: course.id, editingLessonId: lesson.id }}>
-                  <Settings className="h-4 w-4" />
-                  ערוך שיעור
-                </Link>
-              </Button>
-            )}
+          )}
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="md:col-span-2">
+            <div className="w-full aspect-video mb-6 bg-black rounded-lg overflow-hidden">
+              <iframe
+                src={getVideoEmbedUrl(lesson.video_url)}
+                title={lesson.title}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+                allowFullScreen
+                className="absolute top-0 left-0 w-full h-full rounded-lg"
+                style={{ position: 'relative', width: '100%', height: '100%' }}
+              ></iframe>
+            </div>
+
+            <div>
+              <h1 className="text-3xl font-bold mb-4">{lesson.title}</h1>
+              <p className="text-muted-foreground mb-6">{lesson.description}</p>
+              
+              <Separator className="my-6" />
+              
+              <div className="prose prose-lg max-w-none">
+                {lesson.content && (
+                  <div>
+                    {lesson.content.split('\n').map((paragraph, index) => (
+                      <p key={index}>{paragraph}</p>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="md:col-span-2">
-              <div className="w-full aspect-video mb-6 bg-black rounded-lg overflow-hidden">
-                <iframe
-                  src={getVideoEmbedUrl(lesson.video_url)}
-                  title={lesson.title}
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
-                  allowFullScreen
-                  className="absolute top-0 left-0 w-full h-full rounded-lg"
-                  style={{ position: 'relative', width: '100%', height: '100%' }}
-                ></iframe>
-              </div>
-
-              <div>
-                <h1 className="text-3xl font-bold mb-4">{lesson.title}</h1>
-                <p className="text-muted-foreground mb-6">{lesson.description}</p>
+          <div className="md:col-span-1">
+            <Card>
+              <CardContent className="p-6">
+                <h3 className="text-xl font-bold mb-4">פרטי השיעור</h3>
                 
-                <Separator className="my-6" />
-                
-                <div className="prose prose-lg max-w-none">
-                  {lesson.content && (
+                <div className="space-y-4">
+                  <div>
+                    <p className="text-sm text-muted-foreground mb-1">קורס</p>
+                    <p className="font-medium">{course.title}</p>
+                  </div>
+                  
+                  <div>
+                    <p className="text-sm text-muted-foreground mb-1">סוג גישה</p>
+                    {lesson.is_free ? (
+                      <Badge className="bg-green-50 text-green-700 hover:bg-green-50">שיעור חינמי</Badge>
+                    ) : (
+                      <Badge className="bg-primary/10 text-primary hover:bg-primary/10">מנוי משלם</Badge>
+                    )}
+                  </div>
+                  
+                  {lesson.duration && (
                     <div>
-                      {lesson.content.split('\n').map((paragraph, index) => (
-                        <p key={index}>{paragraph}</p>
-                      ))}
+                      <p className="text-sm text-muted-foreground mb-1">משך השיעור</p>
+                      <div className="flex items-center">
+                        <Clock className="ml-2 h-4 w-4 text-muted-foreground" />
+                        <span>
+                          {Math.floor(lesson.duration / 60)}:{(lesson.duration % 60).toString().padStart(2, '0')} דקות
+                        </span>
+                      </div>
                     </div>
                   )}
                 </div>
-              </div>
-            </div>
-
-            <div className="md:col-span-1">
-              <Card>
-                <CardContent className="p-6">
-                  <h3 className="text-xl font-bold mb-4">פרטי השיעור</h3>
-                  
-                  <div className="space-y-4">
-                    <div>
-                      <p className="text-sm text-muted-foreground mb-1">קורס</p>
-                      <p className="font-medium">{course.title}</p>
-                    </div>
-                    
-                    <div>
-                      <p className="text-sm text-muted-foreground mb-1">סוג גישה</p>
-                      {lesson.is_free ? (
-                        <Badge className="bg-green-50 text-green-700 hover:bg-green-50">שיעור חינמי</Badge>
-                      ) : (
-                        <Badge className="bg-primary/10 text-primary hover:bg-primary/10">מנוי משלם</Badge>
-                      )}
-                    </div>
-                    
-                    {lesson.duration && (
-                      <div>
-                        <p className="text-sm text-muted-foreground mb-1">משך השיעור</p>
-                        <div className="flex items-center">
-                          <Clock className="ml-2 h-4 w-4 text-muted-foreground" />
-                          <span>
-                            {Math.floor(lesson.duration / 60)}:{(lesson.duration % 60).toString().padStart(2, '0')} דקות
-                          </span>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </div>
-    </ProtectedRoute>
+    </div>
   );
 };
 

@@ -4,6 +4,7 @@ export interface Lesson {
   course_id: string;
   title: string;
   description: string;
+  content?: string;
   video_url: string;
   duration: number | null;
   position: number;
