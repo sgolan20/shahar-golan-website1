@@ -1,4 +1,3 @@
-
 import { supabase } from "@/integrations/supabase/client";
 import { BlogPost } from "@/lib/models/BlogPost";
 
@@ -18,34 +17,42 @@ export const getPublishedBlogPosts = async (): Promise<BlogPost[]> => {
   return data || [];
 };
 
-// Get recent blog posts (for admin page)
-export const getRecentBlogPosts = async (): Promise<BlogPost[]> => {
+// Get a specific blog post
+export const getBlogPostById = async (id: string): Promise<BlogPost | null> => {
+  const { data, error } = await supabase
+    .from("blog_posts")
+    .select("*")
+    .eq("id", id)
+    .single();
+
+  if (error) {
+    console.error("Error fetching blog post:", error);
+    return null;
+  }
+
+  return data;
+};
+
+// Get all blog posts (admin)
+export const getAllBlogPosts = async (): Promise<BlogPost[]> => {
   const { data, error } = await supabase
     .from("blog_posts")
     .select("*")
     .order("created_at", { ascending: false });
 
   if (error) {
-    console.error("Error fetching recent blog posts:", error);
-    throw new Error("Failed to fetch recent blog posts");
+    console.error("Error fetching all blog posts:", error);
+    throw new Error("Failed to fetch all blog posts");
   }
 
   return data || [];
 };
 
-// Create a new blog post
-export const createBlogPost = async (post: Omit<BlogPost, "id" | "created_at" | "updated_at">): Promise<BlogPost> => {
-  // Ensure publish_date is a string when sending to Supabase
-  const formattedPost = {
-    ...post,
-    publish_date: typeof post.publish_date === 'object' 
-      ? (post.publish_date as Date).toISOString() 
-      : post.publish_date
-  };
-
+// Create a blog post
+export const createBlogPost = async (blogPost: Omit<BlogPost, "id" | "created_at" | "updated_at">): Promise<BlogPost> => {
   const { data, error } = await supabase
     .from("blog_posts")
-    .insert(formattedPost)
+    .insert(blogPost)
     .select()
     .single();
 
@@ -57,27 +64,29 @@ export const createBlogPost = async (post: Omit<BlogPost, "id" | "created_at" | 
   return data;
 };
 
-// Update an existing blog post
-export const updateBlogPost = async (id: string, post: Partial<Omit<BlogPost, "id" | "created_at" | "updated_at">>): Promise<BlogPost> => {
-  // Ensure publish_date is a string when sending to Supabase
-  const formattedPost = {
-    ...post,
-    publish_date: post.publish_date && typeof post.publish_date === 'object'
-      ? (post.publish_date as Date).toISOString()
-      : post.publish_date,
-    updated_at: new Date().toISOString()
+// Update blog post
+export const updateBlogPost = async (id: string, updates: Partial<Omit<BlogPost, "id" | "created_at" | "updated_at">>): Promise<BlogPost> => {
+  // Format dates to ISO strings if they are Date objects
+  const formattedUpdates = {
+    ...updates,
+    updated_at: new Date().toISOString(),
+    publish_date: updates.publish_date ? 
+      (updates.publish_date instanceof Date ? 
+        updates.publish_date.toISOString() : 
+        updates.publish_date) : 
+      undefined
   };
-
+  
   const { data, error } = await supabase
     .from("blog_posts")
-    .update(formattedPost)
+    .update(formattedUpdates)
     .eq("id", id)
     .select()
     .single();
 
   if (error) {
     console.error("Error updating blog post:", error);
-    throw new Error("Failed to update blog post");
+    throw new Error(`Failed to update blog post: ${error.message}`);
   }
 
   return data;
@@ -94,37 +103,4 @@ export const deleteBlogPost = async (id: string): Promise<void> => {
     console.error("Error deleting blog post:", error);
     throw new Error("Failed to delete blog post");
   }
-};
-
-// Get a single blog post by ID
-export const getBlogPostById = async (id: string): Promise<BlogPost> => {
-  const { data, error } = await supabase
-    .from("blog_posts")
-    .select("*")
-    .eq("id", id)
-    .single();
-
-  if (error) {
-    console.error("Error fetching blog post:", error);
-    throw new Error("Failed to fetch blog post");
-  }
-
-  return data;
-};
-
-// Get blog posts by tag
-export const getBlogPostsByTag = async (tag: string): Promise<BlogPost[]> => {
-  const { data, error } = await supabase
-    .from("blog_posts")
-    .select("*")
-    .eq("is_published", true)
-    .contains("tags", [tag])
-    .order("publish_date", { ascending: false });
-
-  if (error) {
-    console.error("Error fetching blog posts by tag:", error);
-    throw new Error("Failed to fetch blog posts by tag");
-  }
-
-  return data || [];
 };

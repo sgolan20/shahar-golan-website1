@@ -1,6 +1,4 @@
-
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
@@ -33,75 +31,77 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/components/ui/use-toast";
-import { Pencil, Trash2, Plus, FileVideo } from "lucide-react";
+import { Pencil, Trash2, Plus, RefreshCw } from "lucide-react";
 import { getAllCourses, createCourse, updateCourse, deleteCourse } from "@/services/courseService";
 import { Course } from "@/lib/models/Course";
 import { LessonManager } from "@/components/courses/LessonManager";
 
-const courseSchema = z.object({
+const formSchema = z.object({
   title: z.string().min(2, { message: "כותרת חייבת להכיל לפחות 2 תווים" }),
   description: z.string().min(10, { message: "תיאור חייב להכיל לפחות 10 תווים" }),
-  slug: z.string().min(2, { message: "Slug חייב להכיל לפחות 2 תווים" }).regex(/^[a-z0-9-]+$/, {
-    message: "Slug יכול להכיל רק אותיות קטנות באנגלית, מספרים ומקפים",
-  }),
-  image_url: z.string().optional(),
+  image_url: z.string().url({ message: "כתובת URL לא תקינה" }).optional(),
   is_published: z.boolean().default(false),
 });
 
-type CourseFormValues = z.infer<typeof courseSchema>;
+type FormValues = z.infer<typeof formSchema>;
 
 const CourseAdmin = () => {
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState<string>("courses");
   
   const { toast } = useToast();
   const queryClient = useQueryClient();
-  const navigate = useNavigate();
 
-  const { data: courses, isLoading } = useQuery({
+  const { data: courses, isLoading, refetch } = useQuery({
     queryKey: ["adminCourses"],
     queryFn: getAllCourses
   });
 
-  const addCourseForm = useForm<CourseFormValues>({
-    resolver: zodResolver(courseSchema),
+  const form = useForm<FormValues>({
+    resolver: zodResolver(formSchema),
     defaultValues: {
       title: "",
       description: "",
-      slug: "",
       image_url: "",
       is_published: false
     }
   });
 
-  const editCourseForm = useForm<CourseFormValues>({
-    resolver: zodResolver(courseSchema),
+  const editForm = useForm<FormValues>({
+    resolver: zodResolver(formSchema),
     defaultValues: {
       title: "",
       description: "",
-      slug: "",
       image_url: "",
       is_published: false
     }
   });
 
   const createCourseMutation = useMutation({
-    mutationFn: createCourse,
+    mutationFn: (data: FormValues) => {
+      const uniqueSlug = generateSlug(data.title);
+      return createCourse({
+        title: data.title,
+        description: data.description,
+        slug: uniqueSlug,
+        image_url: data.image_url || null,
+        is_published: data.is_published || false
+      });
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["adminCourses"] });
       setIsAddDialogOpen(false);
-      addCourseForm.reset();
+      form.reset();
       toast({
         title: "הקורס נוצר בהצלחה",
         description: "הקורס החדש נוסף בהצלחה למערכת."
       });
     },
-    onError: (error) => {
+    onError: (error: any) => {
       toast({
         title: "שגיאה ביצירת הקורס",
         description: error.message,
@@ -111,7 +111,7 @@ const CourseAdmin = () => {
   });
 
   const updateCourseMutation = useMutation({
-    mutationFn: ({ id, data }: { id: string; data: Partial<Omit<Course, "id" | "created_at" | "updated_at">> }) => 
+    mutationFn: ({ id, data }: { id: string, data: Partial<Course> }) => 
       updateCourse(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["adminCourses"] });
@@ -122,7 +122,7 @@ const CourseAdmin = () => {
         description: "פרטי הקורס עודכנו בהצלחה."
       });
     },
-    onError: (error) => {
+    onError: (error: any) => {
       toast({
         title: "שגיאה בעדכון הקורס",
         description: error.message,
@@ -142,7 +142,7 @@ const CourseAdmin = () => {
         description: "הקורס הוסר בהצלחה מהמערכת."
       });
     },
-    onError: (error) => {
+    onError: (error: any) => {
       toast({
         title: "שגיאה במחיקת הקורס",
         description: error.message,
@@ -151,11 +151,11 @@ const CourseAdmin = () => {
     }
   });
 
-  const onAddSubmit = (data: CourseFormValues) => {
+  const onSubmit = (data: FormValues) => {
     createCourseMutation.mutate(data);
   };
 
-  const onEditSubmit = (data: CourseFormValues) => {
+  const onEditSubmit = (data: FormValues) => {
     if (selectedCourse) {
       updateCourseMutation.mutate({ id: selectedCourse.id, data });
     }
@@ -163,10 +163,9 @@ const CourseAdmin = () => {
 
   const handleEditCourse = (course: Course) => {
     setSelectedCourse(course);
-    editCourseForm.reset({
+    editForm.reset({
       title: course.title,
       description: course.description,
-      slug: course.slug,
       image_url: course.image_url || "",
       is_published: course.is_published
     });
@@ -184,107 +183,82 @@ const CourseAdmin = () => {
     }
   };
 
-  const handleManageLessons = (course: Course) => {
-    setSelectedCourse(course);
-    setActiveTab("lessons");
+  const generateSlug = (title: string) => {
+    return title.toLowerCase().replace(/\s+/g, '-').slice(0, 50);
   };
 
   return (
     <div className="container mx-auto py-16 md:py-24">
       <div className="max-w-5xl mx-auto">
         <div className="flex items-center justify-between mb-8">
-          <h1 className="text-3xl font-bold">ניהול קורסים דיגיטליים</h1>
-          <Button onClick={() => setIsAddDialogOpen(true)}>
-            <Plus className="ml-2 h-4 w-4" />
-            הוסף קורס חדש
+          <h1 className="text-3xl font-bold">ניהול קורסים</h1>
+          <Button variant="outline" onClick={() => refetch()}>
+            <RefreshCw className="ml-2 h-4 w-4" />
+            רענן רשימה
           </Button>
         </div>
 
-        <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="mb-6">
-            <TabsTrigger value="courses">קורסים</TabsTrigger>
-            {selectedCourse && (
-              <TabsTrigger value="lessons">
-                שיעורים בקורס: {selectedCourse.title}
-              </TabsTrigger>
-            )}
-          </TabsList>
-
-          <TabsContent value="courses">
-            {isLoading ? (
-              <div className="flex justify-center py-12">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-              </div>
-            ) : courses && courses.length > 0 ? (
-              <div className="border rounded-lg overflow-hidden">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>כותרת</TableHead>
-                      <TableHead>Slug</TableHead>
-                      <TableHead>סטטוס</TableHead>
-                      <TableHead className="text-left">פעולות</TableHead>
+        {isLoading ? (
+          <div className="flex justify-center py-12">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+          </div>
+        ) : courses && courses.length > 0 ? (
+          <div className="grid grid-cols-1 gap-12">
+            <div className="border rounded-lg overflow-hidden">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>כותרת</TableHead>
+                    <TableHead>תיאור</TableHead>
+                    <TableHead>סטטוס</TableHead>
+                    <TableHead className="text-left">פעולות</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {courses.map((course) => (
+                    <TableRow key={course.id}>
+                      <TableCell className="font-medium">{course.title}</TableCell>
+                      <TableCell>{course.description}</TableCell>
+                      <TableCell>
+                        {course.is_published ? (
+                          <span className="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-sm text-green-800">
+                            פורסם
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center rounded-full bg-yellow-100 px-2.5 py-0.5 text-sm text-yellow-800">
+                            טיוטה
+                          </span>
+                        )}
+                      </TableCell>
+                      <TableCell className="space-x-1 space-x-reverse">
+                        <Button variant="ghost" size="sm" onClick={() => handleEditCourse(course)}>
+                          <Pencil className="h-4 w-4" />
+                        </Button>
+                        <Button variant="ghost" size="sm" onClick={() => handleDeleteCourse(course)}>
+                          <Trash2 className="h-4 w-4 text-destructive" />
+                        </Button>
+                      </TableCell>
                     </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {courses.map((course) => (
-                      <TableRow key={course.id}>
-                        <TableCell className="font-medium">{course.title}</TableCell>
-                        <TableCell>{course.slug}</TableCell>
-                        <TableCell>
-                          {course.is_published ? (
-                            <span className="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-sm text-green-800">
-                              פורסם
-                            </span>
-                          ) : (
-                            <span className="inline-flex items-center rounded-full bg-yellow-100 px-2.5 py-0.5 text-sm text-yellow-800">
-                              טיוטה
-                            </span>
-                          )}
-                        </TableCell>
-                        <TableCell className="space-x-2 space-x-reverse flex items-center">
-                          <Button variant="outline" size="sm" onClick={() => handleManageLessons(course)}>
-                            <FileVideo className="ml-2 h-4 w-4" />
-                            שיעורים
-                          </Button>
-                          <Button variant="ghost" size="sm" onClick={() => handleEditCourse(course)}>
-                            <Pencil className="h-4 w-4" />
-                          </Button>
-                          <Button variant="ghost" size="sm" onClick={() => handleDeleteCourse(course)}>
-                            <Trash2 className="h-4 w-4 text-destructive" />
-                          </Button>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </div>
-            ) : (
-              <div className="text-center py-12 bg-muted rounded-lg">
-                <h3 className="text-xl font-medium mb-2">אין קורסים במערכת</h3>
-                <p className="text-muted-foreground mb-6">לחץ על "הוסף קורס חדש" כדי להתחיל.</p>
-                <Button onClick={() => setIsAddDialogOpen(true)}>
-                  <Plus className="ml-2 h-4 w-4" />
-                  הוסף קורס חדש
-                </Button>
-              </div>
-            )}
-          </TabsContent>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
 
-          <TabsContent value="lessons">
             {selectedCourse && (
-              <div className="space-y-6">
-                <div className="flex items-center justify-between">
-                  <h2 className="text-2xl font-bold">ניהול שיעורים - {selectedCourse.title}</h2>
-                  <Button variant="outline" onClick={() => setActiveTab("courses")}>
-                    חזרה לרשימת הקורסים
-                  </Button>
-                </div>
-                <LessonManager courseId={selectedCourse.id} />
-              </div>
+              <LessonManager courseId={selectedCourse.id} />
             )}
-          </TabsContent>
-        </Tabs>
+          </div>
+        ) : (
+          <div className="text-center py-12 bg-muted rounded-lg">
+            <h3 className="text-xl font-medium mb-2">אין קורסים במערכת</h3>
+            <p className="text-muted-foreground">לחץ על "הוסף קורס חדש" כדי להתחיל.</p>
+          </div>
+        )}
+
+        <Button onClick={() => setIsAddDialogOpen(true)}>
+          <Plus className="ml-2 h-4 w-4" />
+          הוסף קורס חדש
+        </Button>
 
         {/* Add Course Dialog */}
         <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
@@ -292,10 +266,10 @@ const CourseAdmin = () => {
             <DialogHeader>
               <DialogTitle className="text-2xl">הוספת קורס חדש</DialogTitle>
             </DialogHeader>
-            <Form {...addCourseForm}>
-              <form onSubmit={addCourseForm.handleSubmit(onAddSubmit)} className="space-y-6">
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                 <FormField
-                  control={addCourseForm.control}
+                  control={form.control}
                   name="title"
                   render={({ field }) => (
                     <FormItem>
@@ -308,33 +282,20 @@ const CourseAdmin = () => {
                   )}
                 />
                 <FormField
-                  control={addCourseForm.control}
+                  control={form.control}
                   name="description"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>תיאור הקורס</FormLabel>
                       <FormControl>
-                        <Textarea placeholder="הכנס תיאור מפורט של הקורס" {...field} rows={5} />
+                        <Textarea placeholder="הכנס תיאור של הקורס" {...field} rows={4} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
                 <FormField
-                  control={addCourseForm.control}
-                  name="slug"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Slug (לשימוש ב-URL)</FormLabel>
-                      <FormControl>
-                        <Input placeholder="קורס-דוגמה" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={addCourseForm.control}
+                  control={form.control}
                   name="image_url"
                   render={({ field }) => (
                     <FormItem>
@@ -347,7 +308,7 @@ const CourseAdmin = () => {
                   )}
                 />
                 <FormField
-                  control={addCourseForm.control}
+                  control={form.control}
                   name="is_published"
                   render={({ field }) => (
                     <FormItem className="flex flex-row items-center space-x-3 space-x-reverse space-y-0">
@@ -358,9 +319,8 @@ const CourseAdmin = () => {
                         />
                       </FormControl>
                       <FormLabel className="font-normal cursor-pointer">
-                        פרסם קורס (יוצג לכולם)
+                        פרסם קורס
                       </FormLabel>
-                      <FormMessage />
                     </FormItem>
                   )}
                 />
@@ -383,10 +343,10 @@ const CourseAdmin = () => {
             <DialogHeader>
               <DialogTitle className="text-2xl">עריכת קורס</DialogTitle>
             </DialogHeader>
-            <Form {...editCourseForm}>
-              <form onSubmit={editCourseForm.handleSubmit(onEditSubmit)} className="space-y-6">
+            <Form {...editForm}>
+              <form onSubmit={editForm.handleSubmit(onEditSubmit)} className="space-y-6">
                 <FormField
-                  control={editCourseForm.control}
+                  control={editForm.control}
                   name="title"
                   render={({ field }) => (
                     <FormItem>
@@ -399,33 +359,20 @@ const CourseAdmin = () => {
                   )}
                 />
                 <FormField
-                  control={editCourseForm.control}
+                  control={editForm.control}
                   name="description"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>תיאור הקורס</FormLabel>
                       <FormControl>
-                        <Textarea placeholder="הכנס תיאור מפורט של הקורס" {...field} rows={5} />
+                        <Textarea placeholder="הכנס תיאור של הקורס" {...field} rows={4} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
                 <FormField
-                  control={editCourseForm.control}
-                  name="slug"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Slug (לשימוש ב-URL)</FormLabel>
-                      <FormControl>
-                        <Input placeholder="קורס-דוגמה" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={editCourseForm.control}
+                  control={editForm.control}
                   name="image_url"
                   render={({ field }) => (
                     <FormItem>
@@ -438,7 +385,7 @@ const CourseAdmin = () => {
                   )}
                 />
                 <FormField
-                  control={editCourseForm.control}
+                  control={editForm.control}
                   name="is_published"
                   render={({ field }) => (
                     <FormItem className="flex flex-row items-center space-x-3 space-x-reverse space-y-0">
@@ -449,9 +396,8 @@ const CourseAdmin = () => {
                         />
                       </FormControl>
                       <FormLabel className="font-normal cursor-pointer">
-                        פרסם קורס (יוצג לכולם)
+                        פרסם קורס
                       </FormLabel>
-                      <FormMessage />
                     </FormItem>
                   )}
                 />
@@ -477,7 +423,7 @@ const CourseAdmin = () => {
             <div className="py-4">
               <p className="mb-2">האם אתה בטוח שברצונך למחוק את הקורס:</p>
               <p className="font-semibold">{selectedCourse?.title}</p>
-              <p className="mt-4 text-destructive">שים לב: פעולה זו תמחק גם את כל השיעורים בקורס ולא ניתן לשחזר אותה.</p>
+              <p className="mt-4 text-destructive">שים לב: פעולה זו אינה ניתנת לשחזור.</p>
             </div>
             <div className="flex justify-end space-x-2 space-x-reverse">
               <Button 

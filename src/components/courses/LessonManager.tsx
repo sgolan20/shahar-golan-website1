@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { z } from "zod";
@@ -101,7 +100,9 @@ export const LessonManager = ({ courseId }: LessonManagerProps) => {
       return createLesson({
         ...data,
         course_id: courseId,
-        position: nextPosition
+        position: nextPosition,
+        is_published: data.is_published !== undefined ? data.is_published : false,
+        is_free: data.is_free !== undefined ? data.is_free : false
       });
     },
     onSuccess: () => {
