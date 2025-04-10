@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X, Youtube, ChevronDown } from "lucide-react";
@@ -12,11 +11,15 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle
 } from "@/components/ui/navigation-menu";
+import { useAuth } from "@/contexts/AuthContext";
+import { signOut } from "@/services/userService";
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
+
+  const { user, isAdmin } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -35,12 +38,12 @@ const Header = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
-  // Corrected order of navigation links from right to left
   const navLinks = [
     { title: "קורס ממוקד", path: "/focused-course" },
     { title: "סדנה ממוקדת", path: "/focused-workshop" },
     { title: "הרצאה מותאמת", path: "/custom-lecture" },
     { title: "סדנת היכרות", path: "/intro-workshop" },
+    { title: "קורסים דיגיטלים", path: "/digital-courses" },
     { 
       title: "בלוג", 
       path: "#",
@@ -55,6 +58,25 @@ const Header = () => {
     { title: "צור קשר", path: "/contact" },
   ];
 
+  const adminLinks = [
+    { title: "ניהול בלוג", path: "/blog-admin" },
+    { title: "ניהול קורסים", path: "/course-admin" },
+    { title: "ניהול משתמשים", path: "/user-admin" },
+  ];
+
+  const combinedLinks = isAdmin 
+    ? [
+        ...navLinks.slice(0, 5),
+        {
+          title: "ניהול",
+          path: "#",
+          isDropdown: true,
+          subLinks: adminLinks
+        },
+        ...navLinks.slice(5)
+      ]
+    : navLinks;
+
   const isLinkActive = (path: string) => {
     return location.pathname === path;
   };
@@ -65,6 +87,11 @@ const Header = () => {
 
   const closeMobileMenu = () => {
     setIsMobileMenuOpen(false);
+  };
+
+  const handleSignOut = async () => {
+    await signOut();
+    closeMobileMenu();
   };
 
   return (
@@ -88,7 +115,7 @@ const Header = () => {
           <nav className="hidden md:flex items-center space-x-1 space-x-reverse">
             <NavigationMenu dir="rtl" className="rtl">
               <NavigationMenuList className="rtl">
-                {navLinks.map((link) => (
+                {combinedLinks.map((link) => (
                   link.isDropdown ? (
                     <NavigationMenuItem key={link.title}>
                       <div className="group relative">
@@ -132,6 +159,29 @@ const Header = () => {
                 ))}
               </NavigationMenuList>
             </NavigationMenu>
+            
+            {/* User Authentication */}
+            {user ? (
+              <div className="flex items-center space-x-2 space-x-reverse">
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={handleSignOut}
+                >
+                  התנתק
+                </Button>
+              </div>
+            ) : (
+              <Button 
+                asChild 
+                variant="default" 
+                size="sm"
+                className="mr-2"
+              >
+                <Link to="/auth">התחבר / הירשם</Link>
+              </Button>
+            )}
+            
             <Button 
               asChild 
               variant="outline" 
@@ -168,7 +218,7 @@ const Header = () => {
       {isMobileMenuOpen && (
         <div className="md:hidden bg-white/95 backdrop-blur-md animate-fade-in">
           <div className="container mx-auto px-4 py-4 flex flex-col text-right">
-            {navLinks.map((link) => (
+            {combinedLinks.map((link) => (
               link.isDropdown ? (
                 <div key={link.title} className="py-2">
                   <div className="flex items-center justify-between px-4 py-2 text-lg font-medium">
@@ -207,6 +257,25 @@ const Header = () => {
                 </Link>
               )
             ))}
+            
+            {/* User authentication for mobile */}
+            {user ? (
+              <Button 
+                variant="outline" 
+                onClick={handleSignOut}
+                className="mt-4 mx-4"
+              >
+                התנתק
+              </Button>
+            ) : (
+              <Button 
+                asChild 
+                className="mt-4 mx-4"
+              >
+                <Link to="/auth" onClick={closeMobileMenu}>התחבר / הירשם</Link>
+              </Button>
+            )}
+            
             <Button 
               asChild 
               variant="outline" 
