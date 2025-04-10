@@ -8,7 +8,7 @@ import { Separator } from "@/components/ui/separator";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { PlayCircle, Lock, Calendar, Clock, CheckCircle, AlertCircle } from "lucide-react";
+import { PlayCircle, Lock, Calendar, Clock, CheckCircle, AlertCircle, Settings } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/components/ui/use-toast";
 
@@ -16,7 +16,7 @@ const CourseDetail = () => {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
   const { toast } = useToast();
-  const { user, isPaidUser } = useAuth();
+  const { user, isPaidUser, isAdmin } = useAuth();
 
   const { data: course, isLoading: courseLoading, error: courseError } = useQuery({
     queryKey: ["course", slug],
@@ -75,9 +75,26 @@ const CourseDetail = () => {
   return (
     <div className="container mx-auto py-16 md:py-24">
       <div className="max-w-5xl mx-auto">
+        <div className="flex items-center justify-between mb-8">
+          <h1 className="text-3xl md:text-4xl font-bold">{course.title}</h1>
+          {isAdmin && (
+            <div className="flex space-x-2 space-x-reverse">
+              <Button 
+                asChild 
+                variant="outline" 
+                className="gap-2"
+              >
+                <Link to={`/course-admin`} state={{ selectedCourseId: course.id }}>
+                  <Settings className="h-4 w-4" />
+                  ניהול הקורס והשיעורים
+                </Link>
+              </Button>
+            </div>
+          )}
+        </div>
+
         <div className="grid md:grid-cols-3 gap-8">
           <div className="md:col-span-2">
-            <h1 className="text-3xl md:text-4xl font-bold mb-4">{course.title}</h1>
             <div className="prose prose-lg max-w-none mb-8">
               <p>{course.description}</p>
             </div>

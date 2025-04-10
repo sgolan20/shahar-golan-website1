@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { getCourseBySlug, getLessonById, getLessonsForCourse } from "@/services/courseService";
+import { getLessonById, getCourseBySlug } from "@/services/courseService";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ChevronRight, Lock, List } from "lucide-react";
+import { ChevronRight, Clock, Settings } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/components/ui/use-toast";
 import { Lesson } from "@/lib/models/Lesson";
@@ -17,19 +17,7 @@ const LessonDetail = () => {
   const { courseSlug, lessonId } = useParams<{ courseSlug: string, lessonId: string }>();
   const navigate = useNavigate();
   const { toast } = useToast();
-  const { isPaidUser } = useAuth();
-
-  const { data: course, isLoading: courseLoading } = useQuery({
-    queryKey: ["course", courseSlug],
-    queryFn: () => getCourseBySlug(courseSlug!),
-    enabled: !!courseSlug
-  });
-
-  const { data: lessons, isLoading: lessonsLoading } = useQuery({
-    queryKey: ["lessons", course?.id],
-    queryFn: () => getLessonsForCourse(course!.id),
-    enabled: !!course?.id
-  });
+  const { user, isPaidUser, isAdmin } = useAuth();
 
   const { data: lesson, isLoading: lessonLoading } = useQuery({
     queryKey: ["lesson", lessonId],
@@ -37,57 +25,49 @@ const LessonDetail = () => {
     enabled: !!lessonId
   });
 
-  const isLoading = courseLoading || lessonsLoading || lessonLoading;
+  const { data: course, isLoading: courseLoading } = useQuery({
+    queryKey: ["course", courseSlug],
+    queryFn: () => getCourseBySlug(courseSlug!),
+    enabled: !!courseSlug
+  });
+
+  const isLoading = lessonLoading || courseLoading;
 
   useEffect(() => {
-    if (!isLoading && lesson && !lesson.is_free && !isPaidUser) {
-      toast({
-        title: "גישה אסורה",
-        description: "לצפייה בתוכן זה נדרש מנוי משלם.",
-        variant: "destructive"
-      });
-      navigate(`/digital-courses/${courseSlug}`);
-    }
-  }, [isLoading, lesson, isPaidUser, courseSlug, navigate, toast]);
-
-  const getCurrentLessonIndex = () => {
-    if (!lessons || !lesson) return -1;
-    return lessons.findIndex(l => l.id === lesson.id);
-  };
-
-  const getNextLesson = () => {
-    if (!lessons) return null;
-    const currentIndex = getCurrentLessonIndex();
-    if (currentIndex < 0 || currentIndex >= lessons.length - 1) return null;
-    return lessons[currentIndex + 1];
-  };
-
-  const getPreviousLesson = () => {
-    if (!lessons) return null;
-    const currentIndex = getCurrentLessonIndex();
-    if (currentIndex <= 0) return null;
-    return lessons[currentIndex - 1];
-  };
-
-  const navigateToPreviousLesson = () => {
-    const prevLesson = getPreviousLesson();
-    if (prevLesson) {
-      navigate(`/digital-courses/${courseSlug}/lessons/${prevLesson.id}`);
-    }
-  };
-
-  const navigateToNextLesson = () => {
-    const nextLesson = getNextLesson();
-    if (nextLesson) {
-      if (nextLesson.is_free || isPaidUser) {
-        navigate(`/digital-courses/${courseSlug}/lessons/${nextLesson.id}`);
-      } else {
-        toast({
-          title: "דרוש מנוי משלם",
-          description: "לצפייה בשיעור הבא נדרש מנוי משלם.",
-          variant: "destructive"
-        });
+    // Check if user has permission to view this lesson
+    if (!isLoading && lesson && course) {
+      const hasAccess = checkUserAccess(lesson);
+      if (!hasAccess) {
+        redirectToCoursePage();
       }
+    }
+  }, [isLoading, lesson, course, isPaidUser, user]);
+
+  const checkUserAccess = (lesson: Lesson) => {
+    // Users can access free lessons
+    if (lesson.is_free) {
+      return true;
+    }
+
+    // Paid users can access any lesson
+    if (isPaidUser) {
+      return true;
+    }
+
+    // Otherwise, user doesn't have access
+    return false;
+  };
+
+  const redirectToCoursePage = () => {
+    toast({
+      title: "אין לך גישה לשיעור זה",
+      description: "על מנת לצפות בשיעור זה עליך לשדרג למנוי משלם",
+      variant: "destructive",
+    });
+    if (courseSlug) {
+      navigate(`/digital-courses/${courseSlug}`);
+    } else {
+      navigate("/digital-courses");
     }
   };
 
@@ -119,141 +99,124 @@ const LessonDetail = () => {
     );
   }
 
-  if (!course || !lesson) {
+  if (!lesson || !course) {
     return (
       <div className="container mx-auto py-16 md:py-24">
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="text-2xl font-bold mb-4">השיעור לא נמצא</h2>
           <p className="text-muted-foreground mb-8">לא הצלחנו למצוא את השיעור המבוקש.</p>
           <Button asChild>
-            <Link to={`/digital-courses/${courseSlug}`}>בחזרה לקורס</Link>
+            <Link to={`/digital-courses${courseSlug ? `/${courseSlug}` : ''}`}>
+              חזרה לקורס
+            </Link>
           </Button>
         </div>
       </div>
     );
   }
 
-  // Check for secured content
-  if (!lesson.is_free && !isPaidUser) {
-    return (
-      <ProtectedRoute requiredRole="paid">
-        <div>זהו תוכן מוגן</div>
-      </ProtectedRoute>
-    );
-  }
-
+  // Only allow access if user has permission
   return (
-    <div className="container mx-auto py-16 md:py-24">
-      <div className="max-w-5xl mx-auto">
-        <div className="mb-6">
-          <div className="flex items-center mb-4">
-            <Button variant="ghost" asChild className="p-0 h-auto hover:bg-transparent">
-              <Link to={`/digital-courses/${courseSlug}`} className="flex items-center text-muted-foreground hover:text-primary">
-                <ChevronRight className="mr-1 h-4 w-4" />
-                בחזרה לקורס: {course.title}
+    <ProtectedRoute checkFunction={() => checkUserAccess(lesson)} fallback={redirectToCoursePage}>
+      <div className="container mx-auto py-16 md:py-24">
+        <div className="max-w-5xl mx-auto">
+          <div className="flex justify-between items-center mb-8">
+            <Button
+              variant="ghost"
+              asChild
+              className="mb-4"
+            >
+              <Link to={`/digital-courses/${courseSlug}`} className="flex items-center">
+                <ChevronRight className="ml-2 h-5 w-5" />
+                חזרה ל{course.title}
               </Link>
             </Button>
-          </div>
-          <h1 className="text-2xl md:text-3xl font-bold">{lesson.title}</h1>
-        </div>
-
-        <div className="grid md:grid-cols-3 gap-8">
-          <div className="md:col-span-2">
-            <div className="w-full aspect-video mb-6 bg-black rounded-lg overflow-hidden">
-              <iframe
-                src={getVideoEmbedUrl(lesson.video_url)}
-                title={lesson.title}
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
-                allowFullScreen
-                className="absolute top-0 left-0 w-full h-full rounded-lg"
-                style={{ position: 'relative', width: '100%', height: '100%' }}
-              ></iframe>
-            </div>
-
-            <div className="prose prose-lg max-w-none mb-8">
-              <p>{lesson.description}</p>
-            </div>
-
-            <div className="flex items-center justify-between mt-8">
+            
+            {isAdmin && (
               <Button 
+                asChild 
                 variant="outline" 
-                onClick={navigateToPreviousLesson}
-                disabled={!getPreviousLesson()}
+                size="sm"
+                className="gap-2"
               >
-                שיעור קודם
+                <Link to="/course-admin" state={{ selectedCourseId: course.id, editingLessonId: lesson.id }}>
+                  <Settings className="h-4 w-4" />
+                  ערוך שיעור
+                </Link>
               </Button>
-              <Button 
-                onClick={navigateToNextLesson}
-                disabled={!getNextLesson()}
-              >
-                {getNextLesson() && !getNextLesson()?.is_free && !isPaidUser ? (
-                  <>
-                    <Lock className="ml-2 h-4 w-4" />
-                    שיעור הבא (מנויים בלבד)
-                  </>
-                ) : (
-                  "שיעור הבא"
-                )}
-              </Button>
-            </div>
+            )}
           </div>
 
-          <div className="md:col-span-1">
-            <Card>
-              <CardContent className="p-6">
-                <div className="mb-4">
-                  <h3 className="text-lg font-semibold mb-2">שיעורים בקורס</h3>
-                  <Separator className="my-2" />
-                </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="md:col-span-2">
+              <div className="w-full aspect-video mb-6 bg-black rounded-lg overflow-hidden">
+                <iframe
+                  src={getVideoEmbedUrl(lesson.video_url)}
+                  title={lesson.title}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+                  allowFullScreen
+                  className="absolute top-0 left-0 w-full h-full rounded-lg"
+                  style={{ position: 'relative', width: '100%', height: '100%' }}
+                ></iframe>
+              </div>
+
+              <div>
+                <h1 className="text-3xl font-bold mb-4">{lesson.title}</h1>
+                <p className="text-muted-foreground mb-6">{lesson.description}</p>
                 
-                {lessons && lessons.length > 0 ? (
-                  <div className="space-y-3">
-                    {lessons.map((lessonItem, index) => (
-                      <div 
-                        key={lessonItem.id}
-                        className={`p-2 rounded-md transition-colors ${
-                          lessonItem.id === lesson.id ? 'bg-primary/10' : 'hover:bg-muted'
-                        }`}
-                      >
-                        <Button 
-                          variant="ghost" 
-                          className={`w-full justify-start h-auto p-2 ${
-                            lessonItem.id === lesson.id ? 'font-semibold' : ''
-                          }`}
-                          onClick={() => {
-                            if (lessonItem.is_free || isPaidUser) {
-                              navigate(`/digital-courses/${courseSlug}/lessons/${lessonItem.id}`);
-                            } else {
-                              toast({
-                                title: "דרוש מנוי משלם",
-                                description: "לצפייה בשיעור זה נדרש מנוי משלם.",
-                                variant: "destructive"
-                              });
-                            }
-                          }}
-                        >
-                          <div className="flex items-center text-right">
-                            <span className="ml-2">{index + 1}.</span>
-                            <span className="flex-1">{lessonItem.title}</span>
-                            {!lessonItem.is_free && !isPaidUser && (
-                              <Lock className="h-4 w-4 text-muted-foreground" />
-                            )}
-                          </div>
-                        </Button>
+                <Separator className="my-6" />
+                
+                <div className="prose prose-lg max-w-none">
+                  {lesson.content && (
+                    <div>
+                      {lesson.content.split('\n').map((paragraph, index) => (
+                        <p key={index}>{paragraph}</p>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <div className="md:col-span-1">
+              <Card>
+                <CardContent className="p-6">
+                  <h3 className="text-xl font-bold mb-4">פרטי השיעור</h3>
+                  
+                  <div className="space-y-4">
+                    <div>
+                      <p className="text-sm text-muted-foreground mb-1">קורס</p>
+                      <p className="font-medium">{course.title}</p>
+                    </div>
+                    
+                    <div>
+                      <p className="text-sm text-muted-foreground mb-1">סוג גישה</p>
+                      {lesson.is_free ? (
+                        <Badge className="bg-green-50 text-green-700 hover:bg-green-50">שיעור חינמי</Badge>
+                      ) : (
+                        <Badge className="bg-primary/10 text-primary hover:bg-primary/10">מנוי משלם</Badge>
+                      )}
+                    </div>
+                    
+                    {lesson.duration && (
+                      <div>
+                        <p className="text-sm text-muted-foreground mb-1">משך השיעור</p>
+                        <div className="flex items-center">
+                          <Clock className="ml-2 h-4 w-4 text-muted-foreground" />
+                          <span>
+                            {Math.floor(lesson.duration / 60)}:{(lesson.duration % 60).toString().padStart(2, '0')} דקות
+                          </span>
+                        </div>
                       </div>
-                    ))}
+                    )}
                   </div>
-                ) : (
-                  <div className="text-center py-4">
-                    <p className="text-muted-foreground">אין שיעורים נוספים.</p>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </ProtectedRoute>
   );
 };
 

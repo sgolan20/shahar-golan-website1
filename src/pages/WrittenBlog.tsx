@@ -1,7 +1,6 @@
-
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Search, ChevronRight, ChevronLeft, Calendar, User, Tag } from "lucide-react";
+import { Search, ChevronRight, ChevronLeft, Calendar, User, Tag, Settings } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -9,10 +8,13 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import { Skeleton } from "@/components/ui/skeleton";
 import { getPublishedBlogPosts, getBlogPostsByTag } from "@/services/blogService";
 import { BlogPost } from "@/lib/models/BlogPost";
+import { useAuth } from "@/contexts/AuthContext";
+import { Link } from "react-router-dom";
 
 const POSTS_PER_PAGE = 6;
 
 const WrittenBlog = () => {
+  const { isAdmin } = useAuth();
   const [searchTerm, setSearchTerm] = useState("");
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
@@ -58,18 +60,6 @@ const WrittenBlog = () => {
     fetchPosts();
   }, [selectedTag]);
 
-  const formatDate = (date: Date | string) => {
-    if (!date) return "";
-    
-    const dateObj = typeof date === 'string' ? new Date(date) : date;
-    return dateObj.toLocaleDateString('he-IL', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    });
-  };
-
-  // סינון פוסטים לפי מונח החיפוש
   const filteredPosts = posts.filter(post => 
     post.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
     post.content.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -101,6 +91,17 @@ const WrittenBlog = () => {
     setCurrentPage(1);
   }, [searchTerm]);
 
+  const formatDate = (date: Date | string) => {
+    if (!date) return "";
+    
+    const dateObj = typeof date === 'string' ? new Date(date) : date;
+    return dateObj.toLocaleDateString('he-IL', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+  };
+
   return (
     <div dir="rtl">
       <section className="pt-20 pb-16 md:pt-28 md:pb-20 bg-gray-50">
@@ -115,6 +116,18 @@ const WrittenBlog = () => {
             <p className="text-xl text-muted-foreground">
               מאמרים, טיפים ותובנות בנושא בינה מלאכותית
             </p>
+            {isAdmin && (
+              <Button 
+                asChild 
+                variant="outline" 
+                className="mt-4 gap-2"
+              >
+                <Link to="/blog-admin">
+                  <Settings className="h-4 w-4" />
+                  ניהול מאמרים
+                </Link>
+              </Button>
+            )}
           </motion.div>
         </div>
       </section>

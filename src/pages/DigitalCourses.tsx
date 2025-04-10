@@ -6,10 +6,12 @@ import { getPublishedCourses } from "@/services/courseService";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { PlayCircle, Book, Clock } from "lucide-react";
+import { PlayCircle, Book, Clock, Settings } from "lucide-react";
 import { Course } from "@/lib/models/Course";
+import { useAuth } from "@/contexts/AuthContext";
 
 const DigitalCourses = () => {
+  const { isAdmin } = useAuth();
   const { data: courses, isLoading, error } = useQuery({
     queryKey: ["publishedCourses"],
     queryFn: getPublishedCourses
@@ -39,12 +41,20 @@ const DigitalCourses = () => {
   return (
     <div className="container mx-auto py-16 md:py-24">
       <div className="max-w-5xl mx-auto">
-        <div className="text-center mb-12">
-          <h1 className="text-3xl md:text-4xl font-bold mb-4">הקורסים הדיגיטליים שלי</h1>
-          <p className="text-xl text-muted-foreground">
-            קורסים מקיפים בנושאי בינה מלאכותית, ממשק משתמש AI וכלי AI מתקדמים
-          </p>
+        <div className="flex items-center justify-between mb-8">
+          <h1 className="text-3xl md:text-4xl font-bold">הקורסים הדיגיטליים שלי</h1>
+          {isAdmin && (
+            <Button asChild variant="outline" className="gap-2">
+              <Link to="/course-admin">
+                <Settings className="h-4 w-4" />
+                ניהול קורסים
+              </Link>
+            </Button>
+          )}
         </div>
+        <p className="text-xl text-muted-foreground mb-8">
+          קורסים מקיפים בנושאי בינה מלאכותית, ממשק משתמש AI וכלי AI מתקדמים
+        </p>
 
         <Separator className="my-8" />
 
