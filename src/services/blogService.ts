@@ -1,3 +1,4 @@
+
 import { supabase } from "@/integrations/supabase/client";
 import { BlogPost } from "@/lib/models/BlogPost";
 
@@ -33,6 +34,23 @@ export const getBlogPostById = async (id: string): Promise<BlogPost | null> => {
   return data;
 };
 
+// Get blog posts by tag
+export const getBlogPostsByTag = async (tag: string): Promise<BlogPost[]> => {
+  const { data, error } = await supabase
+    .from("blog_posts")
+    .select("*")
+    .contains("tags", [tag])
+    .eq("is_published", true)
+    .order("publish_date", { ascending: false });
+
+  if (error) {
+    console.error("Error fetching blog posts by tag:", error);
+    throw new Error("Failed to fetch blog posts by tag");
+  }
+
+  return data || [];
+};
+
 // Get all blog posts (admin)
 export const getAllBlogPosts = async (): Promise<BlogPost[]> => {
   const { data, error } = await supabase
@@ -48,11 +66,34 @@ export const getAllBlogPosts = async (): Promise<BlogPost[]> => {
   return data || [];
 };
 
-// Create a blog post
-export const createBlogPost = async (blogPost: Omit<BlogPost, "id" | "created_at" | "updated_at">): Promise<BlogPost> => {
+// Get recent blog posts (for admin panel)
+export const getRecentBlogPosts = async (): Promise<BlogPost[]> => {
   const { data, error } = await supabase
     .from("blog_posts")
-    .insert(blogPost)
+    .select("*")
+    .order("created_at", { ascending: false })
+    .limit(10);
+
+  if (error) {
+    console.error("Error fetching recent blog posts:", error);
+    throw new Error("Failed to fetch recent blog posts");
+  }
+
+  return data || [];
+};
+
+// Create a blog post
+export const createBlogPost = async (blogPost: Omit<BlogPost, "id" | "created_at" | "updated_at">): Promise<BlogPost> => {
+  const formattedPost = {
+    ...blogPost,
+    publish_date: typeof blogPost.publish_date === 'string' 
+      ? blogPost.publish_date 
+      : blogPost.publish_date.toISOString()
+  };
+
+  const { data, error } = await supabase
+    .from("blog_posts")
+    .insert(formattedPost)
     .select()
     .single();
 
@@ -71,9 +112,9 @@ export const updateBlogPost = async (id: string, updates: Partial<Omit<BlogPost,
     ...updates,
     updated_at: new Date().toISOString(),
     publish_date: updates.publish_date ? 
-      (updates.publish_date instanceof Date ? 
-        updates.publish_date.toISOString() : 
-        updates.publish_date) : 
+      (typeof updates.publish_date === 'string' ? 
+        updates.publish_date : 
+        updates.publish_date.toISOString()) : 
       undefined
   };
   

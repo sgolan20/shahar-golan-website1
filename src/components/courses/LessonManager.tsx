@@ -1,589 +1,523 @@
-import { useEffect, useState } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { z } from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { 
-  Table, 
-  TableBody, 
-  TableCell, 
-  TableHead, 
-  TableHeader, 
-  TableRow 
-} from "@/components/ui/table";
-import { 
-  Dialog, 
-  DialogContent, 
-  DialogHeader, 
-  DialogTitle, 
-  DialogTrigger, 
-  DialogClose 
-} from "@/components/ui/dialog";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+import { useState, useEffect } from "react";
+import { Plus, Trash2, Save, Check, X, ArrowUp, ArrowDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Checkbox } from "@/components/ui/checkbox";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Switch } from "@/components/ui/switch";
 import { Separator } from "@/components/ui/separator";
-import { useToast } from "@/components/ui/use-toast";
-import { Pencil, Trash2, Plus, MoveUp, MoveDown } from "lucide-react";
-import { getLessonsForCourse, createLesson, updateLesson, deleteLesson } from "@/services/courseService";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogClose } from "@/components/ui/dialog";
+import { toast } from "sonner";
+import { getLessonsByCourse, createLesson, updateLesson, deleteLesson } from "@/services/courseService";
+import { Course } from "@/lib/models/Course";
 import { Lesson } from "@/lib/models/Lesson";
 
-const lessonSchema = z.object({
-  title: z.string().min(2, { message: "כותרת חייבת להכיל לפחות 2 תווים" }),
-  description: z.string().min(10, { message: "תיאור חייב להכיל לפחות 10 תווים" }),
-  video_url: z.string().min(5, { message: "כתובת URL של הוידאו נדרשת" }),
-  duration: z.coerce.number().min(0, { message: "משך הזמן לא יכול להיות שלילי" }).optional(),
-  is_free: z.boolean().default(false),
-  is_published: z.boolean().default(false),
-});
-
-type LessonFormValues = z.infer<typeof lessonSchema>;
-
 interface LessonManagerProps {
-  courseId: string;
+  course: Course;
+  onLessonsChange?: () => void;
 }
 
-export const LessonManager = ({ courseId }: LessonManagerProps) => {
-  const [selectedLesson, setSelectedLesson] = useState<Lesson | null>(null);
-  const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
-  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+const LessonManager = ({ course, onLessonsChange }: LessonManagerProps) => {
+  const [lessons, setLessons] = useState<Lesson[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isAddingLesson, setIsAddingLesson] = useState(false);
+  const [isEditingLesson, setIsEditingLesson] = useState(false);
+  const [editingLessonId, setEditingLessonId] = useState<string | null>(null);
   
-  const { toast } = useToast();
-  const queryClient = useQueryClient();
-
-  const { data: lessons, isLoading } = useQuery({
-    queryKey: ["lessons", courseId],
-    queryFn: () => getLessonsForCourse(courseId)
+  const [formData, setFormData] = useState({
+    title: "",
+    description: "",
+    video_url: "",
+    duration: 0,
+    position: 1,
+    is_free: false,
+    is_published: false
   });
-
-  const addLessonForm = useForm<LessonFormValues>({
-    resolver: zodResolver(lessonSchema),
-    defaultValues: {
-      title: "",
-      description: "",
-      video_url: "",
-      duration: 0,
-      is_free: false,
-      is_published: false
-    }
-  });
-
-  const editLessonForm = useForm<LessonFormValues>({
-    resolver: zodResolver(lessonSchema),
-    defaultValues: {
-      title: "",
-      description: "",
-      video_url: "",
-      duration: 0,
-      is_free: false,
-      is_published: false
-    }
-  });
-
-  const createLessonMutation = useMutation({
-    mutationFn: (data: LessonFormValues) => {
-      // Calculate the next position
-      const nextPosition = lessons && lessons.length > 0 
-        ? Math.max(...lessons.map(l => l.position)) + 1 
-        : 1;
+  
+  useEffect(() => {
+    fetchLessons();
+  }, [course.id]);
+  
+  const fetchLessons = async () => {
+    try {
+      setIsLoading(true);
+      const lessonsData = await getLessonsByCourse(course.id);
       
-      return createLesson({
-        ...data,
-        course_id: courseId,
-        position: nextPosition,
-        is_published: data.is_published !== undefined ? data.is_published : false,
-        is_free: data.is_free !== undefined ? data.is_free : false
-      });
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["lessons", courseId] });
-      setIsAddDialogOpen(false);
-      addLessonForm.reset();
-      toast({
-        title: "השיעור נוצר בהצלחה",
-        description: "השיעור החדש נוסף בהצלחה לקורס."
-      });
-    },
-    onError: (error) => {
-      toast({
-        title: "שגיאה ביצירת השיעור",
-        description: error.message,
-        variant: "destructive"
-      });
-    }
-  });
-
-  const updateLessonMutation = useMutation({
-    mutationFn: ({ id, data }: { id: string, data: Partial<Lesson> }) => 
-      updateLesson(id, data),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["lessons", courseId] });
-      setIsEditDialogOpen(false);
-      setSelectedLesson(null);
-      toast({
-        title: "השיעור עודכן בהצלחה",
-        description: "פרטי השיעור עודכנו בהצלחה."
-      });
-    },
-    onError: (error) => {
-      toast({
-        title: "שגיאה בעדכון השיעור",
-        description: error.message,
-        variant: "destructive"
-      });
-    }
-  });
-
-  const deleteLessonMutation = useMutation({
-    mutationFn: deleteLesson,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["lessons", courseId] });
-      setIsDeleteDialogOpen(false);
-      setSelectedLesson(null);
-      toast({
-        title: "השיעור נמחק בהצלחה",
-        description: "השיעור הוסר בהצלחה מהקורס."
-      });
-    },
-    onError: (error) => {
-      toast({
-        title: "שגיאה במחיקת השיעור",
-        description: error.message,
-        variant: "destructive"
-      });
-    }
-  });
-
-  const moveLessonMutation = useMutation({
-    mutationFn: ({ id, position }: { id: string; position: number }) => 
-      updateLesson(id, { position }),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["lessons", courseId] });
-    },
-    onError: (error) => {
-      toast({
-        title: "שגיאה בשינוי סדר השיעורים",
-        description: error.message,
-        variant: "destructive"
-      });
-    }
-  });
-
-  const onAddSubmit = (data: LessonFormValues) => {
-    createLessonMutation.mutate(data);
-  };
-
-  const onEditSubmit = (data: LessonFormValues) => {
-    if (selectedLesson) {
-      updateLessonMutation.mutate({ 
-        id: selectedLesson.id, 
-        data: {
-          ...data,
-          course_id: courseId,
-          position: selectedLesson.position
-        }
-      });
+      // Sort by position
+      const sortedLessons = lessonsData.sort((a, b) => a.position - b.position);
+      setLessons(sortedLessons);
+    } catch (error) {
+      console.error("Error fetching lessons:", error);
+      toast.error("שגיאה בטעינת השיעורים");
+    } finally {
+      setIsLoading(false);
     }
   };
-
-  const handleEditLesson = (lesson: Lesson) => {
-    setSelectedLesson(lesson);
-    editLessonForm.reset({
+  
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    
+    const processedValue = name === 'duration' ? Number(value) : value;
+    
+    setFormData(prev => ({
+      ...prev,
+      [name]: processedValue
+    }));
+  };
+  
+  const handleSwitchChange = (name: string) => (checked: boolean) => {
+    setFormData(prev => ({
+      ...prev,
+      [name]: checked
+    }));
+  };
+  
+  const handleAddLesson = async () => {
+    try {
+      // Make sure required fields are filled
+      if (!formData.title || !formData.description || !formData.video_url) {
+        toast.error("אנא מלא את כל השדות הנדרשים");
+        return;
+      }
+      
+      const newLesson = await createLesson({
+        course_id: course.id,
+        title: formData.title,
+        description: formData.description,
+        video_url: formData.video_url,
+        duration: formData.duration,
+        position: formData.position,
+        is_free: formData.is_free,
+        is_published: formData.is_published
+      });
+      
+      setLessons(prev => [...prev, newLesson].sort((a, b) => a.position - b.position));
+      resetForm();
+      setIsAddingLesson(false);
+      if (onLessonsChange) onLessonsChange();
+      toast.success("השיעור נוצר בהצלחה");
+    } catch (error) {
+      console.error("Error creating lesson:", error);
+      toast.error("שגיאה ביצירת השיעור");
+    }
+  };
+  
+  const handleUpdateLesson = async () => {
+    if (!editingLessonId) return;
+    
+    try {
+      // Make sure required fields are filled
+      if (!formData.title || !formData.description || !formData.video_url) {
+        toast.error("אנא מלא את כל השדות הנדרשים");
+        return;
+      }
+      
+      const updatedLesson = await updateLesson(editingLessonId, {
+        title: formData.title,
+        description: formData.description,
+        video_url: formData.video_url,
+        duration: formData.duration,
+        position: formData.position,
+        is_free: formData.is_free,
+        is_published: formData.is_published
+      });
+      
+      setLessons(prev => 
+        prev.map(lesson => 
+          lesson.id === editingLessonId ? updatedLesson : lesson
+        ).sort((a, b) => a.position - b.position)
+      );
+      
+      resetForm();
+      setIsEditingLesson(false);
+      setEditingLessonId(null);
+      if (onLessonsChange) onLessonsChange();
+      toast.success("השיעור עודכן בהצלחה");
+    } catch (error) {
+      console.error("Error updating lesson:", error);
+      toast.error("שגיאה בעדכון השיעור");
+    }
+  };
+  
+  const handleDeleteLesson = async (id: string) => {
+    if (!confirm("האם אתה בטוח שברצונך למחוק את השיעור הזה?")) return;
+    
+    try {
+      await deleteLesson(id);
+      setLessons(prev => prev.filter(lesson => lesson.id !== id));
+      if (onLessonsChange) onLessonsChange();
+      toast.success("השיעור נמחק בהצלחה");
+    } catch (error) {
+      console.error("Error deleting lesson:", error);
+      toast.error("שגיאה במחיקת השיעור");
+    }
+  };
+  
+  const startEditingLesson = (lesson: Lesson) => {
+    setFormData({
       title: lesson.title,
       description: lesson.description,
       video_url: lesson.video_url,
       duration: lesson.duration || 0,
+      position: lesson.position,
       is_free: lesson.is_free,
       is_published: lesson.is_published
     });
-    setIsEditDialogOpen(true);
+    setIsEditingLesson(true);
+    setEditingLessonId(lesson.id);
   };
-
-  const handleDeleteLesson = (lesson: Lesson) => {
-    setSelectedLesson(lesson);
-    setIsDeleteDialogOpen(true);
+  
+  const resetForm = () => {
+    setFormData({
+      title: "",
+      description: "",
+      video_url: "",
+      duration: 0,
+      position: lessons.length > 0 ? Math.max(...lessons.map(l => l.position)) + 1 : 1,
+      is_free: false,
+      is_published: false
+    });
+    setIsEditingLesson(false);
+    setEditingLessonId(null);
   };
-
-  const confirmDeleteLesson = () => {
-    if (selectedLesson) {
-      deleteLessonMutation.mutate(selectedLesson.id);
+  
+  const moveLesson = async (lessonId: string, direction: 'up' | 'down') => {
+    const lessonIndex = lessons.findIndex(l => l.id === lessonId);
+    if (lessonIndex === -1) return;
+    
+    const currentLesson = lessons[lessonIndex];
+    
+    // Cannot move up if already at the top
+    if (direction === 'up' && lessonIndex === 0) return;
+    
+    // Cannot move down if already at the bottom
+    if (direction === 'down' && lessonIndex === lessons.length - 1) return;
+    
+    const targetIndex = direction === 'up' ? lessonIndex - 1 : lessonIndex + 1;
+    const targetLesson = lessons[targetIndex];
+    
+    try {
+      // Swap positions
+      await updateLesson(currentLesson.id, { position: targetLesson.position });
+      await updateLesson(targetLesson.id, { position: currentLesson.position });
+      
+      // Update local state
+      const updatedLessons = [...lessons];
+      updatedLessons[lessonIndex] = { ...currentLesson, position: targetLesson.position };
+      updatedLessons[targetIndex] = { ...targetLesson, position: currentLesson.position };
+      
+      setLessons(updatedLessons.sort((a, b) => a.position - b.position));
+      if (onLessonsChange) onLessonsChange();
+    } catch (error) {
+      console.error("Error moving lesson:", error);
+      toast.error("שגיאה בשינוי סדר השיעורים");
     }
   };
-
-  const moveLesson = (lesson: Lesson, direction: "up" | "down") => {
-    if (!lessons) return;
-    
-    const sortedLessons = [...lessons].sort((a, b) => a.position - b.position);
-    const currentIndex = sortedLessons.findIndex(l => l.id === lesson.id);
-    
-    if (direction === "up" && currentIndex > 0) {
-      const targetLesson = sortedLessons[currentIndex - 1];
-      moveLessonMutation.mutate({ id: lesson.id, position: targetLesson.position });
-      moveLessonMutation.mutate({ id: targetLesson.id, position: lesson.position });
-    } else if (direction === "down" && currentIndex < sortedLessons.length - 1) {
-      const targetLesson = sortedLessons[currentIndex + 1];
-      moveLessonMutation.mutate({ id: lesson.id, position: targetLesson.position });
-      moveLessonMutation.mutate({ id: targetLesson.id, position: lesson.position });
-    }
-  };
-
-  const formatDuration = (seconds: number | null) => {
-    if (!seconds) return "לא צוין";
-    const minutes = Math.floor(seconds / 60);
-    const remainingSeconds = seconds % 60;
-    return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
-  };
-
+  
   return (
-    <div>
-      <div className="flex items-center justify-between mb-6">
-        <h3 className="text-xl font-semibold">שיעורים בקורס</h3>
-        <Button onClick={() => setIsAddDialogOpen(true)}>
-          <Plus className="ml-2 h-4 w-4" />
-          הוסף שיעור חדש
-        </Button>
-      </div>
-
-      {isLoading ? (
-        <div className="flex justify-center py-12">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-        </div>
-      ) : lessons && lessons.length > 0 ? (
-        <div className="border rounded-lg overflow-hidden">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>מס'</TableHead>
-                <TableHead>כותרת</TableHead>
-                <TableHead>משך זמן</TableHead>
-                <TableHead>גישה</TableHead>
-                <TableHead>סטטוס</TableHead>
-                <TableHead className="text-left">פעולות</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {lessons
-                .sort((a, b) => a.position - b.position)
-                .map((lesson, index) => (
-                  <TableRow key={lesson.id}>
-                    <TableCell>{index + 1}</TableCell>
-                    <TableCell className="font-medium">{lesson.title}</TableCell>
-                    <TableCell>{formatDuration(lesson.duration)}</TableCell>
-                    <TableCell>
-                      {lesson.is_free ? (
-                        <span className="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-sm text-green-800">
-                          חינמי
-                        </span>
-                      ) : (
-                        <span className="inline-flex items-center rounded-full bg-blue-100 px-2.5 py-0.5 text-sm text-blue-800">
-                          למנויים
-                        </span>
-                      )}
-                    </TableCell>
-                    <TableCell>
-                      {lesson.is_published ? (
-                        <span className="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-sm text-green-800">
-                          פורסם
-                        </span>
-                      ) : (
-                        <span className="inline-flex items-center rounded-full bg-yellow-100 px-2.5 py-0.5 text-sm text-yellow-800">
-                          טיוטה
-                        </span>
-                      )}
-                    </TableCell>
-                    <TableCell className="space-x-1 space-x-reverse flex items-center">
-                      <Button 
-                        variant="ghost" 
-                        size="sm" 
-                        onClick={() => moveLesson(lesson, "up")}
-                        disabled={index === 0}
-                      >
-                        <MoveUp className="h-4 w-4" />
-                      </Button>
-                      <Button 
-                        variant="ghost" 
-                        size="sm" 
-                        onClick={() => moveLesson(lesson, "down")}
-                        disabled={index === lessons.length - 1}
-                      >
-                        <MoveDown className="h-4 w-4" />
-                      </Button>
-                      <Button variant="ghost" size="sm" onClick={() => handleEditLesson(lesson)}>
-                        <Pencil className="h-4 w-4" />
-                      </Button>
-                      <Button variant="ghost" size="sm" onClick={() => handleDeleteLesson(lesson)}>
-                        <Trash2 className="h-4 w-4 text-destructive" />
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                ))}
-            </TableBody>
-          </Table>
-        </div>
-      ) : (
-        <div className="text-center py-12 bg-muted rounded-lg">
-          <h3 className="text-xl font-medium mb-2">אין שיעורים בקורס זה</h3>
-          <p className="text-muted-foreground mb-6">לחץ על "הוסף שיעור חדש" כדי להתחיל.</p>
-          <Button onClick={() => setIsAddDialogOpen(true)}>
-            <Plus className="ml-2 h-4 w-4" />
-            הוסף שיעור חדש
-          </Button>
-        </div>
-      )}
-
-      {/* Add Lesson Dialog */}
-      <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
-        <DialogContent className="max-w-2xl">
-          <DialogHeader>
-            <DialogTitle className="text-2xl">הוספת שיעור חדש</DialogTitle>
-          </DialogHeader>
-          <Form {...addLessonForm}>
-            <form onSubmit={addLessonForm.handleSubmit(onAddSubmit)} className="space-y-6">
-              <FormField
-                control={addLessonForm.control}
-                name="title"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>כותרת השיעור</FormLabel>
-                    <FormControl>
-                      <Input placeholder="הכנס את כותרת השיעור" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={addLessonForm.control}
-                name="description"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>תיאור השיעור</FormLabel>
-                    <FormControl>
-                      <Textarea placeholder="הכנס תיאור של השיעור" {...field} rows={4} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={addLessonForm.control}
-                name="video_url"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>כתובת URL של הוידאו</FormLabel>
-                    <FormControl>
-                      <Input placeholder="https://www.youtube.com/embed/xxxxx" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={addLessonForm.control}
-                name="duration"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>משך השיעור (בשניות)</FormLabel>
-                    <FormControl>
-                      <Input type="number" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <div className="grid grid-cols-2 gap-4">
-                <FormField
-                  control={addLessonForm.control}
-                  name="is_free"
-                  render={({ field }) => (
-                    <FormItem className="flex flex-row items-center space-x-3 space-x-reverse space-y-0">
-                      <FormControl>
-                        <Checkbox
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
-                      </FormControl>
-                      <FormLabel className="font-normal cursor-pointer">
-                        גישה חופשית (לכולם)
-                      </FormLabel>
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={addLessonForm.control}
-                  name="is_published"
-                  render={({ field }) => (
-                    <FormItem className="flex flex-row items-center space-x-3 space-x-reverse space-y-0">
-                      <FormControl>
-                        <Checkbox
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
-                      </FormControl>
-                      <FormLabel className="font-normal cursor-pointer">
-                        פרסם שיעור
-                      </FormLabel>
-                    </FormItem>
-                  )}
-                />
-              </div>
-              <div className="flex justify-end space-x-2 space-x-reverse">
-                <Button type="submit" disabled={createLessonMutation.isPending}>
-                  {createLessonMutation.isPending ? "מוסיף..." : "הוסף שיעור"}
-                </Button>
-                <DialogClose asChild>
-                  <Button type="button" variant="outline">ביטול</Button>
-                </DialogClose>
-              </div>
-            </form>
-          </Form>
-        </DialogContent>
-      </Dialog>
-
-      {/* Edit Lesson Dialog */}
-      <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
-        <DialogContent className="max-w-2xl">
-          <DialogHeader>
-            <DialogTitle className="text-2xl">עריכת שיעור</DialogTitle>
-          </DialogHeader>
-          <Form {...editLessonForm}>
-            <form onSubmit={editLessonForm.handleSubmit(onEditSubmit)} className="space-y-6">
-              <FormField
-                control={editLessonForm.control}
-                name="title"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>כותרת השיעור</FormLabel>
-                    <FormControl>
-                      <Input placeholder="הכנס את כותרת השיעור" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={editLessonForm.control}
-                name="description"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>תיאור השיעור</FormLabel>
-                    <FormControl>
-                      <Textarea placeholder="הכנס תיאור של השיעור" {...field} rows={4} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={editLessonForm.control}
-                name="video_url"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>כתובת URL של הוידאו</FormLabel>
-                    <FormControl>
-                      <Input placeholder="https://www.youtube.com/embed/xxxxx" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={editLessonForm.control}
-                name="duration"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>משך השיעור (בשניות)</FormLabel>
-                    <FormControl>
-                      <Input type="number" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <div className="grid grid-cols-2 gap-4">
-                <FormField
-                  control={editLessonForm.control}
-                  name="is_free"
-                  render={({ field }) => (
-                    <FormItem className="flex flex-row items-center space-x-3 space-x-reverse space-y-0">
-                      <FormControl>
-                        <Checkbox
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
-                      </FormControl>
-                      <FormLabel className="font-normal cursor-pointer">
-                        גישה חופשית (לכולם)
-                      </FormLabel>
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={editLessonForm.control}
-                  name="is_published"
-                  render={({ field }) => (
-                    <FormItem className="flex flex-row items-center space-x-3 space-x-reverse space-y-0">
-                      <FormControl>
-                        <Checkbox
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
-                      </FormControl>
-                      <FormLabel className="font-normal cursor-pointer">
-                        פרסם שיעור
-                      </FormLabel>
-                    </FormItem>
-                  )}
-                />
-              </div>
-              <div className="flex justify-end space-x-2 space-x-reverse">
-                <Button type="submit" disabled={updateLessonMutation.isPending}>
-                  {updateLessonMutation.isPending ? "מעדכן..." : "עדכן שיעור"}
-                </Button>
-                <DialogClose asChild>
-                  <Button type="button" variant="outline">ביטול</Button>
-                </DialogClose>
-              </div>
-            </form>
-          </Form>
-        </DialogContent>
-      </Dialog>
-
-      {/* Delete Lesson Dialog */}
-      <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
-        <DialogContent className="max-w-md">
-          <DialogHeader>
-            <DialogTitle className="text-2xl">מחיקת שיעור</DialogTitle>
-          </DialogHeader>
-          <div className="py-4">
-            <p className="mb-2">האם אתה בטוח שברצונך למחוק את השיעור:</p>
-            <p className="font-semibold">{selectedLesson?.title}</p>
-            <p className="mt-4 text-destructive">שים לב: פעולה זו אינה ניתנת לשחזור.</p>
-          </div>
-          <div className="flex justify-end space-x-2 space-x-reverse">
+    <div className="space-y-6" dir="rtl">
+      <div className="flex justify-between items-center">
+        <h2 className="text-2xl font-bold">ניהול שיעורים</h2>
+        <Dialog>
+          <DialogTrigger asChild>
             <Button 
-              variant="destructive" 
-              onClick={confirmDeleteLesson}
-              disabled={deleteLessonMutation.isPending}
+              className="flex items-center gap-2"
+              onClick={() => {
+                setIsAddingLesson(true);
+                setIsEditingLesson(false);
+                resetForm();
+              }}
             >
-              {deleteLessonMutation.isPending ? "מוחק..." : "כן, מחק שיעור"}
+              <Plus size={16} />
+              הוסף שיעור
             </Button>
-            <DialogClose asChild>
-              <Button type="button" variant="outline">ביטול</Button>
-            </DialogClose>
+          </DialogTrigger>
+          <DialogContent className="sm:max-w-[600px]">
+            <DialogHeader>
+              <DialogTitle>
+                {isEditingLesson ? "ערוך שיעור" : "הוסף שיעור חדש"}
+              </DialogTitle>
+            </DialogHeader>
+            <div className="space-y-4 py-4">
+              <div className="space-y-2">
+                <label htmlFor="title" className="text-sm font-medium">כותרת השיעור</label>
+                <Input
+                  id="title"
+                  name="title"
+                  value={formData.title}
+                  onChange={handleChange}
+                  placeholder="הכנס כותרת לשיעור..."
+                />
+              </div>
+              <div className="space-y-2">
+                <label htmlFor="description" className="text-sm font-medium">תיאור השיעור</label>
+                <Textarea
+                  id="description"
+                  name="description"
+                  value={formData.description}
+                  onChange={handleChange}
+                  placeholder="תיאור קצר של תוכן השיעור..."
+                  rows={3}
+                />
+              </div>
+              <div className="space-y-2">
+                <label htmlFor="video_url" className="text-sm font-medium">קישור לוידאו</label>
+                <Input
+                  id="video_url"
+                  name="video_url"
+                  value={formData.video_url}
+                  onChange={handleChange}
+                  placeholder="הכנס קישור YouTube או Vimeo..."
+                />
+              </div>
+              <div className="space-y-2">
+                <label htmlFor="duration" className="text-sm font-medium">משך זמן הוידאו (בשניות)</label>
+                <Input
+                  id="duration"
+                  name="duration"
+                  type="number"
+                  value={formData.duration}
+                  onChange={handleChange}
+                  placeholder="משך זמן הוידאו בשניות..."
+                />
+              </div>
+              <div className="space-y-2">
+                <label htmlFor="position" className="text-sm font-medium">מיקום בקורס</label>
+                <Input
+                  id="position"
+                  name="position"
+                  type="number"
+                  value={formData.position}
+                  onChange={handleChange}
+                  min={1}
+                />
+              </div>
+              <div className="flex items-center space-x-2 space-x-reverse">
+                <Switch
+                  id="is_free"
+                  checked={formData.is_free}
+                  onCheckedChange={handleSwitchChange('is_free')}
+                />
+                <label htmlFor="is_free" className="text-sm font-medium">שיעור חינמי (זמין לכל המשתמשים)</label>
+              </div>
+              <div className="flex items-center space-x-2 space-x-reverse">
+                <Switch
+                  id="is_published"
+                  checked={formData.is_published}
+                  onCheckedChange={handleSwitchChange('is_published')}
+                />
+                <label htmlFor="is_published" className="text-sm font-medium">פרסם שיעור</label>
+              </div>
+            </div>
+            <DialogFooter>
+              <DialogClose asChild>
+                <Button variant="outline">
+                  ביטול
+                </Button>
+              </DialogClose>
+              <Button
+                onClick={isEditingLesson ? handleUpdateLesson : handleAddLesson}
+                className="flex items-center gap-2"
+              >
+                <Save size={16} />
+                {isEditingLesson ? "עדכן שיעור" : "הוסף שיעור"}
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      </div>
+      
+      <Separator />
+      
+      <div className="space-y-4">
+        {isLoading ? (
+          <div className="text-center py-12">
+            <div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full mx-auto mb-4"></div>
+            <p className="text-muted-foreground">טוען שיעורים...</p>
           </div>
-        </DialogContent>
-      </Dialog>
+        ) : lessons.length === 0 ? (
+          <div className="text-center py-12 border border-dashed rounded-lg">
+            <p className="text-muted-foreground mb-4">אין שיעורים בקורס זה</p>
+            <Button 
+              variant="outline" 
+              onClick={() => {
+                setIsAddingLesson(true);
+                resetForm();
+              }}
+              className="flex items-center gap-2"
+            >
+              <Plus size={16} />
+              הוסף שיעור חדש
+            </Button>
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {lessons.map((lesson, index) => (
+              <Card key={lesson.id} className={!lesson.is_published ? "opacity-70" : ""}>
+                <CardHeader className="py-3">
+                  <CardTitle className="flex items-center gap-2 text-lg">
+                    <span className="flex justify-center items-center bg-primary/10 text-primary w-8 h-8 rounded-full">
+                      {index + 1}
+                    </span>
+                    {lesson.title}
+                    {lesson.is_free && (
+                      <span className="bg-green-100 text-green-800 text-xs font-medium px-2 py-0.5 rounded-full mr-2">
+                        חינמי
+                      </span>
+                    )}
+                    {!lesson.is_published && (
+                      <span className="bg-amber-100 text-amber-800 text-xs font-medium px-2 py-0.5 rounded-full">
+                        טיוטה
+                      </span>
+                    )}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="py-2">
+                  <p className="text-sm text-muted-foreground">{lesson.description}</p>
+                  {lesson.duration && (
+                    <p className="text-xs text-muted-foreground mt-2">
+                      משך: {Math.floor(lesson.duration / 60)} דקות {lesson.duration % 60} שניות
+                    </p>
+                  )}
+                </CardContent>
+                <CardFooter className="py-3 flex justify-between">
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={() => handleDeleteLesson(lesson.id)}
+                    className="text-destructive border-destructive hover:bg-destructive/10"
+                  >
+                    <Trash2 size={16} />
+                  </Button>
+                  <div className="flex gap-2">
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      onClick={() => moveLesson(lesson.id, 'up')}
+                      disabled={index === 0}
+                    >
+                      <ArrowUp size={16} />
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      onClick={() => moveLesson(lesson.id, 'down')}
+                      disabled={index === lessons.length - 1}
+                    >
+                      <ArrowDown size={16} />
+                    </Button>
+                    <Dialog>
+                      <DialogTrigger asChild>
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          onClick={() => startEditingLesson(lesson)}
+                        >
+                          <Pencil size={16} />
+                        </Button>
+                      </DialogTrigger>
+                      <DialogContent className="sm:max-w-[600px]">
+                        <DialogHeader>
+                          <DialogTitle>
+                            ערוך שיעור
+                          </DialogTitle>
+                        </DialogHeader>
+                        <div className="space-y-4 py-4">
+                          <div className="space-y-2">
+                            <label htmlFor="title" className="text-sm font-medium">כותרת השיעור</label>
+                            <Input
+                              id="title"
+                              name="title"
+                              value={formData.title}
+                              onChange={handleChange}
+                              placeholder="הכנס כותרת לשיעור..."
+                            />
+                          </div>
+                          <div className="space-y-2">
+                            <label htmlFor="description" className="text-sm font-medium">תיאור השיעור</label>
+                            <Textarea
+                              id="description"
+                              name="description"
+                              value={formData.description}
+                              onChange={handleChange}
+                              placeholder="תיאור קצר של תוכן השיעור..."
+                              rows={3}
+                            />
+                          </div>
+                          <div className="space-y-2">
+                            <label htmlFor="video_url" className="text-sm font-medium">קישור לוידאו</label>
+                            <Input
+                              id="video_url"
+                              name="video_url"
+                              value={formData.video_url}
+                              onChange={handleChange}
+                              placeholder="הכנס קישור YouTube או Vimeo..."
+                            />
+                          </div>
+                          <div className="space-y-2">
+                            <label htmlFor="duration" className="text-sm font-medium">משך זמן הוידאו (בשניות)</label>
+                            <Input
+                              id="duration"
+                              name="duration"
+                              type="number"
+                              value={formData.duration}
+                              onChange={handleChange}
+                              placeholder="משך זמן הוידאו בשניות..."
+                            />
+                          </div>
+                          <div className="space-y-2">
+                            <label htmlFor="position" className="text-sm font-medium">מיקום בקורס</label>
+                            <Input
+                              id="position"
+                              name="position"
+                              type="number"
+                              value={formData.position}
+                              onChange={handleChange}
+                              min={1}
+                            />
+                          </div>
+                          <div className="flex items-center space-x-2 space-x-reverse">
+                            <Switch
+                              id="is_free"
+                              checked={formData.is_free}
+                              onCheckedChange={handleSwitchChange('is_free')}
+                            />
+                            <label htmlFor="is_free" className="text-sm font-medium">שיעור חינמי (זמין לכל המשתמשים)</label>
+                          </div>
+                          <div className="flex items-center space-x-2 space-x-reverse">
+                            <Switch
+                              id="is_published"
+                              checked={formData.is_published}
+                              onCheckedChange={handleSwitchChange('is_published')}
+                            />
+                            <label htmlFor="is_published" className="text-sm font-medium">פרסם שיעור</label>
+                          </div>
+                        </div>
+                        <DialogFooter>
+                          <DialogClose asChild>
+                            <Button variant="outline">
+                              ביטול
+                            </Button>
+                          </DialogClose>
+                          <Button
+                            onClick={handleUpdateLesson}
+                            className="flex items-center gap-2"
+                          >
+                            <Save size={16} />
+                            עדכן שיעור
+                          </Button>
+                        </DialogFooter>
+                      </DialogContent>
+                    </Dialog>
+                  </div>
+                </CardFooter>
+              </Card>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 };
+
+export default LessonManager;
