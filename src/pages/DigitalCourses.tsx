@@ -1,12 +1,12 @@
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { getPublishedCourses } from "@/services/courseService";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { PlayCircle, Book, Clock, Settings } from "lucide-react";
+import { PlayCircle, Book, Settings } from "lucide-react";
 import { Course } from "@/lib/models/Course";
 import { useAuth } from "@/contexts/AuthContext";
 

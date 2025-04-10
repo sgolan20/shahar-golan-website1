@@ -60,6 +60,8 @@ const WrittenBlog = () => {
     fetchPosts();
   }, [selectedTag]);
 
+  
+
   const filteredPosts = posts.filter(post => 
     post.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
     post.content.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -132,6 +134,7 @@ const WrittenBlog = () => {
         </div>
       </section>
 
+      
       <section className="py-12">
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row gap-4 items-center justify-between mb-12">
@@ -167,6 +170,7 @@ const WrittenBlog = () => {
             </div>
           </div>
 
+          
           {isLoading ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {Array.from({ length: 6 }).map((_, index) => (

@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X, Youtube, ChevronDown } from "lucide-react";
@@ -58,24 +59,7 @@ const Header = () => {
     { title: "צור קשר", path: "/contact" },
   ];
 
-  const adminLinks = [
-    { title: "ניהול בלוג", path: "/blog-admin" },
-    { title: "ניהול קורסים", path: "/course-admin" },
-    { title: "ניהול משתמשים", path: "/user-admin" },
-  ];
-
-  const combinedLinks = isAdmin 
-    ? [
-        ...navLinks.slice(0, 5),
-        {
-          title: "ניהול",
-          path: "#",
-          isDropdown: true,
-          subLinks: adminLinks
-        },
-        ...navLinks.slice(5)
-      ]
-    : navLinks;
+  // הסרנו את הקישורים המנהליים מהתפריט הראשי
 
   const isLinkActive = (path: string) => {
     return location.pathname === path;
@@ -115,7 +99,7 @@ const Header = () => {
           <nav className="hidden md:flex items-center space-x-1 space-x-reverse">
             <NavigationMenu dir="rtl" className="rtl">
               <NavigationMenuList className="rtl">
-                {combinedLinks.map((link) => (
+                {navLinks.map((link) => (
                   link.isDropdown ? (
                     <NavigationMenuItem key={link.title}>
                       <div className="group relative">
@@ -218,7 +202,7 @@ const Header = () => {
       {isMobileMenuOpen && (
         <div className="md:hidden bg-white/95 backdrop-blur-md animate-fade-in">
           <div className="container mx-auto px-4 py-4 flex flex-col text-right">
-            {combinedLinks.map((link) => (
+            {navLinks.map((link) => (
               link.isDropdown ? (
                 <div key={link.title} className="py-2">
                   <div className="flex items-center justify-between px-4 py-2 text-lg font-medium">

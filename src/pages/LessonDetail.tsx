@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
@@ -10,7 +11,6 @@ import { ChevronRight, Clock, Settings } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/components/ui/use-toast";
 import { Lesson } from "@/lib/models/Lesson";
-import ProtectedRoute from "@/components/auth/ProtectedRoute";
 import { extractYouTubeId } from "@/components/youtube/YouTubeVideo";
 
 const LessonDetail = () => {

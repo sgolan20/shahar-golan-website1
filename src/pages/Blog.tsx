@@ -1,6 +1,7 @@
+
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Search, ChevronRight, ChevronLeft } from "lucide-react";
+import { Search, ChevronRight, ChevronLeft, Settings } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import YouTubeVideoList from "@/components/youtube/YouTubeVideoList";
@@ -12,10 +13,13 @@ import {
   YouTubeVideo,
   YouTubePlaylist
 } from "@/services/youtubeService";
+import { Link } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
 
 const VIDEOS_PER_PAGE = 6; 
 
 const Blog = () => {
+  const { isAdmin } = useAuth();
   const [searchTerm, setSearchTerm] = useState("");
   const [videos, setVideos] = useState<YouTubeVideo[]>([]);
   const [playlists, setPlaylists] = useState<YouTubePlaylist[]>([]);
@@ -124,6 +128,19 @@ const Blog = () => {
             <p className="text-xl text-muted-foreground">
               צפו בסרטונים העדכניים ביותר מערוץ היוטיוב שלי
             </p>
+            
+            {isAdmin && (
+              <Button 
+                asChild 
+                variant="outline" 
+                className="mt-4 gap-2"
+              >
+                <Link to="/blog-admin">
+                  <Settings className="h-4 w-4" />
+                  ניהול בלוג
+                </Link>
+              </Button>
+            )}
           </motion.div>
         </div>
       </section>
