@@ -1,5 +1,6 @@
+
 import { useState, useEffect } from "react";
-import { Plus, Trash2, Save, Check, X, ArrowUp, ArrowDown } from "lucide-react";
+import { Plus, Trash2, Save, Pencil, ArrowUp, ArrowDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -8,7 +9,7 @@ import { Switch } from "@/components/ui/switch";
 import { Separator } from "@/components/ui/separator";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogClose } from "@/components/ui/dialog";
 import { toast } from "sonner";
-import { getLessonsByCourse, createLesson, updateLesson, deleteLesson } from "@/services/courseService";
+import { getLessonsForCourse, createLesson, updateLesson, deleteLesson } from "@/services/courseService";
 import { Course } from "@/lib/models/Course";
 import { Lesson } from "@/lib/models/Lesson";
 
@@ -41,7 +42,7 @@ const LessonManager = ({ course, onLessonsChange }: LessonManagerProps) => {
   const fetchLessons = async () => {
     try {
       setIsLoading(true);
-      const lessonsData = await getLessonsByCourse(course.id);
+      const lessonsData = await getLessonsForCourse(course.id);
       
       // Sort by position
       const sortedLessons = lessonsData.sort((a, b) => a.position - b.position);

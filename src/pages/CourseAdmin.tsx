@@ -36,7 +36,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { Pencil, Trash2, Plus, RefreshCw } from "lucide-react";
 import { getAllCourses, createCourse, updateCourse, deleteCourse } from "@/services/courseService";
 import { Course } from "@/lib/models/Course";
-import { LessonManager } from "@/components/courses/LessonManager";
+import LessonManager from "@/components/courses/LessonManager";
 
 const formSchema = z.object({
   title: z.string().min(2, { message: "כותרת חייבת להכיל לפחות 2 תווים" }),
@@ -245,7 +245,7 @@ const CourseAdmin = () => {
             </div>
 
             {selectedCourse && (
-              <LessonManager courseId={selectedCourse.id} />
+              <LessonManager course={selectedCourse} onLessonsChange={() => refetch()}/>
             )}
           </div>
         ) : (
