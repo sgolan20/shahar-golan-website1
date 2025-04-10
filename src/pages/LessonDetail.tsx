@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
@@ -12,6 +11,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/components/ui/use-toast";
 import { Lesson } from "@/lib/models/Lesson";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
+import { extractYouTubeId } from "@/components/youtube/YouTubeVideo";
 
 const LessonDetail = () => {
   const { courseSlug, lessonId } = useParams<{ courseSlug: string, lessonId: string }>();
@@ -91,6 +91,24 @@ const LessonDetail = () => {
     }
   };
 
+  const getVideoEmbedUrl = (url: string): string => {
+    // Handle YouTube URLs
+    const youtubeId = extractYouTubeId(url);
+    if (youtubeId) {
+      return `https://www.youtube.com/embed/${youtubeId}`;
+    }
+    
+    // Handle Vimeo URLs
+    const vimeoRegex = /(?:vimeo)\.com\/(?:.*\/)?(?:videos\/)?([0-9]+)/;
+    const vimeoMatch = url.match(vimeoRegex);
+    if (vimeoMatch && vimeoMatch[1]) {
+      return `https://player.vimeo.com/video/${vimeoMatch[1]}`;
+    }
+    
+    // If no match, return original URL
+    return url;
+  };
+
   if (isLoading) {
     return (
       <div className="container mx-auto py-16 md:py-24">
@@ -143,10 +161,12 @@ const LessonDetail = () => {
           <div className="md:col-span-2">
             <div className="w-full aspect-video mb-6 bg-black rounded-lg overflow-hidden">
               <iframe
-                className="w-full h-full"
-                src={lesson.video_url}
+                src={getVideoEmbedUrl(lesson.video_url)}
                 title={lesson.title}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
                 allowFullScreen
+                className="absolute top-0 left-0 w-full h-full rounded-lg"
+                style={{ position: 'relative', width: '100%', height: '100%' }}
               ></iframe>
             </div>
 

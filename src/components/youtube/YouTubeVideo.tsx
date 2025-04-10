@@ -1,3 +1,4 @@
+
 import { motion } from "framer-motion";
 import { Calendar, Play, X } from "lucide-react";
 import { useState } from "react";
@@ -5,6 +6,7 @@ import { YouTubeVideo as YouTubeVideoType } from "@/services/youtubeService";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogOverlay
 } from "@/components/ui/dialog";
 
@@ -23,6 +25,23 @@ const formatDate = (dateString: string): string => {
   } catch (error) {
     return dateString;
   }
+};
+
+// Extract YouTube video ID from various YouTube URL formats
+export const extractYouTubeId = (url: string): string | null => {
+  if (!url) return null;
+  
+  // Regular YouTube URL formats
+  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+  const match = url.match(regExp);
+  
+  return (match && match[2].length === 11) ? match[2] : null;
+};
+
+// Convert any YouTube URL to embed format
+export const getYouTubeEmbedUrl = (url: string): string | null => {
+  const videoId = extractYouTubeId(url);
+  return videoId ? `https://www.youtube.com/embed/${videoId}` : null;
 };
 
 export const YouTubeVideo = ({ video }: YouTubeVideoProps) => {
@@ -81,6 +100,9 @@ export const YouTubeVideo = ({ video }: YouTubeVideoProps) => {
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
         <DialogOverlay className="bg-black/80" />
         <DialogContent className="sm:max-w-[90vw] max-h-[90vh] p-0 border-none bg-transparent">
+          <DialogDescription className="sr-only">
+            {video.title}
+          </DialogDescription>
           <div className="relative w-full aspect-video">
             <button
               onClick={() => setIsModalOpen(false)}
