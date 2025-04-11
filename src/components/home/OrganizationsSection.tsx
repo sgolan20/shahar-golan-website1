@@ -51,6 +51,9 @@ const OrganizationsSection = () => {
   }, {
     name: "הבט",
     logo: "/lovable-uploads/Hebet.png"
+  }, {
+    name: "אוניברסיטת בר-אילן",
+    logo: "/lovable-uploads/Bar_Ilan_logo.png"
   }];
 
   // State for storing visible organizations and grid columns
