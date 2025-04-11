@@ -1,11 +1,12 @@
+
 import { supabase } from "@/integrations/supabase/client";
 import { v4 as uuidv4 } from 'uuid';
 
 // העלאת תמונה לסופהבייס
 export const uploadImage = async (file: File, customBucket?: string): Promise<string> => {
   try {
-    // קבלת הבאקט הראשון הזמין
-    const bucket = customBucket || await getDefaultBucket();
+    // שימוש בבאקט המוגדר או בברירת מחדל
+    const bucket = customBucket || 'course_images';
     
     // יצירת שם קובץ ייחודי עם סיומת מקורית
     const fileExt = file.name.split('.').pop();
@@ -48,8 +49,8 @@ export const uploadImage = async (file: File, customBucket?: string): Promise<st
 
 // מחיקת תמונה מסופהבייס
 export const deleteImage = async (url: string, customBucket?: string): Promise<void> => {
-  // קבלת הבאקט הראשון הזמין
-  const bucket = customBucket || await getDefaultBucket();
+  // שימוש בבאקט המוגדר או בברירת מחדל
+  const bucket = customBucket || 'course_images';
   try {
     // חילוץ שם הקובץ מה-URL
     const fileName = url.split('/').pop();
@@ -100,9 +101,14 @@ export const getDefaultBucket = async (): Promise<string> => {
   const { success, buckets } = await checkStorageAccess();
   
   if (!success || buckets.length === 0) {
-    throw new Error("לא נמצאו באקטים זמינים בסופהבייס");
+    return 'course_images'; // אם אין באקטים, השתמש בבאקט ברירת המחדל
   }
   
-  // השתמש בבאקט הראשון ברשימה
+  // בדוק אם הבאקט הרצוי קיים ברשימה
+  if (buckets.includes('course_images')) {
+    return 'course_images';
+  }
+  
+  // אחרת השתמש בבאקט הראשון ברשימה
   return buckets[0];
 };
