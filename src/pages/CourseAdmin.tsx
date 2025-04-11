@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
@@ -26,6 +26,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
+  FormDescription,
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -33,15 +34,16 @@ import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/components/ui/use-toast";
-import { Pencil, Trash2, Plus, RefreshCw } from "lucide-react";
+import { Pencil, Trash2, Plus, RefreshCw, Upload, Image, Database, Check, AlertCircle } from "lucide-react";
 import { getAllCourses, createCourse, updateCourse, deleteCourse } from "@/services/courseService";
+import { uploadImage, checkStorageAccess } from "@/services/storageService";
 import { Course } from "@/lib/models/Course";
 import LessonManager from "@/components/courses/LessonManager";
 
 const formSchema = z.object({
   title: z.string().min(2, { message: "כותרת חייבת להכיל לפחות 2 תווים" }),
   description: z.string().min(10, { message: "תיאור חייב להכיל לפחות 10 תווים" }),
-  image_url: z.string().url({ message: "כתובת URL לא תקינה" }).optional(),
+  image_url: z.string().optional(),
   is_published: z.boolean().default(false),
 });
 
@@ -52,6 +54,15 @@ const CourseAdmin = () => {
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [editImageFile, setEditImageFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string>("");
+  const [editImagePreview, setEditImagePreview] = useState<string>("");
+  const [isUploading, setIsUploading] = useState(false);
+  const [isCheckingStorage, setIsCheckingStorage] = useState(false);
+  const [storageAccessStatus, setStorageAccessStatus] = useState<boolean | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const editFileInputRef = useRef<HTMLInputElement>(null);
   
   const { toast } = useToast();
   const queryClient = useQueryClient();
@@ -82,13 +93,28 @@ const CourseAdmin = () => {
   });
 
   const createCourseMutation = useMutation({
-    mutationFn: (data: FormValues) => {
+    mutationFn: async (data: FormValues) => {
       const uniqueSlug = generateSlug(data.title);
+      let finalImageUrl = data.image_url || null;
+      
+      // אם יש קובץ תמונה, העלה אותו לסופהבייס
+      if (imageFile) {
+        setIsUploading(true);
+        try {
+          finalImageUrl = await uploadImage(imageFile);
+        } catch (error) {
+          console.error("שגיאה בהעלאת התמונה:", error);
+          throw new Error("נכשלה העלאת התמונה");
+        } finally {
+          setIsUploading(false);
+        }
+      }
+      
       return createCourse({
         title: data.title,
         description: data.description,
         slug: uniqueSlug,
-        image_url: data.image_url || null,
+        image_url: finalImageUrl,
         is_published: data.is_published || false
       });
     },
@@ -96,6 +122,8 @@ const CourseAdmin = () => {
       queryClient.invalidateQueries({ queryKey: ["adminCourses"] });
       setIsAddDialogOpen(false);
       form.reset();
+      setImageFile(null);
+      setImagePreview("");
       toast({
         title: "הקורס נוצר בהצלחה",
         description: "הקורס החדש נוסף בהצלחה למערכת."
@@ -111,12 +139,31 @@ const CourseAdmin = () => {
   });
 
   const updateCourseMutation = useMutation({
-    mutationFn: ({ id, data }: { id: string, data: Partial<Course> }) => 
-      updateCourse(id, data),
+    mutationFn: async ({ id, data }: { id: string, data: Partial<Course> }) => {
+      let updatedData = { ...data };
+      
+      // אם יש קובץ תמונה חדש, העלה אותו לסופהבייס
+      if (editImageFile) {
+        setIsUploading(true);
+        try {
+          const imageUrl = await uploadImage(editImageFile);
+          updatedData.image_url = imageUrl;
+        } catch (error) {
+          console.error("שגיאה בהעלאת התמונה:", error);
+          throw new Error("נכשלה העלאת התמונה");
+        } finally {
+          setIsUploading(false);
+        }
+      }
+      
+      return updateCourse(id, updatedData);
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["adminCourses"] });
       setIsEditDialogOpen(false);
       setSelectedCourse(null);
+      setEditImageFile(null);
+      setEditImagePreview("");
       toast({
         title: "הקורס עודכן בהצלחה",
         description: "פרטי הקורס עודכנו בהצלחה."
@@ -169,6 +216,7 @@ const CourseAdmin = () => {
       image_url: course.image_url || "",
       is_published: course.is_published
     });
+    setEditImagePreview(course.image_url || "");
     setIsEditDialogOpen(true);
   };
 
@@ -187,15 +235,129 @@ const CourseAdmin = () => {
     return title.toLowerCase().replace(/\s+/g, '-').slice(0, 50);
   };
 
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>, isEdit: boolean = false) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    // בדיקה שהקובץ הוא תמונה
+    if (!file.type.startsWith('image/')) {
+      toast({
+        title: "סוג קובץ לא נתמך",
+        description: "אנא בחר קובץ תמונה (JPG, PNG, GIF, וכו')",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    // הגבלת גודל קובץ (5MB)
+    const maxSize = 5 * 1024 * 1024;
+    if (file.size > maxSize) {
+      toast({
+        title: "קובץ גדול מדי",
+        description: "גודל הקובץ לא יכול לעלות על 5MB",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    // יצירת תצוגה מקדימה של התמונה
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const result = e.target?.result as string;
+      if (isEdit) {
+        setEditImagePreview(result);
+        setEditImageFile(file);
+      } else {
+        setImagePreview(result);
+        setImageFile(file);
+      }
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const triggerFileInput = (isEdit: boolean = false) => {
+    if (isEdit) {
+      editFileInputRef.current?.click();
+    } else {
+      fileInputRef.current?.click();
+    }
+  };
+
   return (
     <div className="container mx-auto py-16 md:py-24">
       <div className="max-w-5xl mx-auto">
-        <div className="flex items-center justify-between mb-8">
-          <h1 className="text-3xl font-bold">ניהול קורסים</h1>
-          <Button variant="outline" onClick={() => refetch()}>
-            <RefreshCw className="ml-2 h-4 w-4" />
-            רענן רשימה
-          </Button>
+        <div className="flex flex-col gap-4 mb-8">
+          <div className="flex items-center justify-between">
+            <h1 className="text-3xl font-bold">ניהול קורסים</h1>
+            <div className="flex gap-2">
+              <Button 
+                variant="outline" 
+                onClick={async () => {
+                  setIsCheckingStorage(true);
+                  try {
+                    const result = await checkStorageAccess();
+                    const hasAccess = result.success;
+                    setStorageAccessStatus(hasAccess);
+                    
+                    // הצגת הבאקטים הקיימים
+                    const bucketInfo = result.buckets.length > 0 
+                      ? `נמצאו הבאקטים הבאים: ${result.buckets.join(', ')}` 
+                      : 'לא נמצאו באקטים';
+                    
+                    toast({
+                      title: hasAccess ? "גישה לאחסון תקינה" : "בעיה בגישה לאחסון",
+                      description: hasAccess 
+                        ? `יש לך גישה תקינה לאחסון בסופהבייס. ${bucketInfo}` 
+                        : "אין גישה לאחסון בסופהבייס. בדוק את ההרשאות וההגדרות.",
+                      variant: hasAccess ? "default" : "destructive"
+                    });
+                  } catch (error) {
+                    setStorageAccessStatus(false);
+                    toast({
+                      title: "שגיאה בבדיקת האחסון",
+                      description: "אירעה שגיאה בבדיקת הגישה לאחסון בסופהבייס.",
+                      variant: "destructive"
+                    });
+                  } finally {
+                    setIsCheckingStorage(false);
+                  }
+                }}
+                disabled={isCheckingStorage}
+              >
+                {isCheckingStorage ? (
+                  <>
+                    <div className="animate-spin mr-2 h-4 w-4 border-b-2 border-primary"></div>
+                    בודק...
+                  </>
+                ) : (
+                  <>
+                    <Database className="ml-2 h-4 w-4" />
+                    בדוק גישה לאחסון
+                  </>
+                )}
+              </Button>
+              <Button variant="outline" onClick={() => refetch()}>
+                <RefreshCw className="ml-2 h-4 w-4" />
+                רענן רשימה
+              </Button>
+            </div>
+          </div>
+          
+          {storageAccessStatus !== null && (
+            <div className={`p-3 rounded-md flex items-center ${storageAccessStatus ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+              {storageAccessStatus ? (
+                <>
+                  <Check className="h-5 w-5 ml-2" />
+                  <span>יש גישה תקינה לאחסון בסופהבייס. ניתן להעלות תמונות.</span>
+                </>
+              ) : (
+                <>
+                  <AlertCircle className="h-5 w-5 ml-2" />
+                  <span>אין גישה לאחסון בסופהבייס. בדוק את ההרשאות וההגדרות.</span>
+                </>
+              )}
+            </div>
+          )}
         </div>
 
         {isLoading ? (
@@ -299,10 +461,74 @@ const CourseAdmin = () => {
                   name="image_url"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>כתובת URL של תמונה</FormLabel>
-                      <FormControl>
-                        <Input placeholder="https://example.com/image.jpg" {...field} />
-                      </FormControl>
+                      <FormLabel>תמונת הקורס</FormLabel>
+                      <div className="space-y-4">
+                        <input
+                          type="file"
+                          accept="image/*"
+                          ref={fileInputRef}
+                          style={{ display: 'none' }}
+                          onChange={(e) => handleFileChange(e)}
+                        />
+                        <div className="flex flex-col gap-4">
+                          <Button 
+                            type="button" 
+                            variant="outline" 
+                            onClick={() => triggerFileInput()}
+                            className="w-full h-32 flex flex-col items-center justify-center border-dashed"
+                          >
+                            {imagePreview ? (
+                              <div className="relative w-full h-full">
+                                <img 
+                                  src={imagePreview} 
+                                  alt="תצוגה מקדימה" 
+                                  className="w-full h-full object-contain"
+                                />
+                                <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 hover:opacity-100 transition-opacity">
+                                  <span className="text-white">החלף תמונה</span>
+                                </div>
+                              </div>
+                            ) : (
+                              <>
+                                <Upload className="h-8 w-8 mb-2" />
+                                <span>לחץ להעלאת תמונה</span>
+                              </>
+                            )}
+                          </Button>
+                          {imagePreview && (
+                            <div className="flex justify-end">
+                              <Button 
+                                type="button" 
+                                variant="ghost" 
+                                onClick={() => {
+                                  setImageFile(null);
+                                  setImagePreview("");
+                                }}
+                                size="sm"
+                              >
+                                הסר תמונה
+                              </Button>
+                            </div>
+                          )}
+                        </div>
+                        <FormControl>
+                          <Input 
+                            placeholder="או הזן כתובת URL של תמונה" 
+                            {...field} 
+                            value={imageFile ? '' : field.value}
+                            onChange={(e) => {
+                              field.onChange(e.target.value);
+                              if (e.target.value) {
+                                setImageFile(null);
+                                setImagePreview("");
+                              }
+                            }}
+                          />
+                        </FormControl>
+                        <FormDescription>
+                          העלה תמונה מהמחשב או הזן כתובת URL לתמונה מהאינטרנט
+                        </FormDescription>
+                      </div>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -325,8 +551,8 @@ const CourseAdmin = () => {
                   )}
                 />
                 <div className="flex justify-end space-x-2 space-x-reverse">
-                  <Button type="submit" disabled={createCourseMutation.isPending}>
-                    {createCourseMutation.isPending ? "מוסיף..." : "הוסף קורס"}
+                  <Button type="submit" disabled={createCourseMutation.isPending || isUploading}>
+                    {createCourseMutation.isPending || isUploading ? "מוסיף..." : "הוסף קורס"}
                   </Button>
                   <DialogClose asChild>
                     <Button type="button" variant="outline">ביטול</Button>
@@ -376,10 +602,75 @@ const CourseAdmin = () => {
                   name="image_url"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>כתובת URL של תמונה</FormLabel>
-                      <FormControl>
-                        <Input placeholder="https://example.com/image.jpg" {...field} />
-                      </FormControl>
+                      <FormLabel>תמונת הקורס</FormLabel>
+                      <div className="space-y-4">
+                        <input
+                          type="file"
+                          accept="image/*"
+                          ref={editFileInputRef}
+                          style={{ display: 'none' }}
+                          onChange={(e) => handleFileChange(e, true)}
+                        />
+                        <div className="flex flex-col gap-4">
+                          <Button 
+                            type="button" 
+                            variant="outline" 
+                            onClick={() => triggerFileInput(true)}
+                            className="w-full h-32 flex flex-col items-center justify-center border-dashed"
+                          >
+                            {editImagePreview ? (
+                              <div className="relative w-full h-full">
+                                <img 
+                                  src={editImagePreview} 
+                                  alt="תצוגה מקדימה" 
+                                  className="w-full h-full object-contain"
+                                />
+                                <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 hover:opacity-100 transition-opacity">
+                                  <span className="text-white">החלף תמונה</span>
+                                </div>
+                              </div>
+                            ) : (
+                              <>
+                                <Upload className="h-8 w-8 mb-2" />
+                                <span>לחץ להעלאת תמונה</span>
+                              </>
+                            )}
+                          </Button>
+                          {editImagePreview && (
+                            <div className="flex justify-end">
+                              <Button 
+                                type="button" 
+                                variant="ghost" 
+                                onClick={() => {
+                                  setEditImageFile(null);
+                                  setEditImagePreview("");
+                                  field.onChange("");
+                                }}
+                                size="sm"
+                              >
+                                הסר תמונה
+                              </Button>
+                            </div>
+                          )}
+                        </div>
+                        <FormControl>
+                          <Input 
+                            placeholder="או הזן כתובת URL של תמונה" 
+                            {...field} 
+                            value={editImageFile ? '' : field.value}
+                            onChange={(e) => {
+                              field.onChange(e.target.value);
+                              if (e.target.value) {
+                                setEditImageFile(null);
+                                setEditImagePreview(e.target.value);
+                              }
+                            }}
+                          />
+                        </FormControl>
+                        <FormDescription>
+                          העלה תמונה מהמחשב או הזן כתובת URL לתמונה מהאינטרנט
+                        </FormDescription>
+                      </div>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -402,8 +693,8 @@ const CourseAdmin = () => {
                   )}
                 />
                 <div className="flex justify-end space-x-2 space-x-reverse">
-                  <Button type="submit" disabled={updateCourseMutation.isPending}>
-                    {updateCourseMutation.isPending ? "מעדכן..." : "עדכן קורס"}
+                  <Button type="submit" disabled={updateCourseMutation.isPending || isUploading}>
+                    {updateCourseMutation.isPending || isUploading ? "מעדכן..." : "עדכן קורס"}
                   </Button>
                   <DialogClose asChild>
                     <Button type="button" variant="outline">ביטול</Button>
