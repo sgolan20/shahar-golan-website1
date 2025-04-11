@@ -101,17 +101,17 @@ const Header = () => {
                 {navLinks.map((link) => (
                   link.isDropdown ? (
                     <NavigationMenuItem key={link.title} className="h-10">
-                      <div className="group relative h-full flex items-center justify-center">
+                      <div className="blog-dropdown relative h-full flex items-center justify-center">
                         <button 
-                          className={`nav-link group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 ${isParentActive(link.subLinks) ? "active" : ""}`}
+                          className={`nav-link inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 ${isParentActive(link.subLinks) ? "active" : ""}`}
                         >
                           {link.title}
                           <ChevronDown
-                            className="relative top-[1px] mr-1 h-3 w-3 transition duration-200 group-hover:rotate-180"
+                            className="chevron-icon relative top-[1px] mr-1 h-3 w-3 transition duration-200"
                             aria-hidden="true"
                           />
                         </button>
-                        <div className="absolute right-0 top-full z-50 mt-0 hidden w-[200px] rounded-md border bg-popover p-2 shadow-md group-hover:block transition-all duration-300 opacity-0 group-hover:opacity-100 [transition-delay:0ms] group-hover:[transition-delay:200ms]">
+                        <div className="dropdown-menu absolute right-0 top-full z-50 mt-0 hidden w-[200px] rounded-md border bg-popover p-2 shadow-md transition-all duration-300 opacity-0 [transition-delay:0ms]">
                           <ul className="grid gap-1">
                             {link.subLinks.map((subLink) => (
                               <li key={subLink.path}>
