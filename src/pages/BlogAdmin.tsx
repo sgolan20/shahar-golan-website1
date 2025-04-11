@@ -1,7 +1,6 @@
-
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
-import { Plus, Pencil, Trash2, Eye, EyeOff, Save, X, Tag, Calendar, User } from "lucide-react";
+import { Plus, Pencil, Trash2, Eye, EyeOff, Save, X, Tag, Calendar, User, Image, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import ReactQuill from "react-quill";
 import { Input } from "@/components/ui/input";
@@ -14,6 +13,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "@/components/ui/collapsible";
 import { toast } from "sonner";
 import { getRecentBlogPosts, createBlogPost, updateBlogPost, deleteBlogPost } from "@/services/blogService";
+import { uploadImage, deleteImage } from "@/services/storageService";
 import { BlogPost } from "@/lib/models/BlogPost";
 import Layout from "@/components/layout/Layout";
 
@@ -24,8 +24,10 @@ const BlogAdmin = () => {
   const [isCreatingPost, setIsCreatingPost] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editingPostId, setEditingPostId] = useState<string | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   
-  const [formData, setFormData] = useState<{
+  const [formData, setFormData<{
     title: string;
     content: string;
     summary: string;
@@ -158,6 +160,32 @@ const BlogAdmin = () => {
   
   const handleSwitchChange = (checked: boolean) => {
     setFormData(prev => ({ ...prev, is_published: checked }));
+  };
+  
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    
+    try {
+      setIsUploading(true);
+      const imageUrl = await uploadImage(file, 'course_images');
+      setFormData(prev => ({ ...prev, image_url: imageUrl }));
+      toast.success("התמונה הועלתה בהצלחה");
+    } catch (error) {
+      console.error("שגיאה בהעלאת התמונה:", error);
+      toast.error("שגיאה בהעלאת התמונה");
+    } finally {
+      setIsUploading(false);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+    }
+  };
+  
+  const triggerImageUpload = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
   };
   
   const addTag = () => {
@@ -322,26 +350,53 @@ const BlogAdmin = () => {
                     </div>
                     
                     <div>
-                      <label htmlFor="image_url" className="block text-sm font-medium mb-1">קישור לתמונה</label>
-                      <Input
-                        id="image_url"
-                        name="image_url"
-                        value={formData.image_url || ""}
-                        onChange={handleChange}
-                        placeholder="הכנס קישור לתמונה..."
-                      />
-                      {formData.image_url && (
-                        <div className="mt-2 w-40 h-40 rounded-md overflow-hidden">
-                          <img 
-                            src={formData.image_url} 
-                            alt="תצוגה מקדימה" 
-                            className="w-full h-full object-cover"
-                            onError={(e) => {
-                              (e.target as HTMLImageElement).src = "https://placehold.co/600x400/e2e8f0/64748b?text=תמונה+לא+נמצאה";
-                            }}
+                      <label htmlFor="image_url" className="block text-sm font-medium mb-1">תמונה למאמר</label>
+                      <div className="flex flex-col space-y-3">
+                        <div className="flex gap-3">
+                          <Input
+                            id="image_url"
+                            name="image_url"
+                            value={formData.image_url || ""}
+                            onChange={handleChange}
+                            placeholder="הכנס קישור לתמונה..."
+                            className="flex-grow"
+                          />
+                          <Button 
+                            type="button" 
+                            variant="outline" 
+                            onClick={triggerImageUpload}
+                            disabled={isUploading}
+                            className="flex items-center gap-2"
+                          >
+                            {isUploading ? (
+                              <Loader2 className="h-4 w-4 animate-spin" />
+                            ) : (
+                              <Image className="h-4 w-4" />
+                            )}
+                            העלאת תמונה
+                          </Button>
+                          <input
+                            type="file"
+                            ref={fileInputRef}
+                            onChange={handleImageUpload}
+                            accept="image/*"
+                            className="hidden"
                           />
                         </div>
-                      )}
+                        
+                        {formData.image_url && (
+                          <div className="mt-2 w-40 h-40 rounded-md overflow-hidden">
+                            <img 
+                              src={formData.image_url} 
+                              alt="תצוגה מקדימה" 
+                              className="w-full h-full object-cover"
+                              onError={(e) => {
+                                (e.target as HTMLImageElement).src = "https://placehold.co/600x400/e2e8f0/64748b?text=תמונה+לא+נמצאה";
+                              }}
+                            />
+                          </div>
+                        )}
+                      </div>
                     </div>
                     
                     <div>
