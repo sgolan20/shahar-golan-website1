@@ -27,7 +27,8 @@ const BlogAdmin = () => {
   const [isUploading, setIsUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   
-  const [formData, setFormData<{
+  // Fixed the useState type declaration syntax
+  const [formData, setFormData] = useState<{
     title: string;
     content: string;
     summary: string;
