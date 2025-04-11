@@ -4,24 +4,29 @@ import { UserProfile, UserRole } from "@/lib/models/User";
 
 // Get current user profile
 export const getCurrentUserProfile = async (): Promise<UserProfile | null> => {
-  const { data: { session } } = await supabase.auth.getSession();
-  
-  if (!session) {
+  try {
+    const { data: { session } } = await supabase.auth.getSession();
+    
+    if (!session) {
+      return null;
+    }
+    
+    const { data, error } = await supabase
+      .from("profiles")
+      .select("*")
+      .eq("id", session.user.id)
+      .maybeSingle();
+
+    if (error) {
+      console.error("Error fetching user profile:", error);
+      return null;
+    }
+
+    return data;
+  } catch (error) {
+    console.error("Exception in getCurrentUserProfile:", error);
     return null;
   }
-  
-  const { data, error } = await supabase
-    .from("profiles")
-    .select("*")
-    .eq("id", session.user.id)
-    .single();
-
-  if (error) {
-    console.error("Error fetching user profile:", error);
-    return null;
-  }
-
-  return data;
 };
 
 // Check if user has a specific role
@@ -81,27 +86,31 @@ export const signOut = async (): Promise<{ success: boolean; message: string }> 
 
 // Update user profile
 export const updateUserProfile = async (updates: Partial<Omit<UserProfile, "id" | "created_at" | "updated_at">>): Promise<{ success: boolean; message: string }> => {
-  const { data: { session } } = await supabase.auth.getSession();
-  
-  if (!session) {
-    return { success: false, message: "Not authenticated" };
-  }
-  
-  const { data, error } = await supabase
-    .from("profiles")
-    .update({
-      ...updates,
-      updated_at: new Date().toISOString()
-    })
-    .eq("id", session.user.id)
-    .select()
-    .single();
+  try {
+    const { data: { session } } = await supabase.auth.getSession();
+    
+    if (!session) {
+      return { success: false, message: "Not authenticated" };
+    }
+    
+    const { data, error } = await supabase
+      .from("profiles")
+      .update({
+        ...updates,
+        updated_at: new Date().toISOString()
+      })
+      .eq("id", session.user.id)
+      .select()
+      .single();
 
-  if (error) {
-    return { success: false, message: error.message };
-  }
+    if (error) {
+      return { success: false, message: error.message };
+    }
 
-  return { success: true, message: "Profile updated successfully" };
+    return { success: true, message: "Profile updated successfully" };
+  } catch (error) {
+    return { success: false, message: "An unexpected error occurred" };
+  }
 };
 
 // Set user role (admin only)
@@ -125,15 +134,20 @@ export const setUserRole = async (userId: string, role: UserRole): Promise<{ suc
 
 // Get all users (admin only)
 export const getAllUsers = async (): Promise<UserProfile[]> => {
-  const { data, error } = await supabase
-    .from("profiles")
-    .select("*")
-    .order("created_at", { ascending: false });
+  try {
+    const { data, error } = await supabase
+      .from("profiles")
+      .select("*")
+      .order("created_at", { ascending: false });
 
-  if (error) {
-    console.error("Error fetching all users:", error);
-    throw new Error("Failed to fetch all users");
+    if (error) {
+      console.error("Error fetching all users:", error);
+      throw new Error("Failed to fetch all users");
+    }
+
+    return data || [];
+  } catch (error) {
+    console.error("Exception in getAllUsers:", error);
+    return [];
   }
-
-  return data || [];
 };

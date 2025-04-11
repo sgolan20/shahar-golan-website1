@@ -45,21 +45,61 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       }
     );
 
-    // Check for existing session
+    // Initial session check
+    const checkSession = async () => {
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        
+        if (session) {
+          fetchUserProfile();
+        } else {
+          setUser(null);
+          setCheckingSession(false);
+        }
+      } catch (error) {
+        console.error("Error checking session:", error);
+        setUser(null);
+        setCheckingSession(false);
+      }
+    };
+
+    // Fetch user profile function
     const fetchUserProfile = async () => {
       try {
         setIsLoading(true);
-        const profile = await getCurrentUserProfile();
-        setUser(profile);
+        const { data: { session } } = await supabase.auth.getSession();
+        
+        if (!session) {
+          setUser(null);
+          return;
+        }
+        
+        // Direct database query to avoid RLS recursion
+        const { data, error } = await supabase
+          .from("profiles")
+          .select("*")
+          .eq("id", session.user.id)
+          .maybeSingle();
+
+        if (error) {
+          console.error("Error fetching user profile:", error);
+          setUser(null);
+        } else if (data) {
+          setUser(data as UserProfile);
+        } else {
+          console.error("No profile found for user:", session.user.id);
+          setUser(null);
+        }
       } catch (error) {
-        console.error("Error fetching user profile:", error);
+        console.error("Error in fetchUserProfile:", error);
+        setUser(null);
       } finally {
         setIsLoading(false);
         setCheckingSession(false);
       }
     };
 
-    fetchUserProfile();
+    checkSession();
 
     return () => {
       subscription.unsubscribe();
