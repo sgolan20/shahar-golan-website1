@@ -2,7 +2,7 @@
 import { supabase } from "@/integrations/supabase/client";
 import { UserProfile, UserRole } from "@/lib/models/User";
 
-// Get current user profile
+// Get current user profile - using maybeSingle to avoid single() error
 export const getCurrentUserProfile = async (): Promise<UserProfile | null> => {
   try {
     const { data: { session } } = await supabase.auth.getSession();
@@ -42,46 +42,58 @@ export const hasRole = async (role: UserRole): Promise<boolean> => {
 
 // Sign up with email and password
 export const signUp = async (email: string, password: string, fullName?: string): Promise<{ success: boolean; message: string }> => {
-  const { data, error } = await supabase.auth.signUp({
-    email,
-    password,
-    options: {
-      data: {
-        full_name: fullName
+  try {
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: {
+          full_name: fullName
+        }
       }
+    });
+
+    if (error) {
+      return { success: false, message: error.message };
     }
-  });
 
-  if (error) {
-    return { success: false, message: error.message };
+    return { success: true, message: "Check your email for the confirmation link" };
+  } catch (error: any) {
+    return { success: false, message: error.message || "An unexpected error occurred" };
   }
-
-  return { success: true, message: "Check your email for the confirmation link" };
 };
 
 // Sign in with email and password
 export const signIn = async (email: string, password: string): Promise<{ success: boolean; message: string }> => {
-  const { data, error } = await supabase.auth.signInWithPassword({
-    email,
-    password
-  });
+  try {
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password
+    });
 
-  if (error) {
-    return { success: false, message: error.message };
+    if (error) {
+      return { success: false, message: error.message };
+    }
+
+    return { success: true, message: "Successfully signed in" };
+  } catch (error: any) {
+    return { success: false, message: error.message || "An unexpected error occurred" };
   }
-
-  return { success: true, message: "Successfully signed in" };
 };
 
 // Sign out
 export const signOut = async (): Promise<{ success: boolean; message: string }> => {
-  const { error } = await supabase.auth.signOut();
+  try {
+    const { error } = await supabase.auth.signOut();
 
-  if (error) {
-    return { success: false, message: error.message };
+    if (error) {
+      return { success: false, message: error.message };
+    }
+
+    return { success: true, message: "Successfully signed out" };
+  } catch (error: any) {
+    return { success: false, message: error.message || "An unexpected error occurred" };
   }
-
-  return { success: true, message: "Successfully signed out" };
 };
 
 // Update user profile
@@ -108,28 +120,32 @@ export const updateUserProfile = async (updates: Partial<Omit<UserProfile, "id" 
     }
 
     return { success: true, message: "Profile updated successfully" };
-  } catch (error) {
-    return { success: false, message: "An unexpected error occurred" };
+  } catch (error: any) {
+    return { success: false, message: error.message || "An unexpected error occurred" };
   }
 };
 
 // Set user role (admin only)
 export const setUserRole = async (userId: string, role: UserRole): Promise<{ success: boolean; message: string }> => {
-  const { data, error } = await supabase
-    .from("profiles")
-    .update({
-      role,
-      updated_at: new Date().toISOString()
-    })
-    .eq("id", userId)
-    .select()
-    .single();
+  try {
+    const { data, error } = await supabase
+      .from("profiles")
+      .update({
+        role,
+        updated_at: new Date().toISOString()
+      })
+      .eq("id", userId)
+      .select()
+      .single();
 
-  if (error) {
-    return { success: false, message: error.message };
+    if (error) {
+      return { success: false, message: error.message };
+    }
+
+    return { success: true, message: `User role updated to ${role}` };
+  } catch (error: any) {
+    return { success: false, message: error.message || "An unexpected error occurred" };
   }
-
-  return { success: true, message: `User role updated to ${role}` };
 };
 
 // Get all users (admin only)
