@@ -27,6 +27,7 @@ import CourseDetail from "./pages/CourseDetail";
 import LessonDetail from "./pages/LessonDetail";
 import AuthPage from "./pages/AuthPage";
 import CourseAdmin from "./pages/CourseAdmin";
+import CourseLessons from "./pages/CourseLessons";
 import UserAdmin from "./pages/UserAdmin";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 
@@ -68,6 +69,11 @@ const App = () => (
               <Route path="/course-admin" element={
                 <ProtectedRoute requiredRole="admin">
                   <Layout><CourseAdmin /></Layout>
+                </ProtectedRoute>
+              } />
+              <Route path="/course-admin/:courseId" element={
+                <ProtectedRoute requiredRole="admin">
+                  <Layout><CourseLessons /></Layout>
                 </ProtectedRoute>
               } />
               <Route path="/user-admin" element={

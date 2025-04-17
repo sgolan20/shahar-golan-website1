@@ -45,6 +45,27 @@ export const getCourseBySlug = async (slug: string): Promise<Course | null> => {
   }
 };
 
+// Get a specific course by ID
+export const getCourseById = async (id: string): Promise<Course | null> => {
+  try {
+    const { data, error } = await supabase
+      .from("courses")
+      .select("*")
+      .eq("id", id)
+      .maybeSingle();
+
+    if (error) {
+      console.error("Error fetching course by ID:", error);
+      return null;
+    }
+
+    return data;
+  } catch (error) {
+    console.error("Exception in getCourseById:", error);
+    return null;
+  }
+};
+
 // Get all courses (admin)
 export const getAllCourses = async (): Promise<Course[]> => {
   try {

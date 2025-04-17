@@ -1,5 +1,6 @@
 import { useState, useRef } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -34,7 +35,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/components/ui/use-toast";
-import { Pencil, Trash2, Plus, RefreshCw, Upload, Image, Database, Check, AlertCircle } from "lucide-react";
+import { Pencil, Trash2, Plus, RefreshCw, Upload, Image, Database, Check, AlertCircle, ArrowLeft } from "lucide-react";
 import { getAllCourses, createCourse, updateCourse, deleteCourse } from "@/services/courseService";
 import { uploadImage, checkStorageAccess } from "@/services/storageService";
 import { Course } from "@/lib/models/Course";
@@ -64,6 +65,7 @@ const CourseAdmin = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const editFileInputRef = useRef<HTMLInputElement>(null);
   
+  const navigate = useNavigate();
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
@@ -392,13 +394,33 @@ const CourseAdmin = () => {
                           </span>
                         )}
                       </TableCell>
-                      <TableCell className="space-x-1 space-x-reverse">
-                        <Button variant="ghost" size="sm" onClick={() => handleEditCourse(course)}>
-                          <Pencil className="h-4 w-4" />
-                        </Button>
-                        <Button variant="ghost" size="sm" onClick={() => handleDeleteCourse(course)}>
-                          <Trash2 className="h-4 w-4 text-destructive" />
-                        </Button>
+                      <TableCell>
+                        <div className="flex items-center gap-2">
+                          <Button
+                            variant="outline"
+                            size="icon"
+                            onClick={() => navigate(`/course-admin/${course.id}`)}
+                            title="נהל שיעורים"
+                          >
+                            <Database className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            variant="outline"
+                            size="icon"
+                            onClick={() => handleEditCourse(course)}
+                            title="ערוך קורס"
+                          >
+                            <Pencil className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            variant="outline"
+                            size="icon"
+                            onClick={() => handleDeleteCourse(course)}
+                            title="מחק קורס"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
                       </TableCell>
                     </TableRow>
                   ))}
