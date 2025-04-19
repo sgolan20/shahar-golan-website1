@@ -1,361 +1,307 @@
 
-import { useState, useEffect } from "react";
-import { useParams, Link, useNavigate } from "react-router-dom";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { 
-  PayPalScriptProvider, 
-  PayPalButtons,
-  FUNDING 
-} from "@paypal/react-paypal-js";
-import { getCourseBySlug, getLessonsForCourseWithAccess } from "@/services/courseService";
-import { recordCoursePurchase } from "@/services/userCourseService";
-import { 
-  Card, 
-  CardContent, 
-  CardDescription, 
-  CardFooter, 
-  CardHeader, 
-  CardTitle 
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { 
-  Dialog, 
-  DialogContent, 
-  DialogDescription, 
-  DialogFooter, 
-  DialogHeader, 
-  DialogTitle 
-} from "@/components/ui/dialog";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
-import { Separator } from "@/components/ui/separator";
-import { Badge } from "@/components/ui/badge";
-import { useToast } from "@/components/ui/use-toast";
-import { PlayCircle, Lock, CheckCircle, AlertCircle } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import { getCourseBySlug, getLessonsByCourse } from "@/services/courseService";
+import { hasUserPurchasedCourse, recordCoursePurchase } from "@/services/userCourseService";
 import { useAuth } from "@/contexts/AuthContext";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
+import { Separator } from "@/components/ui/separator";
+import { Check, Lock } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useToast } from "@/components/ui/use-toast";
+import {
+  PayPalScriptProvider,
+  PayPalButtons
+} from "@paypal/react-paypal-js";
 
 const CourseDetail = () => {
   const { slug } = useParams<{ slug: string }>();
-  const { user, checkingSession } = useAuth();
   const navigate = useNavigate();
+  const { user, isPaidUser } = useAuth();
   const { toast } = useToast();
-  const queryClient = useQueryClient();
-  const [showAuthDialog, setShowAuthDialog] = useState(false);
-  const [showPaymentDialog, setShowPaymentDialog] = useState(false);
+  const [hasPurchased, setHasPurchased] = useState<boolean | null>(null);
 
+  // Fetch course data
   const { data: course, isLoading: courseLoading } = useQuery({
-    queryKey: ["course", slug],
-    queryFn: () => getCourseBySlug(slug || ""),
-    enabled: !!slug
+    queryKey: ['course', slug],
+    queryFn: () => getCourseBySlug(slug || ''),
+    enabled: !!slug,
   });
 
-  const { data: lessonsData, isLoading: lessonsLoading } = useQuery({
-    queryKey: ["courseLessons", course?.id],
-    queryFn: () => getLessonsForCourseWithAccess(course?.id || ""),
-    enabled: !!course?.id
+  // Fetch lessons for this course
+  const { data: lessons = [], isLoading: lessonsLoading } = useQuery({
+    queryKey: ['course-lessons', course?.id],
+    queryFn: () => getLessonsByCourse(course?.id || ''),
+    enabled: !!course?.id,
   });
 
-  const lessons = lessonsData?.lessons || [];
-  const hasPurchased = lessonsData?.hasPurchased || false;
-
-  const recordPurchaseMutation = useMutation({
-    mutationFn: ({ courseId, transactionId }: { courseId: string, transactionId: string }) => 
-      recordCoursePurchase(courseId, transactionId),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["courseLessons", course?.id] });
-      queryClient.invalidateQueries({ queryKey: ["userCourses"] });
-      setShowPaymentDialog(false);
-      toast({
-        title: "הרכישה הושלמה בהצלחה!",
-        description: "כעת יש לך גישה מלאה לכל תוכן הקורס.",
-      });
+  // Check if user has purchased the course
+  useEffect(() => {
+    if (user && course?.id) {
+      const checkPurchase = async () => {
+        const purchased = await hasUserPurchasedCourse(course.id);
+        setHasPurchased(purchased);
+      };
+      checkPurchase();
+    } else if (!user) {
+      setHasPurchased(false);
     }
-  });
+  }, [user, course?.id]);
 
-  const handlePaymentSuccess = (details: any) => {
-    if (course) {
-      recordPurchaseMutation.mutate({ 
-        courseId: course.id,
-        transactionId: details.id
-      });
+  const handlePurchaseSuccess = async (details: any) => {
+    if (user && course?.id) {
+      const success = await recordCoursePurchase(
+        course.id,
+        details.id || details.orderID
+      );
+      
+      if (success) {
+        setHasPurchased(true);
+        toast({
+          title: "רכישה מוצלחת!",
+          description: `רכשת גישה לקורס "${course.title}"`,
+        });
+      } else {
+        toast({
+          title: "שגיאה ברישום הרכישה",
+          description: "הרכישה בוצעה אבל חל שגיאה ברישום. אנא פנה לתמיכה.",
+          variant: "destructive"
+        });
+      }
     }
   };
 
-  const handlePurchaseClick = () => {
+  const handleLessonClick = (lessonId: string) => {
     if (!user) {
-      setShowAuthDialog(true);
+      toast({
+        title: "דרושה התחברות",
+        description: "אנא התחבר כדי לצפות בשיעורים",
+        variant: "destructive"
+      });
+      navigate("/auth", { state: { returnUrl: `/digital-courses/${slug}` } });
+      return;
+    }
+
+    if (hasPurchased || (isPaidUser && course?.is_free)) {
+      navigate(`/digital-courses/${slug}/lessons/${lessonId}`);
     } else {
-      setShowPaymentDialog(true);
+      toast({
+        title: "גישה מוגבלת",
+        description: "עליך לרכוש את הקורס כדי לצפות בשיעורים",
+        variant: "destructive"
+      });
     }
   };
 
-  const paypalOptions = {
-    "client-id": "test", // Replace with your PayPal client ID for production
-    currency: "ILS",
-    intent: "capture"
-  };
-
-  if (courseLoading || lessonsLoading) {
+  if (courseLoading) {
     return (
-      <div className="container mx-auto py-16 md:py-24">
-        <div className="flex justify-center items-center min-h-[300px]">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-        </div>
+      <div className="container mx-auto py-10">
+        <Skeleton className="h-12 w-3/4 mb-4" />
+        <Skeleton className="h-64 w-full mb-6" />
+        <Skeleton className="h-8 w-1/2 mb-2" />
+        <Skeleton className="h-24 w-full mb-6" />
+        <Skeleton className="h-10 w-full mb-2" />
+        <Skeleton className="h-10 w-full mb-2" />
+        <Skeleton className="h-10 w-full mb-2" />
       </div>
     );
   }
 
   if (!course) {
     return (
-      <div className="container mx-auto py-16 md:py-24">
-        <div className="max-w-3xl mx-auto text-center">
-          <h2 className="text-2xl font-bold mb-4">הקורס לא נמצא</h2>
-          <p className="text-muted-foreground mb-8">
-            הקורס המבוקש אינו קיים או שאינו זמין כרגע.
-          </p>
-          <Button asChild>
-            <Link to="/digital-courses">חזרה לרשימת הקורסים</Link>
-          </Button>
-        </div>
+      <div className="container mx-auto py-10 text-center">
+        <h1 className="text-3xl font-bold mb-4">הקורס לא נמצא</h1>
+        <p className="mb-6">לא הצלחנו למצוא את הקורס המבוקש.</p>
+        <Button asChild>
+          <Link to="/digital-courses">חזרה לקורסים דיגיטליים</Link>
+        </Button>
       </div>
     );
   }
 
-  const freeLessons = lessons.filter(lesson => lesson.is_free);
-  const paidLessons = lessons.filter(lesson => !lesson.is_free);
+  const paypalOptions = {
+    clientId: "ATX_K7XVX0f6bMlwW8s72Z-Q2eKnZd9-HYGJw1vz4vP8J5SZHFZPbdU8cKdUejk4UXYvvbAYaBGlTKPl",
+    currency: "ILS",
+    intent: "capture"
+  };
+
+  const createOrder = (data: any, actions: any) => {
+    return actions.order.create({
+      intent: "CAPTURE",
+      purchase_units: [
+        {
+          amount: {
+            value: course.price?.toString() || "0",
+            currency_code: "ILS"
+          },
+          description: `רכישת הקורס: ${course.title}`,
+          payee: {
+            email_address: "sgolan20@gmail.com"
+          }
+        }
+      ]
+    });
+  };
 
   return (
-    <div className="container mx-auto py-16 md:py-24">
-      <div className="max-w-5xl mx-auto">
-        <div className="flex flex-col md:flex-row gap-8">
-          {/* Course Info */}
-          <div className="md:w-2/3">
-            <h1 className="text-3xl md:text-4xl font-bold mb-4">{course.title}</h1>
-            
-            {course.image_url && (
-              <div className="relative w-full h-64 md:h-80 mb-6 overflow-hidden rounded-lg">
-                <img 
-                  src={course.image_url} 
-                  alt={course.title} 
-                  className="w-full h-full object-cover"
-                />
-              </div>
-            )}
-            
-            <div className="prose max-w-none mb-8">
-              <h2 className="text-2xl font-bold mb-2">תיאור הקורס</h2>
-              <p className="text-lg whitespace-pre-line">{course.description}</p>
-            </div>
-            
-            <Separator className="my-8" />
-            
-            <div className="mb-8">
-              <h2 className="text-2xl font-bold mb-6">תוכן הקורס</h2>
-              
-              {lessons.length === 0 ? (
-                <div className="text-center py-8 bg-muted/50 rounded-lg">
-                  <p className="text-muted-foreground">עדיין אין שיעורים בקורס זה</p>
-                </div>
-              ) : (
-                <Accordion type="multiple" defaultValue={["free-lessons"]}>
-                  {freeLessons.length > 0 && (
-                    <AccordionItem value="free-lessons">
-                      <AccordionTrigger className="text-lg">
-                        שיעורים בחינם ({freeLessons.length})
-                      </AccordionTrigger>
-                      <AccordionContent className="space-y-2">
-                        {freeLessons.map((lesson, index) => (
-                          <div key={lesson.id} className="flex items-center justify-between p-3 hover:bg-muted rounded-md transition-colors">
-                            <div className="flex items-center">
-                              <Badge className="mr-2 bg-green-100 text-green-800 hover:bg-green-100">חינם</Badge>
-                              <span>{index + 1}. {lesson.title}</span>
-                            </div>
-                            <Button asChild size="sm" variant="outline">
-                              <Link to={`/digital-courses/${slug}/lessons/${lesson.id}`}>
-                                <PlayCircle className="ml-2 h-4 w-4" />
-                                צפה בשיעור
-                              </Link>
-                            </Button>
-                          </div>
-                        ))}
-                      </AccordionContent>
-                    </AccordionItem>
-                  )}
-                  
-                  {paidLessons.length > 0 && (
-                    <AccordionItem value="paid-lessons">
-                      <AccordionTrigger className="text-lg">
-                        שיעורים בתשלום ({paidLessons.length})
-                      </AccordionTrigger>
-                      <AccordionContent className="space-y-2">
-                        {paidLessons.map((lesson, index) => (
-                          <div key={lesson.id} className="flex items-center justify-between p-3 hover:bg-muted rounded-md transition-colors">
-                            <div className="flex items-center">
-                              <span>{freeLessons.length + index + 1}. {lesson.title}</span>
-                            </div>
-                            {hasPurchased ? (
-                              <Button asChild size="sm" variant="outline">
-                                <Link to={`/digital-courses/${slug}/lessons/${lesson.id}`}>
-                                  <PlayCircle className="ml-2 h-4 w-4" />
-                                  צפה בשיעור
-                                </Link>
-                              </Button>
-                            ) : (
-                              <Button size="sm" variant="outline" disabled>
-                                <Lock className="ml-2 h-4 w-4" />
-                                נעול
-                              </Button>
-                            )}
-                          </div>
-                        ))}
-                      </AccordionContent>
-                    </AccordionItem>
-                  )}
-                </Accordion>
-              )}
-            </div>
+    <div className="container mx-auto py-10">
+      <h1 className="text-3xl font-bold mb-6 text-center">{course.title}</h1>
+      
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {/* Main Content */}
+        <div className="md:col-span-2">
+          {course.image_url && (
+            <AspectRatio ratio={16 / 9} className="mb-6 overflow-hidden rounded-lg shadow-md">
+              <img 
+                src={course.image_url} 
+                alt={course.title} 
+                className="object-cover w-full h-full"
+              />
+            </AspectRatio>
+          )}
+          
+          <div className="prose max-w-none mb-8">
+            <h2 className="text-2xl font-bold mb-4">תיאור הקורס</h2>
+            <div dangerouslySetInnerHTML={{ __html: course.description || '' }} />
           </div>
           
-          {/* Course Purchase Card */}
-          <div className="md:w-1/3">
-            <Card className="sticky top-24">
-              <CardHeader>
-                <CardTitle>פרטי הקורס</CardTitle>
-                <CardDescription>גישה מלאה לכל תוכן הקורס</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="text-3xl font-bold">₪299</div>
-                <ul className="space-y-2">
-                  <li className="flex items-center">
-                    <CheckCircle className="ml-2 h-5 w-5 text-green-500" />
-                    <span>גישה לכל השיעורים</span>
-                  </li>
-                  <li className="flex items-center">
-                    <CheckCircle className="ml-2 h-5 w-5 text-green-500" />
-                    <span>גישה ללא הגבלת זמן</span>
-                  </li>
-                  <li className="flex items-center">
-                    <CheckCircle className="ml-2 h-5 w-5 text-green-500" />
-                    <span>עדכונים לתוכן הקורס</span>
-                  </li>
-                </ul>
-              </CardContent>
-              <CardFooter>
-                {hasPurchased ? (
-                  <div className="w-full space-y-4">
-                    <div className="flex items-center text-green-600 bg-green-50 p-3 rounded-md">
-                      <CheckCircle className="ml-2 h-5 w-5" />
-                      <span>יש לך גישה מלאה לקורס זה</span>
-                    </div>
-                    <Button asChild className="w-full">
-                      <Link to={`/digital-courses/${slug}/lessons/${lessons[0]?.id}`}>
-                        <PlayCircle className="ml-2 h-5 w-5" />
-                        התחל בצפייה
-                      </Link>
-                    </Button>
-                  </div>
+          <div>
+            <h2 className="text-2xl font-bold mb-4">תוכן הקורס</h2>
+            {lessonsLoading ? (
+              <div className="space-y-3">
+                <Skeleton className="h-10 w-full" />
+                <Skeleton className="h-10 w-full" />
+                <Skeleton className="h-10 w-full" />
+              </div>
+            ) : (
+              <div className="space-y-2">
+                {lessons.length > 0 ? (
+                  lessons.map((lesson) => (
+                    <Card 
+                      key={lesson.id} 
+                      className={`transition-all cursor-pointer hover:shadow-md ${
+                        hasPurchased || (isPaidUser && course.is_free) ? 'hover:bg-accent/10' : 'opacity-80'
+                      }`}
+                      onClick={() => handleLessonClick(lesson.id)}
+                    >
+                      <CardContent className="p-4 flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          {hasPurchased || (isPaidUser && course.is_free) ? (
+                            <Check className="h-5 w-5 text-green-500" />
+                          ) : (
+                            <Lock className="h-5 w-5 text-muted-foreground" />
+                          )}
+                          <div>
+                            <h3 className="font-medium">{lesson.title}</h3>
+                            {lesson.duration && (
+                              <p className="text-sm text-muted-foreground">
+                                משך שיעור: {lesson.duration}
+                              </p>
+                            )}
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))
                 ) : (
-                  <Button onClick={handlePurchaseClick} className="w-full">
-                    רכוש עכשיו דרך PayPal
-                  </Button>
+                  <p className="text-muted-foreground">
+                    אין שיעורים זמינים בקורס זה כרגע.
+                  </p>
                 )}
-              </CardFooter>
-            </Card>
+              </div>
+            )}
           </div>
         </div>
+        
+        {/* Purchase Sidebar */}
+        <div>
+          <Card className="sticky top-24">
+            <CardHeader>
+              <CardTitle>מחיר הקורס</CardTitle>
+              <CardDescription>
+                {course.is_free ? 'קורס חינמי' : `₪${course.price || 0}`}
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              {!user ? (
+                <Button className="w-full mb-4" asChild>
+                  <Link to="/auth" state={{ returnUrl: `/digital-courses/${slug}` }}>
+                    התחבר כדי לרכוש
+                  </Link>
+                </Button>
+              ) : hasPurchased ? (
+                <div className="text-center">
+                  <div className="bg-green-100 text-green-800 p-3 rounded-md mb-4">
+                    רכשת קורס זה
+                  </div>
+                  <Button 
+                    className="w-full"
+                    onClick={() => lessons[0] && handleLessonClick(lessons[0].id)}
+                  >
+                    התחל ללמוד
+                  </Button>
+                </div>
+              ) : course.is_free && isPaidUser ? (
+                <div className="text-center">
+                  <div className="bg-blue-100 text-blue-800 p-3 rounded-md mb-4">
+                    קורס זה זמין בחינם עבורך כחלק מתוכנית החברות
+                  </div>
+                  <Button 
+                    className="w-full"
+                    onClick={() => lessons[0] && handleLessonClick(lessons[0].id)}
+                  >
+                    התחל ללמוד
+                  </Button>
+                </div>
+              ) : (
+                <>
+                  <div className="space-y-2 mb-4">
+                    <div className="flex items-center">
+                      <Check className="h-5 w-5 text-green-500 mr-2" />
+                      <span>גישה מלאה לכל תוכן הקורס</span>
+                    </div>
+                    <div className="flex items-center">
+                      <Check className="h-5 w-5 text-green-500 mr-2" />
+                      <span>גישה ללא הגבלת זמן</span>
+                    </div>
+                    <div className="flex items-center">
+                      <Check className="h-5 w-5 text-green-500 mr-2" />
+                      <span>תמיכה בדוא"ל</span>
+                    </div>
+                  </div>
+                  
+                  <Separator className="my-4" />
+                  
+                  <div className="mb-4">
+                    <PayPalScriptProvider options={paypalOptions}>
+                      <PayPalButtons
+                        style={{ layout: "vertical" }}
+                        createOrder={createOrder}
+                        onApprove={(data, actions) => {
+                          return actions.order!.capture().then((details) => {
+                            handlePurchaseSuccess(details);
+                          });
+                        }}
+                      />
+                    </PayPalScriptProvider>
+                  </div>
+                </>
+              )}
+            </CardContent>
+            <CardFooter className="text-sm text-muted-foreground">
+              <p>
+                במקרה של בעיה ברכישה, אנא צרו קשר באמצעות דף 
+                <Link to="/contact" className="text-primary underline mx-1">
+                  צור קשר
+                </Link>
+              </p>
+            </CardFooter>
+          </Card>
+        </div>
       </div>
-      
-      {/* Auth Dialog */}
-      <Dialog open={showAuthDialog} onOpenChange={setShowAuthDialog}>
-        <DialogContent className="max-w-md">
-          <DialogHeader>
-            <DialogTitle>נדרשת התחברות</DialogTitle>
-            <DialogDescription>
-              עליך להתחבר או להירשם כדי לרכוש את הקורס.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="space-y-4 py-4">
-            <div className="flex items-center text-amber-600 bg-amber-50 p-3 rounded-md">
-              <AlertCircle className="ml-2 h-5 w-5" />
-              <span>יש לך חשבון? התחבר כדי להמשיך.</span>
-            </div>
-          </div>
-          <DialogFooter className="flex flex-col sm:flex-row gap-2">
-            <Button onClick={() => {
-              setShowAuthDialog(false);
-              navigate("/auth", { state: { returnUrl: `/digital-courses/${slug}` } });
-            }} className="w-full sm:w-auto">
-              התחבר או הירשם
-            </Button>
-            <Button variant="outline" onClick={() => setShowAuthDialog(false)} className="w-full sm:w-auto">
-              ביטול
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-      
-      {/* Payment Dialog */}
-      <Dialog open={showPaymentDialog} onOpenChange={setShowPaymentDialog}>
-        <DialogContent className="max-w-md">
-          <DialogHeader>
-            <DialogTitle>רכישת הקורס</DialogTitle>
-            <DialogDescription>
-              השתמש ב-PayPal לרכישה מאובטחת של הקורס "{course.title}"
-            </DialogDescription>
-          </DialogHeader>
-          <div className="py-4">
-            <div className="text-center mb-4">
-              <div className="text-xl font-bold">₪299</div>
-              <p className="text-sm text-muted-foreground">תשלום חד פעמי, גישה ללא הגבלה</p>
-            </div>
-            
-            <PayPalScriptProvider options={paypalOptions}>
-              <PayPalButtons 
-                style={{ layout: "vertical" }}
-                fundingSource={FUNDING.PAYPAL}
-                createOrder={(data, actions) => {
-                  return actions.order.create({
-                    purchase_units: [
-                      {
-                        amount: {
-                          value: "299.00",
-                          currency_code: "ILS"
-                        },
-                        description: `קורס: ${course.title}`,
-                        payee: {
-                          email_address: "sgolan20@gmail.com"
-                        }
-                      }
-                    ]
-                  });
-                }}
-                onApprove={(data, actions) => {
-                  return actions.order!.capture().then((details) => {
-                    handlePaymentSuccess(details);
-                  });
-                }}
-                onError={(err) => {
-                  console.error("PayPal error:", err);
-                  toast({
-                    title: "שגיאה בתהליך התשלום",
-                    description: "אירעה שגיאה בעת עיבוד התשלום. אנא נסה שוב מאוחר יותר.",
-                    variant: "destructive"
-                  });
-                }}
-              />
-            </PayPalScriptProvider>
-          </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setShowPaymentDialog(false)} className="w-full">
-              ביטול
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
     </div>
   );
 };
