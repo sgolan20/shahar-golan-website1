@@ -46,6 +46,8 @@ const formSchema = z.object({
   description: z.string().min(10, { message: "תיאור חייב להכיל לפחות 10 תווים" }),
   image_url: z.string().optional(),
   is_published: z.boolean().default(false),
+  is_free: z.boolean().default(true),
+  price: z.number().min(0).nullable(),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -80,7 +82,9 @@ const CourseAdmin = () => {
       title: "",
       description: "",
       image_url: "",
-      is_published: false
+      is_published: false,
+      is_free: true,
+      price: null
     }
   });
 
@@ -90,7 +94,9 @@ const CourseAdmin = () => {
       title: "",
       description: "",
       image_url: "",
-      is_published: false
+      is_published: false,
+      is_free: true,
+      price: null
     }
   });
 
@@ -117,7 +123,9 @@ const CourseAdmin = () => {
         description: data.description,
         slug: uniqueSlug,
         image_url: finalImageUrl,
-        is_published: data.is_published || false
+        is_published: data.is_published || false,
+        is_free: data.is_free || true,
+        price: data.price
       });
     },
     onSuccess: () => {
@@ -216,7 +224,9 @@ const CourseAdmin = () => {
       title: course.title,
       description: course.description,
       image_url: course.image_url || "",
-      is_published: course.is_published
+      is_published: course.is_published,
+      is_free: course.is_free,
+      price: course.price
     });
     setEditImagePreview(course.image_url || "");
     setIsEditDialogOpen(true);
@@ -572,6 +582,49 @@ const CourseAdmin = () => {
                     </FormItem>
                   )}
                 />
+                
+        <FormField
+          control={form.control}
+          name="is_free"
+          render={({ field }) => (
+            <FormItem className="flex flex-row items-center space-x-3 space-x-reverse space-y-0">
+              <FormControl>
+                <Checkbox
+                  checked={field.value}
+                  onCheckedChange={field.onChange}
+                />
+              </FormControl>
+              <FormLabel className="font-normal cursor-pointer">
+                קורס חינמי
+              </FormLabel>
+            </FormItem>
+          )}
+        />
+        
+        {!form.watch("is_free") && (
+          <FormField
+            control={form.control}
+            name="price"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>מחיר הקורס (₪)</FormLabel>
+                <FormControl>
+                  <Input
+                    type="number"
+                    placeholder="הזן מחיר"
+                    {...field}
+                    onChange={(e) => {
+                      const value = e.target.value ? Number(e.target.value) : null;
+                      field.onChange(value);
+                    }}
+                    value={field.value === null ? '' : field.value}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        )}
                 <div className="flex justify-end space-x-2 space-x-reverse">
                   <Button type="submit" disabled={createCourseMutation.isPending || isUploading}>
                     {createCourseMutation.isPending || isUploading ? "מוסיף..." : "הוסף קורס"}
@@ -714,6 +767,49 @@ const CourseAdmin = () => {
                     </FormItem>
                   )}
                 />
+                
+        <FormField
+          control={editForm.control}
+          name="is_free"
+          render={({ field }) => (
+            <FormItem className="flex flex-row items-center space-x-3 space-x-reverse space-y-0">
+              <FormControl>
+                <Checkbox
+                  checked={field.value}
+                  onCheckedChange={field.onChange}
+                />
+              </FormControl>
+              <FormLabel className="font-normal cursor-pointer">
+                קורס חינמי
+              </FormLabel>
+            </FormItem>
+          )}
+        />
+        
+        {!editForm.watch("is_free") && (
+          <FormField
+            control={editForm.control}
+            name="price"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>מחיר הקורס (₪)</FormLabel>
+                <FormControl>
+                  <Input
+                    type="number"
+                    placeholder="הזן מחיר"
+                    {...field}
+                    onChange={(e) => {
+                      const value = e.target.value ? Number(e.target.value) : null;
+                      field.onChange(value);
+                    }}
+                    value={field.value === null ? '' : field.value}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        )}
                 <div className="flex justify-end space-x-2 space-x-reverse">
                   <Button type="submit" disabled={updateCourseMutation.isPending || isUploading}>
                     {updateCourseMutation.isPending || isUploading ? "מעדכן..." : "עדכן קורס"}
