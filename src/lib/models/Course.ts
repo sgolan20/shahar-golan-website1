@@ -6,6 +6,8 @@ export interface Course {
   image_url: string | null;
   slug: string;
   is_published: boolean;
+  is_free: boolean;
+  price: number | null;
   created_at: string;
   updated_at: string;
 }

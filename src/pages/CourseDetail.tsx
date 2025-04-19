@@ -1,8 +1,8 @@
 
 import React, { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { getCourseBySlug, getLessonsByCourse } from "@/services/courseService";
+import { getCourseBySlug, getLessonsForCourse } from "@/services/courseService";
 import { hasUserPurchasedCourse, recordCoursePurchase } from "@/services/userCourseService";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
@@ -34,7 +34,7 @@ const CourseDetail = () => {
   // Fetch lessons for this course
   const { data: lessons = [], isLoading: lessonsLoading } = useQuery({
     queryKey: ['course-lessons', course?.id],
-    queryFn: () => getLessonsByCourse(course?.id || ''),
+    queryFn: () => getLessonsForCourse(course?.id || ''),
     enabled: !!course?.id,
   });
 

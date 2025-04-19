@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -18,7 +19,7 @@ import {
 } from "lucide-react";
 
 const Header = () => {
-  const { isMobile } = useIsMobile();
+  const isMobile = useIsMobile();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
   const { user, isAdmin, isPaidUser, checkingSession } = useAuth();
