@@ -18,3 +18,6 @@ export function useIsMobile() {
 
   return isMobile === undefined ? false : isMobile
 }
+
+// Make sure we're exporting this function as default as well
+export default useIsMobile;

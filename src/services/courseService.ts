@@ -1,3 +1,4 @@
+
 import { supabase } from "@/integrations/supabase/client";
 import { Course } from "@/lib/models/Course";
 import { Lesson } from "@/lib/models/Lesson";
@@ -16,7 +17,12 @@ export const getPublishedCourses = async (): Promise<Course[]> => {
       return [];
     }
 
-    return data || [];
+    // Ensure all course objects have the required fields
+    return (data || []).map(course => ({
+      ...course,
+      is_free: course.is_free ?? false,
+      price: course.price ?? null
+    })) as Course[];
   } catch (error) {
     console.error("Exception in getPublishedCourses:", error);
     return [];
@@ -38,7 +44,14 @@ export const getCourseBySlug = async (slug: string): Promise<Course | null> => {
       return null;
     }
 
-    return data;
+    if (!data) return null;
+
+    // Ensure the course object has the required fields
+    return {
+      ...data,
+      is_free: data.is_free ?? false,
+      price: data.price ?? null
+    } as Course;
   } catch (error) {
     console.error("Exception in getCourseBySlug:", error);
     return null;
@@ -59,7 +72,14 @@ export const getCourseById = async (id: string): Promise<Course | null> => {
       return null;
     }
 
-    return data;
+    if (!data) return null;
+
+    // Ensure the course object has the required fields
+    return {
+      ...data,
+      is_free: data.is_free ?? false,
+      price: data.price ?? null
+    } as Course;
   } catch (error) {
     console.error("Exception in getCourseById:", error);
     return null;
@@ -79,7 +99,12 @@ export const getAllCourses = async (): Promise<Course[]> => {
       return [];
     }
 
-    return data || [];
+    // Ensure all course objects have the required fields
+    return (data || []).map(course => ({
+      ...course,
+      is_free: course.is_free ?? false,
+      price: course.price ?? null
+    })) as Course[];
   } catch (error) {
     console.error("Exception in getAllCourses:", error);
     return [];
@@ -121,7 +146,12 @@ export const createCourse = async (course: Omit<Course, "id" | "created_at" | "u
       return null;
     }
 
-    return data;
+    // Ensure the course object has the required fields
+    return {
+      ...data,
+      is_free: data.is_free ?? false,
+      price: data.price ?? null
+    } as Course;
   } catch (error) {
     console.error("Exception in createCourse:", error);
     return null;
@@ -148,7 +178,12 @@ export const updateCourse = async (id: string, course: Partial<Omit<Course, "id"
       return null;
     }
 
-    return data;
+    // Ensure the course object has the required fields
+    return {
+      ...data,
+      is_free: data.is_free ?? false,
+      price: data.price ?? null
+    } as Course;
   } catch (error) {
     console.error("Exception in updateCourse:", error);
     return null;
