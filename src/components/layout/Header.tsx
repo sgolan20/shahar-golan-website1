@@ -1,284 +1,292 @@
+
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X, Youtube, ChevronDown } from "lucide-react";
+import useMobile from "@/hooks/use-mobile";
 import { Button } from "@/components/ui/button";
-import { 
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-  navigationMenuTriggerStyle
-} from "@/components/ui/navigation-menu";
 import { useAuth } from "@/contexts/AuthContext";
+import { 
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger
+} from "@/components/ui/dropdown-menu";
 import { signOut } from "@/services/userService";
+import { useToast } from "@/components/ui/use-toast";
+import { 
+  Menu, X, User, ChevronDown, LogOut, BookOpen, 
+  Settings, UserCircle
+} from "lucide-react";
 
 const Header = () => {
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { isMobile } = useMobile();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
+  const { user, isAdmin, isPaidUser, checkingSession } = useAuth();
+  const { toast } = useToast();
 
-  const { user, isAdmin } = useAuth();
-
+  // Close mobile menu when route changes
   useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 10) {
-        setIsScrolled(true);
-      } else {
-        setIsScrolled(false);
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  const toggleMobileMenu = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen);
-  };
-
-  const navLinks = [
-    { title: "קורס ממוקד", path: "/focused-course" },
-    { title: "סדנה ממוקדת", path: "/focused-workshop" },
-    { title: "הרצאה מותאמת", path: "/custom-lecture" },
-    { title: "סדנת היכרות", path: "/intro-workshop" },
-    { title: "קורסים דיגיטלים", path: "/digital-courses" },
-    { title: "למה מרצה לבינה מלאכותית?", path: "/why-me" },
-    { 
-      title: "בלוג", 
-      path: "#",
-      isDropdown: true,
-      subLinks: [
-        { title: "בלוג וידאו", path: "/blog" },
-        { title: "בלוג מאמרים", path: "/written-blog" }
-      ]
-    },
-    { title: "אודות", path: "/about" },
-    { title: "צור קשר", path: "/contact" },
-  ];
-
-  // הסרנו את הקישורים המנהליים מהתפריט הראשי
-
-  const isLinkActive = (path: string) => {
-    return location.pathname === path;
-  };
-
-  const isParentActive = (subLinks: { path: string }[]) => {
-    return subLinks.some(link => location.pathname === link.path);
-  };
-
-  const closeMobileMenu = () => {
-    setIsMobileMenuOpen(false);
-  };
+    setIsMenuOpen(false);
+  }, [location.pathname]);
 
   const handleSignOut = async () => {
-    await signOut();
-    closeMobileMenu();
+    const result = await signOut();
+    if (result.success) {
+      toast({
+        title: "התנתקת בהצלחה",
+        description: "מקווים לראות אותך שוב בקרוב!",
+      });
+    } else {
+      toast({
+        title: "שגיאה בהתנתקות",
+        description: result.message,
+        variant: "destructive"
+      });
+    }
   };
 
   return (
-    <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled
-          ? "bg-white/90 backdrop-blur-md shadow-sm"
-          : "bg-transparent"
-      }`}
-    >
-      <div className="container mx-auto px-4 md:px-6">
-        <div className="flex items-center justify-between h-16 md:h-20">
-          <Link
-            to="/"
-            className="text-2xl font-display font-bold text-gradient"
-          >
+    <header className="sticky top-0 bg-white border-b z-40">
+      <div className="container mx-auto">
+        <div className="flex items-center justify-between py-4">
+          {/* Logo */}
+          <Link to="/" className="text-2xl font-bold">
             שחר גולן
           </Link>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-1 space-x-reverse">
-            <NavigationMenu dir="rtl" className="rtl">
-              <NavigationMenuList className="rtl flex items-center">
-                {navLinks.map((link) => (
-                  link.isDropdown ? (
-                    <NavigationMenuItem key={link.title} className="h-10">
-                      <div className="blog-dropdown relative h-full flex items-center justify-center">
-                        <button 
-                          className={`nav-link inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 ${isParentActive(link.subLinks) ? "active" : ""}`}
-                        >
-                          {link.title}
-                          <ChevronDown
-                            className="chevron-icon relative top-[1px] mr-1 h-3 w-3 transition duration-200"
-                            aria-hidden="true"
-                          />
-                        </button>
-                        <div className="dropdown-menu absolute right-0 top-full z-50 mt-0 hidden w-[200px] rounded-md border bg-popover p-2 shadow-md transition-all duration-300 opacity-0 [transition-delay:0ms]">
-                          <ul className="grid gap-1">
-                            {link.subLinks.map((subLink) => (
-                              <li key={subLink.path}>
-                                <Link
-                                  to={subLink.path}
-                                  className={`block w-full rounded-md p-2 text-right hover:bg-accent ${
-                                    isLinkActive(subLink.path) ? "bg-accent" : ""
-                                  }`}
-                                >
-                                  {subLink.title}
-                                </Link>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      </div>
-                    </NavigationMenuItem>
-                  ) : (
-                    <NavigationMenuItem key={link.path} className="h-10">
-                      <Link
-                        to={link.path}
-                        className={`nav-link h-10 flex items-center ${isLinkActive(link.path) ? "active" : ""}`}
-                      >
-                        {link.title}
-                      </Link>
-                    </NavigationMenuItem>
-                  )
-                ))}
-              </NavigationMenuList>
-            </NavigationMenu>
-            
-            {/* User Authentication */}
-            {user ? (
-              <div className="flex items-center space-x-2 space-x-reverse">
-                <Button 
-                  variant="outline" 
-                  size="sm"
-                  onClick={handleSignOut}
-                >
-                  התנתק
-                </Button>
-              </div>
-            ) : (
-              <Button 
-                asChild 
-                variant="default" 
-                size="sm"
-                className="mr-2"
-              >
-                <Link to="/auth">התחבר / הירשם</Link>
-              </Button>
-            )}
-            
-            <Button 
-              asChild 
-              variant="outline" 
-              size="sm"
-            >
-              <a 
-                href="https://www.youtube.com/@sgolan20" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="flex items-center bg-red-600 text-white hover:bg-red-700 border-red-600 hover:border-red-700"
-              >
-                <Youtube className="ml-2 h-4 w-4" />
-                ערוץ היוטיוב
-              </a>
-            </Button>
-          </nav>
+          {/* Navigation - Desktop */}
+          {!isMobile && (
+            <nav className="flex items-center space-x-1 space-x-reverse">
+              <NavLinks />
+              
+              {/* Auth Status */}
+              {!checkingSession && (
+                user ? (
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" className="gap-2">
+                        <UserCircle className="h-4 w-4" />
+                        {user.full_name || "חשבון"}
+                        <ChevronDown className="h-4 w-4" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" className="w-48">
+                      <DropdownMenuItem asChild>
+                        <Link to="/profile" className="flex items-center gap-2 cursor-pointer">
+                          <User className="h-4 w-4" />
+                          <span>הפרופיל שלי</span>
+                        </Link>
+                      </DropdownMenuItem>
+                      
+                      <DropdownMenuItem asChild>
+                        <Link to="/digital-courses" className="flex items-center gap-2 cursor-pointer">
+                          <BookOpen className="h-4 w-4" />
+                          <span>הקורסים שלי</span>
+                        </Link>
+                      </DropdownMenuItem>
+                      
+                      {isAdmin && (
+                        <>
+                          <DropdownMenuSeparator />
+                          <DropdownMenuItem asChild>
+                            <Link to="/course-admin" className="flex items-center gap-2 cursor-pointer">
+                              <Settings className="h-4 w-4" />
+                              <span>ניהול קורסים</span>
+                            </Link>
+                          </DropdownMenuItem>
+                          <DropdownMenuItem asChild>
+                            <Link to="/user-admin" className="flex items-center gap-2 cursor-pointer">
+                              <Settings className="h-4 w-4" />
+                              <span>ניהול משתמשים</span>
+                            </Link>
+                          </DropdownMenuItem>
+                        </>
+                      )}
+                      
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem onClick={handleSignOut} className="flex items-center gap-2 cursor-pointer">
+                        <LogOut className="h-4 w-4" />
+                        <span>התנתק</span>
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                ) : (
+                  <Button asChild variant="outline">
+                    <Link to="/auth">התחבר / הירשם</Link>
+                  </Button>
+                )
+              )}
+            </nav>
+          )}
 
           {/* Mobile Menu Button */}
-          <button
-            className="md:hidden p-2 rounded-md"
-            onClick={toggleMobileMenu}
-            aria-label="Toggle mobile menu"
-          >
-            {isMobileMenuOpen ? (
-              <X className="h-6 w-6" />
-            ) : (
-              <Menu className="h-6 w-6" />
-            )}
-          </button>
+          {isMobile && (
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              aria-label={isMenuOpen ? "סגור תפריט" : "פתח תפריט"}
+            >
+              {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            </Button>
+          )}
         </div>
       </div>
 
-      {/* Mobile Navigation */}
-      {isMobileMenuOpen && (
-        <div className="md:hidden bg-white/95 backdrop-blur-md animate-fade-in">
-          <div className="container mx-auto px-4 py-4 flex flex-col text-right">
-            {navLinks.map((link) => (
-              link.isDropdown ? (
-                <div key={link.title} className="py-2">
-                  <div className="flex items-center justify-between px-4 py-2 text-lg font-medium border-r-2 border-primary/20">
-                    {link.title}
-                    <ChevronDown className="h-4 w-4" />
-                  </div>
-                  <div className="pr-6 mt-1">
-                    {link.subLinks.map((subLink) => (
-                      <Link
-                        key={subLink.path}
-                        to={subLink.path}
-                        onClick={closeMobileMenu}
-                        className={`block py-2 px-4 text-lg ${
-                          isLinkActive(subLink.path)
-                            ? "text-primary font-medium border-r-2 border-primary"
-                            : "text-foreground"
-                        }`}
-                      >
-                        {subLink.title}
-                      </Link>
-                    ))}
-                  </div>
-                </div>
-              ) : (
-                <Link
-                  key={link.path}
-                  to={link.path}
-                  onClick={closeMobileMenu}
-                  className={`py-3 px-4 text-lg flex items-center ${
-                    isLinkActive(link.path)
-                      ? "text-primary font-medium border-r-2 border-primary"
-                      : "text-foreground"
-                  }`}
-                >
-                  {link.title}
-                </Link>
-              )
-            ))}
+      {/* Mobile Menu */}
+      {isMobile && isMenuOpen && (
+        <div className="fixed inset-0 top-[65px] bg-white z-30 overflow-y-auto">
+          <div className="container mx-auto py-6 flex flex-col gap-4">
+            <MobileNavLinks />
             
-            {/* User authentication for mobile */}
-            {user ? (
-              <Button 
-                variant="outline" 
-                onClick={handleSignOut}
-                className="mt-4 mx-4"
-              >
-                התנתק
-              </Button>
-            ) : (
-              <Button 
-                asChild 
-                className="mt-4 mx-4"
-              >
-                <Link to="/auth" onClick={closeMobileMenu}>התחבר / הירשם</Link>
-              </Button>
+            {/* Auth Status for Mobile */}
+            {!checkingSession && (
+              <div className="mt-4 border-t pt-4">
+                {user ? (
+                  <>
+                    <div className="text-sm text-muted-foreground mb-2">
+                      מחובר כ: {user.full_name || user.email}
+                    </div>
+                    <div className="flex flex-col gap-2">
+                      <Button asChild variant="outline" className="justify-start" size="sm">
+                        <Link to="/profile" className="flex items-center gap-2">
+                          <User className="h-4 w-4" />
+                          הפרופיל שלי
+                        </Link>
+                      </Button>
+                      <Button asChild variant="outline" className="justify-start" size="sm">
+                        <Link to="/digital-courses" className="flex items-center gap-2">
+                          <BookOpen className="h-4 w-4" />
+                          הקורסים שלי
+                        </Link>
+                      </Button>
+                      
+                      {isAdmin && (
+                        <>
+                          <div className="h-px bg-border my-2" />
+                          <Button asChild variant="outline" className="justify-start" size="sm">
+                            <Link to="/course-admin" className="flex items-center gap-2">
+                              <Settings className="h-4 w-4" />
+                              ניהול קורסים
+                            </Link>
+                          </Button>
+                          <Button asChild variant="outline" className="justify-start" size="sm">
+                            <Link to="/user-admin" className="flex items-center gap-2">
+                              <Settings className="h-4 w-4" />
+                              ניהול משתמשים
+                            </Link>
+                          </Button>
+                        </>
+                      )}
+                      
+                      <div className="h-px bg-border my-2" />
+                      <Button onClick={handleSignOut} variant="destructive" className="justify-start" size="sm">
+                        <LogOut className="mr-2 h-4 w-4" />
+                        התנתק
+                      </Button>
+                    </div>
+                  </>
+                ) : (
+                  <Button asChild className="w-full">
+                    <Link to="/auth">התחבר / הירשם</Link>
+                  </Button>
+                )}
+              </div>
             )}
-            
-            <Button 
-              asChild 
-              variant="outline" 
-              size="sm"
-              className="mt-4 mx-4"
-            >
-              <a 
-                href="https://www.youtube.com/@sgolan20" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="flex items-center justify-center bg-red-600 text-white hover:bg-red-700 border-red-600 hover:border-red-700"
-              >
-                <Youtube className="ml-2 h-4 w-4" />
-                ערוץ היוטיוב
-              </a>
-            </Button>
           </div>
         </div>
       )}
     </header>
+  );
+};
+
+// Desktop Navigation Links
+const NavLinks = () => {
+  const location = useLocation();
+  
+  const isActive = (path: string) => {
+    return location.pathname === path ? "bg-muted" : "";
+  };
+  
+  return (
+    <>
+      <Button asChild variant="ghost" className={isActive("/")}>
+        <Link to="/">דף הבית</Link>
+      </Button>
+      <Button asChild variant="ghost" className={isActive("/about")}>
+        <Link to="/about">אודות</Link>
+      </Button>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="ghost" className="gap-1">
+            שירותים
+            <ChevronDown className="h-4 w-4" />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent>
+          <DropdownMenuItem asChild>
+            <Link to="/focused-course">קורס ממוקד</Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem asChild>
+            <Link to="/focused-workshop">סדנה ממוקדת</Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem asChild>
+            <Link to="/custom-lecture">הרצאה בהתאמה אישית</Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem asChild>
+            <Link to="/intro-workshop">סדנת מבוא</Link>
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem asChild>
+            <Link to="/digital-courses">קורסים דיגיטליים</Link>
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+      <Button asChild variant="ghost" className={isActive("/blog")}>
+        <Link to="/blog">מאמרים</Link>
+      </Button>
+      <Button asChild variant="ghost" className={isActive("/contact")}>
+        <Link to="/contact">צור קשר</Link>
+      </Button>
+    </>
+  );
+};
+
+// Mobile Navigation Links
+const MobileNavLinks = () => {
+  return (
+    <>
+      <NavButton to="/">דף הבית</NavButton>
+      <NavButton to="/about">אודות</NavButton>
+      <div className="border-t pt-3 pb-1">
+        <h3 className="text-sm font-medium mb-2">שירותים</h3>
+        <div className="grid gap-1 pr-2">
+          <NavButton to="/focused-course">קורס ממוקד</NavButton>
+          <NavButton to="/focused-workshop">סדנה ממוקדת</NavButton>
+          <NavButton to="/custom-lecture">הרצאה בהתאמה אישית</NavButton>
+          <NavButton to="/intro-workshop">סדנת מבוא</NavButton>
+          <NavButton to="/digital-courses">קורסים דיגיטליים</NavButton>
+        </div>
+      </div>
+      <NavButton to="/blog">מאמרים</NavButton>
+      <NavButton to="/contact">צור קשר</NavButton>
+    </>
+  );
+};
+
+const NavButton = ({ to, children }: { to: string; children: React.ReactNode }) => {
+  const location = useLocation();
+  const isActive = location.pathname === to;
+  
+  return (
+    <Button
+      asChild
+      variant={isActive ? "default" : "ghost"}
+      className="justify-start w-full"
+    >
+      <Link to={to}>{children}</Link>
+    </Button>
   );
 };
 

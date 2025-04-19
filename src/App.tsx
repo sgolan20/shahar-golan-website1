@@ -29,6 +29,7 @@ import AuthPage from "./pages/AuthPage";
 import CourseAdmin from "./pages/CourseAdmin";
 import CourseLessons from "./pages/CourseLessons";
 import UserAdmin from "./pages/UserAdmin";
+import UserProfile from "./pages/UserProfile";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 
 const queryClient = new QueryClient();
@@ -59,6 +60,13 @@ const App = () => (
               <Route path="/digital-courses/:slug" element={<Layout><CourseDetail /></Layout>} />
               <Route path="/digital-courses/:courseSlug/lessons/:lessonId" element={<Layout><LessonDetail /></Layout>} />
               <Route path="/auth" element={<Layout><AuthPage /></Layout>} />
+              
+              {/* Profile Route */}
+              <Route path="/profile" element={
+                <ProtectedRoute>
+                  <Layout><UserProfile /></Layout>
+                </ProtectedRoute>
+              } />
               
               {/* Admin Routes */}
               <Route path="/blog-admin" element={

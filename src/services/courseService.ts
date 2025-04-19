@@ -263,3 +263,44 @@ export const deleteLesson = async (id: string): Promise<boolean> => {
     return false;
   }
 };
+
+// Get lessons for a course with access check
+export const getLessonsForCourseWithAccess = async (courseId: string): Promise<{ lessons: Lesson[], hasPurchased: boolean }> => {
+  try {
+    const { data: { session } } = await supabase.auth.getSession();
+    const isAuthenticated = !!session;
+    
+    // First, check if user has purchased the course
+    let hasPurchased = false;
+    
+    if (isAuthenticated) {
+      const { data: purchaseData, error: purchaseError } = await supabase
+        .from("user_courses")
+        .select("id")
+        .eq("user_id", session.user.id)
+        .eq("course_id", courseId)
+        .maybeSingle();
+        
+      if (!purchaseError && purchaseData) {
+        hasPurchased = true;
+      }
+    }
+    
+    // Get all lessons
+    const { data: lessons, error } = await supabase
+      .from("lessons")
+      .select("*")
+      .eq("course_id", courseId)
+      .order("position", { ascending: true });
+
+    if (error) {
+      console.error("Error fetching lessons:", error);
+      return { lessons: [], hasPurchased };
+    }
+
+    return { lessons: lessons || [], hasPurchased };
+  } catch (error) {
+    console.error("Exception in getLessonsForCourseWithAccess:", error);
+    return { lessons: [], hasPurchased: false };
+  }
+};
