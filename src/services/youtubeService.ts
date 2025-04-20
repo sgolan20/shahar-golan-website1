@@ -1,33 +1,13 @@
+
 import axios from 'axios';
+import { YouTubeVideo, YouTubeThumbnails } from '@/lib/models/YouTubeVideo';
 
-// טיפוסים עבור נתוני YouTube
-export interface YouTubeVideo {
-  id: string;
-  title: string;
-  description: string;
-  publishedAt: string;
-  thumbnails: {
-    default: { url: string; width: number; height: number };
-    medium: { url: string; width: number; height: number };
-    high: { url: string; width: number; height: number };
-    standard?: { url: string; width: number; height: number };
-    maxres?: { url: string; width: number; height: number };
-  };
-  channelTitle: string;
-  playlistId?: string;
-}
-
+// Export the interface for playlists - this isn't defined in our models yet
 export interface YouTubePlaylist {
   id: string;
   title: string;
   description: string;
-  thumbnails: {
-    default: { url: string; width: number; height: number };
-    medium: { url: string; width: number; height: number };
-    high: { url: string; width: number; height: number };
-    standard?: { url: string; width: number; height: number };
-    maxres?: { url: string; width: number; height: number };
-  };
+  thumbnails: YouTubeThumbnails;
   itemCount: number;
 }
 
@@ -71,7 +51,12 @@ export const getPlaylistVideos = async (playlistId: string): Promise<YouTubeVide
     
     // וידוא שהתגובה היא מערך
     if (Array.isArray(response.data)) {
-      return response.data;
+      // Add the channelId property to each video to conform to our interface
+      const videos = response.data.map(video => ({
+        ...video,
+        channelId: video.channelId || CHANNEL_ID // Use existing channelId or default
+      }));
+      return videos;
     } else {
       console.error('Response is not an array:', response.data);
       return [];
@@ -82,6 +67,9 @@ export const getPlaylistVideos = async (playlistId: string): Promise<YouTubeVide
   }
 };
 
+// Define a default channel ID to use when one isn't provided by the API
+const CHANNEL_ID = 'UCWpncdvMbjNwtljABXcAbHA';
+
 // פונקציה לקבלת כל הסרטונים בערוץ
 export const getChannelVideos = async (): Promise<YouTubeVideo[]> => {
   try {
@@ -90,7 +78,12 @@ export const getChannelVideos = async (): Promise<YouTubeVideo[]> => {
     
     // וידוא שהתגובה היא מערך
     if (Array.isArray(response.data)) {
-      return response.data;
+      // Add the channelId property to each video to conform to our interface
+      const videos = response.data.map(video => ({
+        ...video,
+        channelId: video.channelId || CHANNEL_ID // Use existing channelId or default
+      }));
+      return videos;
     } else {
       console.error('Response is not an array:', response.data);
       return [];

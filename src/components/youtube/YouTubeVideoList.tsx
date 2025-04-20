@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { YouTubeVideo as YouTubeVideoType } from "@/services/youtubeService";
+
+import { YouTubeVideo as YouTubeVideoType } from "@/lib/models/YouTubeVideo";
 import YouTubeVideo from "./YouTubeVideo";
 import { Loader2 } from "lucide-react";
 
