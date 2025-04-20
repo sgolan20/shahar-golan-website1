@@ -8,7 +8,6 @@ import { AnimatePresence } from "framer-motion";
 import { AuthProvider } from "./contexts/AuthContext";
 import Layout from "./components/layout/Layout";
 import Index from "./pages/Index";
-import About from "./pages/About";
 import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
 import WrittenBlog from "./pages/WrittenBlog";
@@ -31,6 +30,7 @@ import CourseLessons from "./pages/CourseLessons";
 import UserAdmin from "./pages/UserAdmin";
 import UserProfile from "./pages/UserProfile";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
+import YouTubeVideos from "./pages/YouTubeVideos"; // New import for YouTube Videos page
 
 const queryClient = new QueryClient();
 
@@ -46,10 +46,10 @@ const App = () => (
           <AnimatePresence mode="wait">
             <Routes>
               <Route path="/" element={<Layout><Index /></Layout>} />
-              <Route path="/about" element={<Layout><About /></Layout>} />
               <Route path="/blog" element={<Layout><Blog /></Layout>} />
               <Route path="/blog/:id" element={<Layout><BlogPost /></Layout>} />
               <Route path="/written-blog" element={<Layout><WrittenBlog /></Layout>} />
+              <Route path="/video-blog" element={<Layout><YouTubeVideos /></Layout>} />
               <Route path="/contact" element={<Layout><Contact /></Layout>} />
               <Route path="/why-me" element={<Layout><WhyMe /></Layout>} />
               <Route path="/focused-course" element={<Layout><FocusedCourse /></Layout>} />
