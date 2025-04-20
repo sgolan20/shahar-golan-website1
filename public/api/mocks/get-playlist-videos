@@ -1,0 +1,31 @@
+
+[
+  {
+    "id": "video1",
+    "title": "הכירו את הבינה המלאכותית של גוגל - Gemini",
+    "description": "סקירה מעמיקה על Gemini, כלי הבינה המלאכותית החדש של גוגל והיכולות המתקדמות שלו",
+    "publishedAt": "2024-04-01T10:00:00Z",
+    "thumbnails": {
+      "default": { "url": "https://i.ytimg.com/vi/dummy1/default.jpg", "width": 120, "height": 90 },
+      "medium": { "url": "https://i.ytimg.com/vi/dummy1/mqdefault.jpg", "width": 320, "height": 180 },
+      "high": { "url": "https://i.ytimg.com/vi/dummy1/hqdefault.jpg", "width": 480, "height": 360 }
+    },
+    "channelTitle": "שחר גולן",
+    "channelId": "UCWpncdvMbjNwtljABXcAbHA",
+    "playlistId": "playlist1"
+  },
+  {
+    "id": "video4",
+    "title": "עתיד העבודה עם בינה מלאכותית",
+    "description": "איך הבינה המלאכותית משנה את עולם העבודה ואיך להתכונן לשינויים הצפויים",
+    "publishedAt": "2024-01-10T09:15:00Z",
+    "thumbnails": {
+      "default": { "url": "https://i.ytimg.com/vi/dummy4/default.jpg", "width": 120, "height": 90 },
+      "medium": { "url": "https://i.ytimg.com/vi/dummy4/mqdefault.jpg", "width": 320, "height": 180 },
+      "high": { "url": "https://i.ytimg.com/vi/dummy4/hqdefault.jpg", "width": 480, "height": 360 }
+    },
+    "channelTitle": "שחר גולן",
+    "channelId": "UCWpncdvMbjNwtljABXcAbHA",
+    "playlistId": "playlist1"
+  }
+]

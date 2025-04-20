@@ -1,0 +1,42 @@
+
+[
+  {
+    "id": "video1",
+    "title": "הכירו את הבינה המלאכותית של גוגל - Gemini",
+    "description": "סקירה מעמיקה על Gemini, כלי הבינה המלאכותית החדש של גוגל והיכולות המתקדמות שלו",
+    "publishedAt": "2024-04-01T10:00:00Z",
+    "thumbnails": {
+      "default": { "url": "https://i.ytimg.com/vi/dummy1/default.jpg", "width": 120, "height": 90 },
+      "medium": { "url": "https://i.ytimg.com/vi/dummy1/mqdefault.jpg", "width": 320, "height": 180 },
+      "high": { "url": "https://i.ytimg.com/vi/dummy1/hqdefault.jpg", "width": 480, "height": 360 }
+    },
+    "channelTitle": "שחר גולן",
+    "channelId": "UCWpncdvMbjNwtljABXcAbHA"
+  },
+  {
+    "id": "video2",
+    "title": "איך להשתמש ב-AI לכתיבת תוכן שיווקי",
+    "description": "מדריך מעשי לשימוש בכלי בינה מלאכותית ליצירת תוכן שיווקי אפקטיבי לעסקים",
+    "publishedAt": "2024-03-15T14:30:00Z",
+    "thumbnails": {
+      "default": { "url": "https://i.ytimg.com/vi/dummy2/default.jpg", "width": 120, "height": 90 },
+      "medium": { "url": "https://i.ytimg.com/vi/dummy2/mqdefault.jpg", "width": 320, "height": 180 },
+      "high": { "url": "https://i.ytimg.com/vi/dummy2/hqdefault.jpg", "width": 480, "height": 360 }
+    },
+    "channelTitle": "שחר גולן",
+    "channelId": "UCWpncdvMbjNwtljABXcAbHA"
+  },
+  {
+    "id": "video3",
+    "title": "5 כלי AI חינמיים שכל עסק צריך להכיר",
+    "description": "סקירה של חמישה כלי בינה מלאכותית חינמיים שיכולים לעזור לעסקים קטנים ובינוניים",
+    "publishedAt": "2024-02-20T11:45:00Z",
+    "thumbnails": {
+      "default": { "url": "https://i.ytimg.com/vi/dummy3/default.jpg", "width": 120, "height": 90 },
+      "medium": { "url": "https://i.ytimg.com/vi/dummy3/mqdefault.jpg", "width": 320, "height": 180 },
+      "high": { "url": "https://i.ytimg.com/vi/dummy3/hqdefault.jpg", "width": 480, "height": 360 }
+    },
+    "channelTitle": "שחר גולן",
+    "channelId": "UCWpncdvMbjNwtljABXcAbHA"
+  }
+]

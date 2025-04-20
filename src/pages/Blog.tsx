@@ -10,9 +10,9 @@ import {
   getChannelPlaylists, 
   getChannelVideos, 
   getPlaylistVideos,
-  YouTubeVideo,
   YouTubePlaylist
 } from "@/services/youtubeService";
+import { YouTubeVideo } from "@/lib/models/YouTubeVideo";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 

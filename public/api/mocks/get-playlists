@@ -1,0 +1,25 @@
+
+[
+  {
+    "id": "playlist1",
+    "title": "מדריכי AI",
+    "description": "סדרת מדריכים על שימוש בבינה מלאכותית",
+    "thumbnails": {
+      "default": { "url": "https://i.ytimg.com/vi/dummy1/default.jpg", "width": 120, "height": 90 },
+      "medium": { "url": "https://i.ytimg.com/vi/dummy1/mqdefault.jpg", "width": 320, "height": 180 },
+      "high": { "url": "https://i.ytimg.com/vi/dummy1/hqdefault.jpg", "width": 480, "height": 360 }
+    },
+    "itemCount": 5
+  },
+  {
+    "id": "playlist2",
+    "title": "חדשנות טכנולוגית",
+    "description": "סרטונים על חדשנות טכנולוגית וטרנדים עדכניים",
+    "thumbnails": {
+      "default": { "url": "https://i.ytimg.com/vi/dummy2/default.jpg", "width": 120, "height": 90 },
+      "medium": { "url": "https://i.ytimg.com/vi/dummy2/mqdefault.jpg", "width": 320, "height": 180 },
+      "high": { "url": "https://i.ytimg.com/vi/dummy2/hqdefault.jpg", "width": 480, "height": 360 }
+    },
+    "itemCount": 3
+  }
+]
