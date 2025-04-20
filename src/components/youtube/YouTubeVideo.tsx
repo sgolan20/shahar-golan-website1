@@ -2,7 +2,7 @@
 import { motion } from "framer-motion";
 import { Calendar, Play, X } from "lucide-react";
 import { useState } from "react";
-import { YouTubeVideo as YouTubeVideoType } from "@/lib/models/YouTubeVideo";
+import { YouTubeVideo as YouTubeVideoType } from "@/services/youtubeService";
 import {
   Dialog,
   DialogContent,

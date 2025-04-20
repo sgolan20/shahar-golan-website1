@@ -54,12 +54,7 @@ const OrganizationsSection = () => {
   }, {
     name: "אוניברסיטת בר-אילן",
     logo: "/lovable-uploads/Bar_Ilan_logo.png"
-  },
-    {
-      name: "HackerU by ThriveDx",
-      logo: "/lovable-uploads/f10ea97f-6626-4010-b552-1741b0fe7f2c.png"
-    }
-  ];
+  }];
 
   // State for storing visible organizations and grid columns
   const [visibleOrgs, setVisibleOrgs] = useState(organizations);

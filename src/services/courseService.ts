@@ -1,4 +1,3 @@
-
 import { supabase } from "@/integrations/supabase/client";
 import { Course } from "@/lib/models/Course";
 import { Lesson } from "@/lib/models/Lesson";
@@ -17,12 +16,7 @@ export const getPublishedCourses = async (): Promise<Course[]> => {
       return [];
     }
 
-    // Ensure all course objects have the required fields
-    return (data || []).map(course => ({
-      ...course,
-      is_free: course.is_free ?? false,
-      price: course.price ?? null
-    })) as Course[];
+    return data || [];
   } catch (error) {
     console.error("Exception in getPublishedCourses:", error);
     return [];
@@ -44,44 +38,9 @@ export const getCourseBySlug = async (slug: string): Promise<Course | null> => {
       return null;
     }
 
-    if (!data) return null;
-
-    // Ensure the course object has the required fields
-    return {
-      ...data,
-      is_free: data.is_free ?? false,
-      price: data.price ?? null
-    } as Course;
+    return data;
   } catch (error) {
     console.error("Exception in getCourseBySlug:", error);
-    return null;
-  }
-};
-
-// Get a specific course by ID
-export const getCourseById = async (id: string): Promise<Course | null> => {
-  try {
-    const { data, error } = await supabase
-      .from("courses")
-      .select("*")
-      .eq("id", id)
-      .maybeSingle();
-
-    if (error) {
-      console.error("Error fetching course by ID:", error);
-      return null;
-    }
-
-    if (!data) return null;
-
-    // Ensure the course object has the required fields
-    return {
-      ...data,
-      is_free: data.is_free ?? false,
-      price: data.price ?? null
-    } as Course;
-  } catch (error) {
-    console.error("Exception in getCourseById:", error);
     return null;
   }
 };
@@ -99,12 +58,7 @@ export const getAllCourses = async (): Promise<Course[]> => {
       return [];
     }
 
-    // Ensure all course objects have the required fields
-    return (data || []).map(course => ({
-      ...course,
-      is_free: course.is_free ?? false,
-      price: course.price ?? null
-    })) as Course[];
+    return data || [];
   } catch (error) {
     console.error("Exception in getAllCourses:", error);
     return [];
@@ -146,12 +100,7 @@ export const createCourse = async (course: Omit<Course, "id" | "created_at" | "u
       return null;
     }
 
-    // Ensure the course object has the required fields
-    return {
-      ...data,
-      is_free: data.is_free ?? false,
-      price: data.price ?? null
-    } as Course;
+    return data;
   } catch (error) {
     console.error("Exception in createCourse:", error);
     return null;
@@ -178,12 +127,7 @@ export const updateCourse = async (id: string, course: Partial<Omit<Course, "id"
       return null;
     }
 
-    // Ensure the course object has the required fields
-    return {
-      ...data,
-      is_free: data.is_free ?? false,
-      price: data.price ?? null
-    } as Course;
+    return data;
   } catch (error) {
     console.error("Exception in updateCourse:", error);
     return null;
@@ -296,46 +240,5 @@ export const deleteLesson = async (id: string): Promise<boolean> => {
   } catch (error) {
     console.error("Exception in deleteLesson:", error);
     return false;
-  }
-};
-
-// Get lessons for a course with access check
-export const getLessonsForCourseWithAccess = async (courseId: string): Promise<{ lessons: Lesson[], hasPurchased: boolean }> => {
-  try {
-    const { data: { session } } = await supabase.auth.getSession();
-    const isAuthenticated = !!session;
-    
-    // First, check if user has purchased the course
-    let hasPurchased = false;
-    
-    if (isAuthenticated) {
-      const { data: purchaseData, error: purchaseError } = await supabase
-        .from("user_courses")
-        .select("id")
-        .eq("user_id", session.user.id)
-        .eq("course_id", courseId)
-        .maybeSingle();
-        
-      if (!purchaseError && purchaseData) {
-        hasPurchased = true;
-      }
-    }
-    
-    // Get all lessons
-    const { data: lessons, error } = await supabase
-      .from("lessons")
-      .select("*")
-      .eq("course_id", courseId)
-      .order("position", { ascending: true });
-
-    if (error) {
-      console.error("Error fetching lessons:", error);
-      return { lessons: [], hasPurchased };
-    }
-
-    return { lessons: lessons || [], hasPurchased };
-  } catch (error) {
-    console.error("Exception in getLessonsForCourseWithAccess:", error);
-    return { lessons: [], hasPurchased: false };
   }
 };

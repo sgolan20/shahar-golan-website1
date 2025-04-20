@@ -57,9 +57,7 @@ export type Database = {
           description: string
           id: string
           image_url: string | null
-          is_free: boolean
           is_published: boolean
-          price: number | null
           slug: string
           title: string
           updated_at: string
@@ -69,9 +67,7 @@ export type Database = {
           description: string
           id?: string
           image_url?: string | null
-          is_free?: boolean
           is_published?: boolean
-          price?: number | null
           slug: string
           title: string
           updated_at?: string
@@ -81,9 +77,7 @@ export type Database = {
           description?: string
           id?: string
           image_url?: string | null
-          is_free?: boolean
           is_published?: boolean
-          price?: number | null
           slug?: string
           title?: string
           updated_at?: string
@@ -166,55 +160,6 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
-      }
-      user_courses: {
-        Row: {
-          course_id: string
-          expires_at: string | null
-          granted_at: string
-          granted_by: string | null
-          id: string
-          user_id: string
-        }
-        Insert: {
-          course_id: string
-          expires_at?: string | null
-          granted_at?: string
-          granted_by?: string | null
-          id?: string
-          user_id: string
-        }
-        Update: {
-          course_id?: string
-          expires_at?: string | null
-          granted_at?: string
-          granted_by?: string | null
-          id?: string
-          user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "user_courses_course_id_fkey"
-            columns: ["course_id"]
-            isOneToOne: false
-            referencedRelation: "courses"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "user_courses_granted_by_fkey"
-            columns: ["granted_by"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "user_courses_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
-        ]
       }
     }
     Views: {
