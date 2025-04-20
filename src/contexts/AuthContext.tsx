@@ -1,5 +1,5 @@
 
-import { ReactNode, createContext, useContext, useEffect, useState } from "react";
+import React, { ReactNode, createContext, useContext, useEffect, useState } from "react";
 import { UserProfile } from "@/lib/models/User";
 import { supabase } from "@/integrations/supabase/client";
 
