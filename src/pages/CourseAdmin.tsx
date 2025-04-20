@@ -1,5 +1,6 @@
 import { useState, useRef } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -34,7 +35,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/components/ui/use-toast";
-import { Pencil, Trash2, Plus, RefreshCw, Upload, Image, Database, Check, AlertCircle } from "lucide-react";
+import { Pencil, Trash2, Plus, RefreshCw, Upload, Image, Database, Check, AlertCircle, ArrowLeft } from "lucide-react";
 import { getAllCourses, createCourse, updateCourse, deleteCourse } from "@/services/courseService";
 import { uploadImage, checkStorageAccess } from "@/services/storageService";
 import { Course } from "@/lib/models/Course";
@@ -45,6 +46,8 @@ const formSchema = z.object({
   description: z.string().min(10, { message: "תיאור חייב להכיל לפחות 10 תווים" }),
   image_url: z.string().optional(),
   is_published: z.boolean().default(false),
+  is_free: z.boolean().default(true),
+  price: z.number().min(0).nullable(),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -64,6 +67,7 @@ const CourseAdmin = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const editFileInputRef = useRef<HTMLInputElement>(null);
   
+  const navigate = useNavigate();
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
@@ -78,7 +82,9 @@ const CourseAdmin = () => {
       title: "",
       description: "",
       image_url: "",
-      is_published: false
+      is_published: false,
+      is_free: true,
+      price: null
     }
   });
 
@@ -88,7 +94,9 @@ const CourseAdmin = () => {
       title: "",
       description: "",
       image_url: "",
-      is_published: false
+      is_published: false,
+      is_free: true,
+      price: null
     }
   });
 
@@ -115,7 +123,9 @@ const CourseAdmin = () => {
         description: data.description,
         slug: uniqueSlug,
         image_url: finalImageUrl,
-        is_published: data.is_published || false
+        is_published: data.is_published || false,
+        is_free: data.is_free || true,
+        price: data.price
       });
     },
     onSuccess: () => {
@@ -214,7 +224,9 @@ const CourseAdmin = () => {
       title: course.title,
       description: course.description,
       image_url: course.image_url || "",
-      is_published: course.is_published
+      is_published: course.is_published,
+      is_free: course.is_free,
+      price: course.price
     });
     setEditImagePreview(course.image_url || "");
     setIsEditDialogOpen(true);
@@ -392,13 +404,33 @@ const CourseAdmin = () => {
                           </span>
                         )}
                       </TableCell>
-                      <TableCell className="space-x-1 space-x-reverse">
-                        <Button variant="ghost" size="sm" onClick={() => handleEditCourse(course)}>
-                          <Pencil className="h-4 w-4" />
-                        </Button>
-                        <Button variant="ghost" size="sm" onClick={() => handleDeleteCourse(course)}>
-                          <Trash2 className="h-4 w-4 text-destructive" />
-                        </Button>
+                      <TableCell>
+                        <div className="flex items-center gap-2">
+                          <Button
+                            variant="outline"
+                            size="icon"
+                            onClick={() => navigate(`/course-admin/${course.id}`)}
+                            title="נהל שיעורים"
+                          >
+                            <Database className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            variant="outline"
+                            size="icon"
+                            onClick={() => handleEditCourse(course)}
+                            title="ערוך קורס"
+                          >
+                            <Pencil className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            variant="outline"
+                            size="icon"
+                            onClick={() => handleDeleteCourse(course)}
+                            title="מחק קורס"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
                       </TableCell>
                     </TableRow>
                   ))}
@@ -550,6 +582,49 @@ const CourseAdmin = () => {
                     </FormItem>
                   )}
                 />
+                
+        <FormField
+          control={form.control}
+          name="is_free"
+          render={({ field }) => (
+            <FormItem className="flex flex-row items-center space-x-3 space-x-reverse space-y-0">
+              <FormControl>
+                <Checkbox
+                  checked={field.value}
+                  onCheckedChange={field.onChange}
+                />
+              </FormControl>
+              <FormLabel className="font-normal cursor-pointer">
+                קורס חינמי
+              </FormLabel>
+            </FormItem>
+          )}
+        />
+        
+        {!form.watch("is_free") && (
+          <FormField
+            control={form.control}
+            name="price"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>מחיר הקורס (₪)</FormLabel>
+                <FormControl>
+                  <Input
+                    type="number"
+                    placeholder="הזן מחיר"
+                    {...field}
+                    onChange={(e) => {
+                      const value = e.target.value ? Number(e.target.value) : null;
+                      field.onChange(value);
+                    }}
+                    value={field.value === null ? '' : field.value}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        )}
                 <div className="flex justify-end space-x-2 space-x-reverse">
                   <Button type="submit" disabled={createCourseMutation.isPending || isUploading}>
                     {createCourseMutation.isPending || isUploading ? "מוסיף..." : "הוסף קורס"}
@@ -692,6 +767,49 @@ const CourseAdmin = () => {
                     </FormItem>
                   )}
                 />
+                
+        <FormField
+          control={editForm.control}
+          name="is_free"
+          render={({ field }) => (
+            <FormItem className="flex flex-row items-center space-x-3 space-x-reverse space-y-0">
+              <FormControl>
+                <Checkbox
+                  checked={field.value}
+                  onCheckedChange={field.onChange}
+                />
+              </FormControl>
+              <FormLabel className="font-normal cursor-pointer">
+                קורס חינמי
+              </FormLabel>
+            </FormItem>
+          )}
+        />
+        
+        {!editForm.watch("is_free") && (
+          <FormField
+            control={editForm.control}
+            name="price"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>מחיר הקורס (₪)</FormLabel>
+                <FormControl>
+                  <Input
+                    type="number"
+                    placeholder="הזן מחיר"
+                    {...field}
+                    onChange={(e) => {
+                      const value = e.target.value ? Number(e.target.value) : null;
+                      field.onChange(value);
+                    }}
+                    value={field.value === null ? '' : field.value}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        )}
                 <div className="flex justify-end space-x-2 space-x-reverse">
                   <Button type="submit" disabled={updateCourseMutation.isPending || isUploading}>
                     {updateCourseMutation.isPending || isUploading ? "מעדכן..." : "עדכן קורס"}
