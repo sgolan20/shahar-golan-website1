@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -214,38 +213,37 @@ const NavLinks = () => {
       <Button asChild variant="ghost" className={isActive("/")}>
         <Link to="/">דף הבית</Link>
       </Button>
-      <Button asChild variant="ghost" className={isActive("/about")}>
-        <Link to="/about">אודות</Link>
+      <Button asChild variant="ghost" className={isActive("/focused-course")}>
+        <Link to="/focused-course">קורס ממוקד</Link>
+      </Button>
+      <Button asChild variant="ghost" className={isActive("/focused-workshop")}>
+        <Link to="/focused-workshop">סדנה ממוקדת</Link>
+      </Button>
+      <Button asChild variant="ghost" className={isActive("/custom-lecture")}>
+        <Link to="/custom-lecture">הרצאה בהתאמה אישית</Link>
+      </Button>
+      <Button asChild variant="ghost" className={isActive("/intro-workshop")}>
+        <Link to="/intro-workshop">סדנת מבוא</Link>
+      </Button>
+      <Button asChild variant="ghost" className={isActive("/digital-courses")}>
+        <Link to="/digital-courses">קורסים דיגיטליים</Link>
       </Button>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="gap-1">
-            שירותים
+            בלוג
             <ChevronDown className="h-4 w-4" />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent>
           <DropdownMenuItem asChild>
-            <Link to="/focused-course">קורס ממוקד</Link>
+            <Link to="/blog">מאמרים</Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
-            <Link to="/focused-workshop">סדנה ממוקדת</Link>
-          </DropdownMenuItem>
-          <DropdownMenuItem asChild>
-            <Link to="/custom-lecture">הרצאה בהתאמה אישית</Link>
-          </DropdownMenuItem>
-          <DropdownMenuItem asChild>
-            <Link to="/intro-workshop">סדנת מבוא</Link>
-          </DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem asChild>
-            <Link to="/digital-courses">קורסים דיגיטליים</Link>
+            <Link to="/written-blog">בלוג וידאו</Link>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-      <Button asChild variant="ghost" className={isActive("/blog")}>
-        <Link to="/blog">מאמרים</Link>
-      </Button>
       <Button asChild variant="ghost" className={isActive("/contact")}>
         <Link to="/contact">צור קשר</Link>
       </Button>
@@ -258,18 +256,18 @@ const MobileNavLinks = () => {
   return (
     <>
       <NavButton to="/">דף הבית</NavButton>
-      <NavButton to="/about">אודות</NavButton>
+      <NavButton to="/focused-course">קורס ממוקד</NavButton>
+      <NavButton to="/focused-workshop">סדנה ממוקדת</NavButton>
+      <NavButton to="/custom-lecture">הרצאה בהתאמה אישית</NavButton>
+      <NavButton to="/intro-workshop">סדנת מבוא</NavButton>
+      <NavButton to="/digital-courses">קורסים דיגיטליים</NavButton>
       <div className="border-t pt-3 pb-1">
-        <h3 className="text-sm font-medium mb-2">שירותים</h3>
+        <h3 className="text-sm font-medium mb-2">בלוג</h3>
         <div className="grid gap-1 pr-2">
-          <NavButton to="/focused-course">קורס ממוקד</NavButton>
-          <NavButton to="/focused-workshop">סדנה ממוקדת</NavButton>
-          <NavButton to="/custom-lecture">הרצאה בהתאמה אישית</NavButton>
-          <NavButton to="/intro-workshop">סדנת מבוא</NavButton>
-          <NavButton to="/digital-courses">קורסים דיגיטליים</NavButton>
+          <NavButton to="/blog">מאמרים</NavButton>
+          <NavButton to="/written-blog">בלוג וידאו</NavButton>
         </div>
       </div>
-      <NavButton to="/blog">מאמרים</NavButton>
       <NavButton to="/contact">צור קשר</NavButton>
     </>
   );
