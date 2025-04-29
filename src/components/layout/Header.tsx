@@ -38,8 +38,8 @@ const Header = () => {
 
   return (
     <header className="fixed w-full bg-gradient-to-r from-white via-white to-white/95 shadow-sm z-50">
-      <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-16 md:h-20">
+      <div className="container mx-auto px-4 py-3">
+        <div className="flex items-center justify-between h-20 md:h-24">
           {/* Logo */}
           <Link to="/" className="flex flex-col items-center">
             <img src="/lovable-uploads/a1101c8c-6041-4b87-b131-c307256136f7.png" alt="שחר גולן לוגו" className="h-10 md:h-12" />
