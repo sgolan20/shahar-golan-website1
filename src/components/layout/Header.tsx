@@ -20,14 +20,7 @@ const MobileNavLinks = () => {
       <NavButton to="/focused-workshop">סדנה ממוקדת</NavButton>
       <NavButton to="/custom-lecture">הרצאה בהתאמה אישית</NavButton>
       <NavButton to="/intro-workshop">סדנת מבוא</NavButton>
-      <NavButton to="/digital-courses">קורסים דיגיטליים</NavButton>
-      <div className="border-t pt-3 pb-1">
-        <h3 className="text-sm font-medium mb-2">בלוג</h3>
-        <div className="grid gap-1 pr-2">
-          <NavButton to="/written-blog">מאמרים</NavButton>
-          <NavButton to="/video-blog">בלוג וידאו</NavButton>
-        </div>
-      </div>
+      <NavButton to="/video-blog">בלוג וידאו</NavButton>
       <NavButton to="/contact">צור קשר</NavButton>
     </>
   );
@@ -53,19 +46,7 @@ const Header = () => {
             <NavButton to="/focused-workshop">סדנה ממוקדת</NavButton>
             <NavButton to="/custom-lecture">הרצאה בהתאמה אישית</NavButton>
             <NavButton to="/intro-workshop">סדנת מבוא</NavButton>
-            <NavButton to="/digital-courses">קורסים דיגיטליים</NavButton>
-            
-            {/* Blog Dropdown */}
-            <div className="relative blog-dropdown">
-              <button className="px-3 py-2 hover:text-brandBlue transition-colors flex items-center">
-                בלוג
-                <ChevronDown className="mr-1 h-4 w-4 chevron-icon transition-transform" />
-              </button>
-              <div className="dropdown-menu absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-md overflow-hidden z-50">
-                <NavButton to="/written-blog">מאמרים</NavButton>
-                <NavButton to="/video-blog">בלוג וידאו</NavButton>
-              </div>
-            </div>
+            <NavButton to="/video-blog">בלוג וידאו</NavButton>
             
             <NavButton to="/contact">צור קשר</NavButton>
           </nav>

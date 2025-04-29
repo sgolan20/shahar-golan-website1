@@ -128,6 +128,10 @@ export default {
 			},
 			backgroundImage: {
 				'brand-gradient': 'linear-gradient(to right, #4a52a3, #4aaba3)',
+				'brand-gradient-hover': 'linear-gradient(to right, #3f4689, #3e9189)',
+				'brand-gradient-vertical': 'linear-gradient(to bottom, #4a52a3, #4aaba3)',
+				'brand-gradient-diagonal': 'linear-gradient(135deg, #4a52a3, #4aaba3)',
+				'brand-gradient-radial': 'radial-gradient(circle, #4a52a3, #4aaba3)',
 			},
 		}
 	},
