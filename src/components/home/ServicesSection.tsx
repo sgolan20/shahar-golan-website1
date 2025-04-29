@@ -73,7 +73,7 @@ const ServicesSection = () => {
       }} transition={{
         duration: 0.5
       }}>
-          <h2 className="text-4xl md:text-5xl font-extrabold mb-5 bg-clip-text text-transparent bg-gradient-to-l from-purple-700 to-purple-500">מה מתאים לכם?</h2>
+          <h2 className="text-4xl md:text-5xl font-extrabold mb-5 bg-clip-text text-transparent bg-brand-gradient">מה מתאים לכם?</h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto font-light">הדרכות <span className="font-semibold">מותאמות אישית</span> להטמעת בינה מלאכותית בחברה שלכם</p>
         </motion.div>
 
@@ -91,10 +91,10 @@ const ServicesSection = () => {
                   <div className="h-60 bg-cover bg-center relative transition-all group-hover:scale-105 duration-700" style={{
                 backgroundImage: `url(${service.bgImage})`
               }}>
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-primary/20 group-hover:from-black/60 group-hover:to-primary/10 transition-colors duration-300"></div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-[#4a52a3]/20 group-hover:from-black/60 group-hover:to-[#4aaba3]/10 transition-colors duration-300"></div>
                   </div>
                   <CardContent className="pt-6 relative">
-                    <div className="bg-gradient-to-br from-purple-500 to-purple-700 p-4 rounded-full w-18 h-18 flex items-center justify-center mb-4 text-white absolute -top-9 right-6 border-4 border-white shadow-lg hover-scale glow">
+                    <div className="bg-brand-gradient p-4 rounded-full w-18 h-18 flex items-center justify-center mb-4 text-white absolute -top-9 right-6 border-4 border-white shadow-lg hover-scale glow">
                       {service.icon}
                     </div>
                     <div className="pt-8">
@@ -102,7 +102,7 @@ const ServicesSection = () => {
                       <p className="text-gray-500 mb-5 text-base font-light leading-relaxed">
                         {service.description}
                       </p>
-                      <Button asChild className="tech-button rounded-full py-2 px-5 text-sm md:text-base mt-2 shadow-md hover:shadow-xl transition-all w-full justify-center">
+                      <Button asChild className="rounded-full py-2 px-5 text-sm md:text-base mt-2 shadow-md hover:shadow-xl transition-all w-full justify-center">
                         <span className="flex items-center text-white font-medium">
                           {service.linkText}
                           <ArrowRight className="mr-2 h-4 w-4 transition-transform group-hover:translate-x-1 rtl:group-hover:-translate-x-1" />
