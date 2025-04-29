@@ -57,14 +57,15 @@ const Header = () => {
           
           {/* Mobile menu button */}
           <button 
-            className="md:hidden p-2 relative overflow-hidden group"
+            className="md:hidden p-2 relative overflow-hidden group z-50 bg-white rounded-md shadow-sm"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            aria-label="תפריט"
           >
-            <div className="absolute inset-0 opacity-0 group-hover:opacity-10 bg-brand-gradient transition-opacity duration-300"></div>
+            <div className="absolute inset-0 opacity-0 group-hover:opacity-10 bg-brand-gradient transition-opacity duration-300 rounded-md"></div>
             {isMobileMenuOpen ? (
-              <X className="h-6 w-6 text-transparent bg-clip-text bg-brand-gradient" />
+              <X className="h-6 w-6 text-[#4a52a3]" />
             ) : (
-              <Menu className="h-6 w-6 text-transparent bg-clip-text bg-brand-gradient" />
+              <Menu className="h-6 w-6 text-[#4a52a3]" />
             )}
           </button>
         </div>
