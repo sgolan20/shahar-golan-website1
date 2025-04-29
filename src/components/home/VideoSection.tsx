@@ -20,7 +20,7 @@ const VideoSection = () => {
     setIsMuted(!isMuted);
   };
 
-  return <section className="tech-gradient-bg text-white py-14" id="video-showcase">
+  return <section className="bg-brand-gradient text-white py-14" id="video-showcase">
       <div className="container mx-auto py-8 px-4">
         {/* Tech lines animation in background */}
         <div className="absolute inset-0 overflow-hidden">

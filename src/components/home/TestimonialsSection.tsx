@@ -79,7 +79,7 @@ const TestimonialsSection = () => {
           transition={{ duration: 0.5 }}
           className="text-center mb-12"
         >
-          <h2 className="text-4xl md:text-5xl font-bold mb-5 bg-clip-text text-transparent bg-gradient-to-l from-purple-700 to-purple-500">
+          <h2 className="text-4xl md:text-5xl font-bold mb-5 bg-clip-text text-transparent bg-brand-gradient">
             מה אומרים עלי
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
@@ -88,7 +88,7 @@ const TestimonialsSection = () => {
         </motion.div>
 
         <div className="max-w-5xl mx-auto relative">
-          <div className="relative overflow-hidden z-0 bg-gradient-to-r from-purple-50 to-white rounded-2xl shadow-xl p-2">
+          <div className="relative overflow-hidden z-0 bg-gradient-to-r from-[#4a52a3]/5 to-[#4aaba3]/5 rounded-2xl shadow-xl p-2">
             <div 
               className="flex transition-transform duration-500 ease-in-out"
               style={{ transform: `translateX(${activeIndex * 100}%)` }}
@@ -104,7 +104,7 @@ const TestimonialsSection = () => {
                 >
                   <div className="flex flex-col md:flex-row gap-8 items-center">
                     <div className="relative mb-6 md:mb-0 w-32 h-32 flex-shrink-0">
-                      <div className="absolute -top-4 -left-4 text-purple-500">
+                      <div className="absolute -top-4 -left-4 text-[#4a52a3]">
                         <Quote size={40} className="opacity-50" />
                       </div>
                       {testimonial.image ? (
@@ -114,11 +114,11 @@ const TestimonialsSection = () => {
                           className="w-full h-full object-cover rounded-full border-4 border-white shadow-lg"
                         />
                       ) : (
-                        <div className="w-full h-full rounded-full bg-purple-100 flex items-center justify-center text-purple-500 text-2xl font-bold">
+                        <div className="w-full h-full rounded-full bg-[#4a52a3]/10 flex items-center justify-center text-[#4a52a3] text-2xl font-bold">
                           {testimonial.author.charAt(0)}
                         </div>
                       )}
-                      <div className="absolute -right-2 -bottom-2 w-8 h-8 bg-gradient-to-br from-purple-500 to-purple-700 rounded-full shadow-lg"></div>
+                      <div className="absolute -right-2 -bottom-2 w-8 h-8 bg-brand-gradient rounded-full shadow-lg"></div>
                     </div>
 
                     <div className="flex-1">
@@ -127,7 +127,7 @@ const TestimonialsSection = () => {
                       </p>
                       <div className="border-t border-gray-200 pt-4">
                         <h4 className="font-bold text-lg text-gray-800">{testimonial.author}</h4>
-                        <p className="text-purple-600">
+                        <p className="text-[#4a52a3]">
                           {testimonial.role}, {testimonial.company}
                         </p>
                       </div>
@@ -141,7 +141,7 @@ const TestimonialsSection = () => {
             <div className="flex justify-center gap-4 mt-6 pb-6">
               <button
                 onClick={prevTestimonial}
-                className="w-10 h-10 rounded-full bg-white border border-purple-200 flex items-center justify-center text-purple-600 hover:bg-purple-50 transition-colors shadow-sm hover-scale"
+                className="w-10 h-10 rounded-full bg-white border border-[#4a52a3]/20 flex items-center justify-center text-[#4a52a3] hover:bg-[#4a52a3]/5 transition-colors shadow-sm hover-scale"
               >
                 <ChevronRight className="h-5 w-5" />
               </button>
@@ -152,14 +152,14 @@ const TestimonialsSection = () => {
                   className={cn(
                     "w-3 h-3 rounded-full transition-all",
                     activeIndex === index
-                      ? "bg-purple-600 w-6"
-                      : "bg-purple-200 hover:bg-purple-300"
+                      ? "bg-[#4a52a3] w-6"
+                      : "bg-[#4a52a3]/20 hover:bg-[#4a52a3]/40"
                   )}
                 />
               ))}
               <button
                 onClick={nextTestimonial}
-                className="w-10 h-10 rounded-full bg-white border border-purple-200 flex items-center justify-center text-purple-600 hover:bg-purple-50 transition-colors shadow-sm hover-scale"
+                className="w-10 h-10 rounded-full bg-white border border-[#4a52a3]/20 flex items-center justify-center text-[#4a52a3] hover:bg-[#4a52a3]/5 transition-colors shadow-sm hover-scale"
               >
                 <ChevronLeft className="h-5 w-5" />
               </button>
@@ -167,8 +167,8 @@ const TestimonialsSection = () => {
           </div>
 
           {/* Decorative elements */}
-          <div className="absolute top-10 -left-10 w-24 h-24 bg-purple-100 rounded-full opacity-50 -z-10"></div>
-          <div className="absolute bottom-10 -right-10 w-32 h-32 bg-purple-100 rounded-full opacity-50 -z-10"></div>
+          <div className="absolute top-10 -left-10 w-24 h-24 bg-[#4a52a3]/10 rounded-full opacity-50 -z-10"></div>
+          <div className="absolute bottom-10 -right-10 w-32 h-32 bg-[#4aaba3]/10 rounded-full opacity-50 -z-10"></div>
         </div>
       </div>
     </section>

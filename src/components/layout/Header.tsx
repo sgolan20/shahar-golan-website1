@@ -10,7 +10,7 @@ const NavButton = ({ to, children }: { to: string; children: React.ReactNode }) 
       to={to} 
       className="block px-3 py-2 transition-colors relative group"
     >
-      <span className="relative z-10 bg-clip-text text-transparent bg-brand-gradient hover:bg-brand-gradient-hover transition-all duration-300">
+      <span className="relative z-10 text-[#4a52a3] hover:text-[#4a52a3]/80 transition-all duration-300">
         {children}
       </span>
       <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-brand-gradient group-hover:w-full transition-all duration-300"></span>
@@ -21,13 +21,12 @@ const NavButton = ({ to, children }: { to: string; children: React.ReactNode }) 
 const MobileNavLinks = () => {
   return (
     <div className="flex flex-col space-y-2 py-2">
-      <Link to="/" className="block px-4 py-2 text-right font-medium text-gray-800 hover:bg-brand-gradient hover:text-white rounded-md transition-all">דף הבית</Link>
-      <Link to="/focused-course" className="block px-4 py-2 text-right font-medium text-gray-800 hover:bg-brand-gradient hover:text-white rounded-md transition-all">קורס ממוקד</Link>
-      <Link to="/focused-workshop" className="block px-4 py-2 text-right font-medium text-gray-800 hover:bg-brand-gradient hover:text-white rounded-md transition-all">סדנה ממוקדת</Link>
-      <Link to="/custom-lecture" className="block px-4 py-2 text-right font-medium text-gray-800 hover:bg-brand-gradient hover:text-white rounded-md transition-all">הרצאה בהתאמה אישית</Link>
-      <Link to="/intro-workshop" className="block px-4 py-2 text-right font-medium text-gray-800 hover:bg-brand-gradient hover:text-white rounded-md transition-all">סדנת מבוא</Link>
-      <Link to="/video-blog" className="block px-4 py-2 text-right font-medium text-gray-800 hover:bg-brand-gradient hover:text-white rounded-md transition-all">בלוג וידאו</Link>
-      <Link to="/contact" className="block px-4 py-2 text-right font-medium text-gray-800 hover:bg-brand-gradient hover:text-white rounded-md transition-all">צור קשר</Link>
+      <Link to="/focused-course" className="block px-4 py-2 text-right font-medium text-[#4a52a3] hover:bg-brand-gradient hover:text-white rounded-md transition-all">קורס ממוקד</Link>
+      <Link to="/focused-workshop" className="block px-4 py-2 text-right font-medium text-[#4a52a3] hover:bg-brand-gradient hover:text-white rounded-md transition-all">סדנה ממוקדת</Link>
+      <Link to="/custom-lecture" className="block px-4 py-2 text-right font-medium text-[#4a52a3] hover:bg-brand-gradient hover:text-white rounded-md transition-all">הרצאה בהתאמה אישית</Link>
+      <Link to="/intro-workshop" className="block px-4 py-2 text-right font-medium text-[#4a52a3] hover:bg-brand-gradient hover:text-white rounded-md transition-all">סדנת מבוא</Link>
+      <Link to="/video-blog" className="block px-4 py-2 text-right font-medium text-[#4a52a3] hover:bg-brand-gradient hover:text-white rounded-md transition-all">בלוג וידאו</Link>
+      <Link to="/contact" className="block px-4 py-2 text-right font-medium text-[#4a52a3] hover:bg-brand-gradient hover:text-white rounded-md transition-all">צור קשר</Link>
     </div>
   );
 };
@@ -47,14 +46,12 @@ const Header = () => {
           </Link>
           
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-6 ml-auto" dir="rtl">
-            <NavButton to="/">דף הבית</NavButton>
+          <nav className="hidden md:flex items-center space-x-6 ml-auto mr-8" dir="rtl">
             <NavButton to="/focused-course">קורס ממוקד</NavButton>
             <NavButton to="/focused-workshop">סדנה ממוקדת</NavButton>
             <NavButton to="/custom-lecture">הרצאה בהתאמה אישית</NavButton>
             <NavButton to="/intro-workshop">סדנת מבוא</NavButton>
             <NavButton to="/video-blog">בלוג וידאו</NavButton>
-            
             <NavButton to="/contact">צור קשר</NavButton>
           </nav>
           
