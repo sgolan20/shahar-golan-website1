@@ -6,8 +6,14 @@ import { Menu, X, ChevronDown } from "lucide-react";
 // NavButton component for consistent navigation styling
 const NavButton = ({ to, children }: { to: string; children: React.ReactNode }) => {
   return (
-    <Link to={to} className="block px-3 py-2 hover:text-brandBlue transition-colors">
-      {children}
+    <Link 
+      to={to} 
+      className="block px-3 py-2 transition-colors relative group"
+    >
+      <span className="relative z-10 bg-clip-text text-transparent bg-brand-gradient hover:bg-brand-gradient-hover transition-all duration-300">
+        {children}
+      </span>
+      <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-brand-gradient group-hover:w-full transition-all duration-300"></span>
     </Link>
   );
 };
@@ -31,7 +37,7 @@ const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
-    <header className="fixed w-full bg-white shadow-sm z-50">
+    <header className="fixed w-full bg-gradient-to-r from-white via-white to-white/95 shadow-sm z-50">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
@@ -53,13 +59,14 @@ const Header = () => {
           
           {/* Mobile menu button */}
           <button 
-            className="md:hidden p-2"
+            className="md:hidden p-2 relative overflow-hidden group"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           >
+            <div className="absolute inset-0 opacity-0 group-hover:opacity-10 bg-brand-gradient transition-opacity duration-300"></div>
             {isMobileMenuOpen ? (
-              <X className="h-6 w-6 text-brandBlue" />
+              <X className="h-6 w-6 text-transparent bg-clip-text bg-brand-gradient" />
             ) : (
-              <Menu className="h-6 w-6" />
+              <Menu className="h-6 w-6 text-transparent bg-clip-text bg-brand-gradient" />
             )}
           </button>
         </div>
