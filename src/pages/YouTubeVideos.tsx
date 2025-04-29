@@ -6,11 +6,9 @@ import { YouTubeVideo } from "@/lib/models/YouTubeVideo";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
-import { useAuth } from "@/contexts/AuthContext";
 import { Settings } from "lucide-react";
 
 const YouTubeVideos = () => {
-  const { isAdmin } = useAuth();
   const [videos, setVideos] = useState<YouTubeVideo[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -54,18 +52,6 @@ const YouTubeVideos = () => {
             <p className="text-xl text-muted-foreground">
               סרטוני וידאו מהערוץ שלנו
             </p>
-            {isAdmin && (
-              <Button 
-                asChild 
-                variant="outline" 
-                className="mt-4 gap-2 border-[#4a52a3]/30 hover:bg-brand-gradient hover:text-white"
-              >
-                <a href="/youtube-admin">
-                  <Settings className="h-4 w-4" />
-                  ניהול סרטונים
-                </a>
-              </Button>
-            )}
           </motion.div>
         </div>
       </section>
