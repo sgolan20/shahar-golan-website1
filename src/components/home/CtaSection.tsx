@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 
 const CtaSection = () => {
   return (
-    <section className="py-20 bg-gradient-to-br from-purple-700 to-purple-500 text-white">
+    <section className="py-20 bg-brand-gradient text-white">
       <div className="container mx-auto px-4 text-center">
         <h2 className="text-3xl md:text-4xl font-bold mb-6">
           מוכנים להכיר את עולם הבינה המלאכותית?

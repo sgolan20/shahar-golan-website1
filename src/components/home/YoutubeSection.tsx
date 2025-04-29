@@ -12,7 +12,7 @@ const YoutubeSection = () => {
             <p className="text-lg mb-6 text-muted-foreground">
               בערוץ היוטיוב שלי אני מעלה באופן קבוע תוכן חינמי ואיכותי על כלי AI חדשים, טיפים, והדרכות מעשיות. הצטרפו לקהילה של למעלה מ-6,000 עוקבים וקבלו עדכונים על כל החידושים בעולם הבינה המלאכותית.
             </p>
-            <Button asChild className="btn-shine">
+            <Button asChild className="btn-shine bg-brand-gradient hover:bg-brand-gradient">
               <a 
                 href="https://www.youtube.com/channel/UCxxxxxxxx" 
                 target="_blank" 
@@ -26,7 +26,7 @@ const YoutubeSection = () => {
           </div>
           <div className="md:w-1/2 flex justify-center">
             <div className="bg-white rounded-xl p-2 shadow-lg transform rotate-3 hover:rotate-0 transition-all duration-300">
-              <div className="aspect-video w-full max-w-md overflow-hidden rounded-lg shadow-inner bg-gray-800">
+              <div className="aspect-video w-full max-w-md overflow-hidden rounded-lg shadow-inner bg-gray-800 relative">
                 <img 
                   src="https://images.unsplash.com/photo-1611162616305-c69b3fa7fbe0" 
                   alt="ערוץ היוטיוב" 

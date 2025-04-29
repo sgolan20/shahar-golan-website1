@@ -1,4 +1,3 @@
-
 import type { Config } from "tailwindcss";
 
 export default {
@@ -25,6 +24,8 @@ export default {
 				ring: 'hsl(var(--ring))',
 				background: 'hsl(var(--background))',
 				foreground: 'hsl(var(--foreground))',
+				brandBlue: '#4a52a3',
+				brandTeal: '#4aaba3',
 				primary: {
 					DEFAULT: 'hsl(var(--primary))',
 					foreground: 'hsl(var(--primary-foreground))'
@@ -124,7 +125,10 @@ export default {
 				'scale-out': 'scale-out 0.2s ease-out',
 				'slide-in': 'slide-in 0.3s ease-out',
 				pulse: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite'
-			}
+			},
+			backgroundImage: {
+				'brand-gradient': 'linear-gradient(to right, #4a52a3, #4aaba3)',
+			},
 		}
 	},
 	plugins: [require("tailwindcss-animate")],

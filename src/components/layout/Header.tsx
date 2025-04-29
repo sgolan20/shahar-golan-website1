@@ -1,11 +1,12 @@
 
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { Menu, X, ChevronDown } from "lucide-react";
 
 // NavButton component for consistent navigation styling
 const NavButton = ({ to, children }: { to: string; children: React.ReactNode }) => {
   return (
-    <Link to={to} className="block px-3 py-2 hover:text-blue-500 transition-colors">
+    <Link to={to} className="block px-3 py-2 hover:text-brandBlue transition-colors">
       {children}
     </Link>
   );
@@ -34,13 +35,15 @@ const MobileNavLinks = () => {
 
 // Complete Header component with desktop and mobile navigation
 const Header = () => {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
   return (
     <header className="fixed w-full bg-white shadow-sm z-50">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
-          <Link to="/" className="text-xl font-bold">
-            שחר גולן
+          <Link to="/" className="flex items-center">
+            <img src="/lovable-uploads/a1101c8c-6041-4b87-b131-c307256136f7.png" alt="שחר גולן לוגו" className="h-10 md:h-12" />
           </Link>
           
           {/* Desktop Navigation */}
@@ -53,11 +56,12 @@ const Header = () => {
             <NavButton to="/digital-courses">קורסים דיגיטליים</NavButton>
             
             {/* Blog Dropdown */}
-            <div className="relative group">
-              <button className="px-3 py-2 hover:text-blue-500 transition-colors">
+            <div className="relative blog-dropdown">
+              <button className="px-3 py-2 hover:text-brandBlue transition-colors flex items-center">
                 בלוג
+                <ChevronDown className="mr-1 h-4 w-4 chevron-icon transition-transform" />
               </button>
-              <div className="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-md overflow-hidden opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
+              <div className="dropdown-menu absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-md overflow-hidden z-50">
                 <NavButton to="/written-blog">מאמרים</NavButton>
                 <NavButton to="/video-blog">בלוג וידאו</NavButton>
               </div>
@@ -67,20 +71,27 @@ const Header = () => {
           </nav>
           
           {/* Mobile menu button */}
-          <button className="md:hidden p-2">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
+          <button 
+            className="md:hidden p-2"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          >
+            {isMobileMenuOpen ? (
+              <X className="h-6 w-6 text-brandBlue" />
+            ) : (
+              <Menu className="h-6 w-6" />
+            )}
           </button>
         </div>
       </div>
       
       {/* Mobile Navigation Menu */}
-      <div className="md:hidden">
-        <div className="px-4 py-3 space-y-1 bg-gray-50">
-          <MobileNavLinks />
+      {isMobileMenuOpen && (
+        <div className="md:hidden">
+          <div className="px-4 py-3 space-y-1 bg-gray-50">
+            <MobileNavLinks />
+          </div>
         </div>
-      </div>
+      )}
     </header>
   );
 };
