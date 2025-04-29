@@ -20,15 +20,15 @@ const NavButton = ({ to, children }: { to: string; children: React.ReactNode }) 
 
 const MobileNavLinks = () => {
   return (
-    <>
-      <NavButton to="/">דף הבית</NavButton>
-      <NavButton to="/focused-course">קורס ממוקד</NavButton>
-      <NavButton to="/focused-workshop">סדנה ממוקדת</NavButton>
-      <NavButton to="/custom-lecture">הרצאה בהתאמה אישית</NavButton>
-      <NavButton to="/intro-workshop">סדנת מבוא</NavButton>
-      <NavButton to="/video-blog">בלוג וידאו</NavButton>
-      <NavButton to="/contact">צור קשר</NavButton>
-    </>
+    <div className="flex flex-col space-y-2 py-2">
+      <Link to="/" className="block px-4 py-2 text-right font-medium text-gray-800 hover:bg-brand-gradient hover:text-white rounded-md transition-all">דף הבית</Link>
+      <Link to="/focused-course" className="block px-4 py-2 text-right font-medium text-gray-800 hover:bg-brand-gradient hover:text-white rounded-md transition-all">קורס ממוקד</Link>
+      <Link to="/focused-workshop" className="block px-4 py-2 text-right font-medium text-gray-800 hover:bg-brand-gradient hover:text-white rounded-md transition-all">סדנה ממוקדת</Link>
+      <Link to="/custom-lecture" className="block px-4 py-2 text-right font-medium text-gray-800 hover:bg-brand-gradient hover:text-white rounded-md transition-all">הרצאה בהתאמה אישית</Link>
+      <Link to="/intro-workshop" className="block px-4 py-2 text-right font-medium text-gray-800 hover:bg-brand-gradient hover:text-white rounded-md transition-all">סדנת מבוא</Link>
+      <Link to="/video-blog" className="block px-4 py-2 text-right font-medium text-gray-800 hover:bg-brand-gradient hover:text-white rounded-md transition-all">בלוג וידאו</Link>
+      <Link to="/contact" className="block px-4 py-2 text-right font-medium text-gray-800 hover:bg-brand-gradient hover:text-white rounded-md transition-all">צור קשר</Link>
+    </div>
   );
 };
 
@@ -76,7 +76,7 @@ const Header = () => {
       {/* Mobile Navigation Menu */}
       {isMobileMenuOpen && (
         <div className="md:hidden">
-          <div className="px-4 py-3 space-y-1 bg-gray-50">
+          <div className="px-2 py-2 bg-white/95 border-t border-gray-200 shadow-lg">
             <MobileNavLinks />
           </div>
         </div>
