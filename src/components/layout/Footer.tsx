@@ -90,7 +90,11 @@ const Footer = () => {
               <Link to="/" className="text-muted-foreground hover:text-primary transition-colors">בית</Link>
               <Link to="/about" className="text-muted-foreground hover:text-primary transition-colors">אודות</Link>
               <Link to="/why-me" className="text-muted-foreground hover:text-primary transition-colors">למה מרצה לבינה מלאכותית?</Link>
-              <Link to="/blog" className="text-muted-foreground hover:text-primary transition-colors">בלוג</Link>
+              <Link to="/focused-course" className="text-muted-foreground hover:text-primary transition-colors">קורס ממוקד</Link>
+              <Link to="/focused-workshop" className="text-muted-foreground hover:text-primary transition-colors">סדנה ממוקדת</Link>
+              <Link to="/custom-lecture" className="text-muted-foreground hover:text-primary transition-colors">הרצאה בהתאמה אישית</Link>
+              <Link to="/intro-workshop" className="text-muted-foreground hover:text-primary transition-colors">סדנת מבוא</Link>
+              <Link to="/video-blog" className="text-muted-foreground hover:text-primary transition-colors">בלוג וידאו</Link>
               <Link to="/contact" className="text-muted-foreground hover:text-primary transition-colors">צור קשר</Link>
             </nav>
           </div>

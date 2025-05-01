@@ -49,6 +49,9 @@ const YouTubeVideos = () => {
             transition={{ duration: 0.5 }}
           >
             <h1 className="text-4xl md:text-5xl font-bold mb-6 bg-clip-text text-transparent bg-brand-gradient">בלוג וידאו</h1>
+            <p className="text-lg text-muted-foreground mt-2">
+              בלוג הווידאו הוא ערוץ היוטיוב שלי, בו תמצאו חדשות ועדכונים על כלים חדשים בבינה מלאכותית, מדריכים וטיפים שימושיים, והסברים מעשיים על איך להפיק את המיטב מה-AI.
+            </p>
             <p className="text-xl text-muted-foreground">
               סרטוני וידאו מהערוץ שלנו
             </p>

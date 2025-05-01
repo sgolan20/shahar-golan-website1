@@ -8,6 +8,7 @@ import { AnimatePresence } from "framer-motion";
 import Layout from "./components/layout/Layout";
 import Index from "./pages/Index";
 import Contact from "./pages/Contact";
+import About from "./pages/About";
 import WhyMe from "./pages/WhyMe";
 import NotFound from "./pages/NotFound";
 import FocusedCourse from "./pages/FocusedCourse";
@@ -32,6 +33,7 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Layout><Index /></Layout>} />
             <Route path="/video-blog" element={<Layout><YouTubeVideos /></Layout>} />
+            <Route path="/about" element={<Layout><About /></Layout>} />
             <Route path="/contact" element={<Layout><Contact /></Layout>} />
             <Route path="/why-me" element={<Layout><WhyMe /></Layout>} />
             <Route path="/focused-course" element={<Layout><FocusedCourse /></Layout>} />
