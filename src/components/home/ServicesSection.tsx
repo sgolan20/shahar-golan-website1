@@ -73,7 +73,7 @@ const ServicesSection = () => {
       }} transition={{
         duration: 0.5
       }}>
-          <h2 className="text-4xl md:text-5xl font-extrabold mb-5 bg-clip-text text-transparent bg-brand-gradient">מה מתאים לכם?</h2>
+          <h2 className="text-4xl md:text-5xl font-extrabold mb-5 bg-clip-text text-transparent bg-brand-gradient">מה הכי מתאים לכם?</h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto font-light">הדרכות <span className="font-semibold">מותאמות אישית</span> להטמעת בינה מלאכותית בחברה שלכם</p>
         </motion.div>
 

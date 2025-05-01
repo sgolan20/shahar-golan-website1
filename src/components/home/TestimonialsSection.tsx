@@ -65,7 +65,7 @@ const TestimonialsSection = () => {
           className="text-center mb-12"
         >
           <h2 className="text-4xl md:text-5xl font-bold mb-5 bg-clip-text text-transparent bg-brand-gradient">
-            מה אומרים עלי
+            אין חכם כבעל ניסיון
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             אלו שכבר השתתפו בסדנאות ובהרצאות שלי

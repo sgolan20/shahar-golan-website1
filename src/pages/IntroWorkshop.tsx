@@ -114,7 +114,7 @@ const IntroWorkshop = () => {
 
           <div className="text-center">
             <h2 className="text-2xl font-semibold mb-6">מעוניינים להשתתף בסדנת היכרות?</h2>
-            <p className="text-lg mb-6">הסדנאות מתקיימות באופן מקוון, בתשלום סמלי או ללא עלות</p>
+
             <Button asChild size="lg" className="text-lg px-8">
               <a href="/contact">צרו קשר למידע על הסדנה הקרובה</a>
             </Button>
