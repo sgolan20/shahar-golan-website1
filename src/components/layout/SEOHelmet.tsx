@@ -1,4 +1,3 @@
-
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
@@ -13,7 +12,7 @@ const SEOHelmet = ({
   title = "שחר גולן - מרצה ומומחה ל-AI ובינה מלאכותית", 
   description = "מרצה ומדריך לבינה מלאכותית וכלי AI, מלמד כיצד להשתמש בכלים מתקדמים בחיי היום יום והעבודה",
   keywords = "בינה מלאכותית, AI, הרצאות, סדנאות, למידת מכונה, שחר גולן, מומחה AI, גנרטיב AI, חדשנות טכנולוגית",
-  ogImage = "/og-image.png"
+  ogImage = "/lovable-uploads/Screenshot 2025-05-02 010226.png"
 }: SEOProps) => {
   const location = useLocation();
   
