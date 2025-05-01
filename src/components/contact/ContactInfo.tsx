@@ -45,7 +45,6 @@ const ContactInfo = () => {
             <div>
               <h3 className="text-lg font-medium mb-1">מיקום</h3>
               <p className="text-muted-foreground">
-                תל אביב, ישראל<br />
                 זמין להרצאות וסדנאות בכל רחבי הארץ
               </p>
             </div>

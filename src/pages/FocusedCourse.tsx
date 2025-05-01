@@ -21,12 +21,14 @@ const FocusedCourse = () => {
           />
           <div className="absolute inset-0 bg-black/40"></div>
           <div className="absolute inset-0 flex flex-col justify-center items-center text-center p-4">
-            <h1 className="text-3xl md:text-5xl font-bold mb-6 text-white">
-              קורס ממוקד בהתאמה אישית
-            </h1>
-            <p className="text-xl mb-8 text-white/90 max-w-2xl">
-              קורס בינה מלאכותית בהתאמה מיוחדת לצרכים הספציפיים של הארגון שלך
-            </p>
+            <div className="bg-black/40 backdrop-blur-sm p-6 rounded-xl shadow-lg max-w-3xl">
+              <h1 className="text-3xl md:text-5xl font-bold mb-6 text-white drop-shadow-lg">
+                קורס ממוקד בהתאמה אישית
+              </h1>
+              <p className="text-xl mb-8 text-white/90 drop-shadow max-w-2xl">
+                קורס בינה מלאכותית בהתאמה מיוחדת לצרכים הספציפיים של הארגון שלך
+              </p>
+            </div>
           </div>
         </div>
       </div>
