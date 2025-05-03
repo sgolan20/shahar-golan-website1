@@ -1,0 +1,74 @@
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": "https://golanai.co.il/#person",
+      "name": "שחר גולן",
+      "url": "https://golanai.co.il/",
+      "image": {
+        "@type": "ImageObject",
+        "@id": "https://golanai.co.il/#personImage",
+        "url": "https://golanai.co.il/lovable-uploads/Screenshot 2025-05-02 010226.png",
+        "contentUrl": "https://golanai.co.il/lovable-uploads/Screenshot 2025-05-02 010226.png",
+        "caption": "שחר גולן - מרצה לבינה מלאכותית"
+      },
+      "sameAs": [
+        "https://www.youtube.com/@shahargolan",
+        "https://www.linkedin.com/in/shahargolan/"
+      ],
+      "jobTitle": "מרצה ומומחה לבינה מלאכותית",
+      "worksFor": {
+        "@type": "Organization",
+        "@id": "https://golanai.co.il/#organization",
+        "name": "שחר גולן - AI",
+        "url": "https://golanai.co.il/"
+      },
+      "description": "מרצה מוביל לבינה מלאכותית בישראל, מלמד כיצד להשתמש בכלי AI מתקדמים בעולם העסקי והפרטי"
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://golanai.co.il/#website",
+      "url": "https://golanai.co.il/",
+      "name": "שחר גולן - מרצה לבינה מלאכותית",
+      "description": "סדנאות AI חווייתיות, קורסים מקוונים והרצאות פרונטליות",
+      "publisher": {
+        "@id": "https://golanai.co.il/#organization"
+      }
+    },
+    {
+      "@type": "Organization",
+      "@id": "https://golanai.co.il/#organization",
+      "name": "שחר גולן - AI",
+      "url": "https://golanai.co.il/",
+      "logo": {
+        "@type": "ImageObject",
+        "@id": "https://golanai.co.il/#logo",
+        "url": "https://golanai.co.il/lovable-uploads/a1101c8c-6041-4b87-b131-c307256136f7.png",
+        "width": 512,
+        "height": 512,
+        "caption": "שחר גולן - AI"
+      },
+      "image": {
+        "@id": "https://golanai.co.il/#logo"
+      },
+      "founder": {
+        "@id": "https://golanai.co.il/#person"
+      }
+    },
+    {
+      "@type": "Service",
+      "@id": "https://golanai.co.il/services/#service",
+      "name": "הרצאות ומפגשי AI",
+      "description": "הרצאות וסדנאות AI מותאמות אישית לארגונים וקבוצות, המיועדות לפתח מיומנויות שימוש בבינה מלאכותית",
+      "provider": {
+        "@id": "https://golanai.co.il/#person"
+      },
+      "serviceType": ["הרצאות AI", "סדנאות בינה מלאכותית", "הדרכות AI"],
+      "areaServed": {
+        "@type": "Country",
+        "name": "ישראל"
+      }
+    }
+  ]
+}
