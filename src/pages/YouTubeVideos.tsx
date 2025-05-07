@@ -40,17 +40,27 @@ const YouTubeVideos = () => {
 
   return (
     <div dir="rtl">
-      <section className="pt-20 pb-16 md:pt-28 md:pb-20 bg-gradient-to-b from-white to-gray-50">
-        <div className="container mx-auto px-4">
+      <section
+        className="relative pt-20 pb-16 md:pt-28 md:pb-20 bg-gradient-to-b from-white to-gray-50 overflow-hidden"
+        style={{
+          backgroundImage: `url('/lovable-uploads/20250502_0143_לפטופ עם איורים טכנולוגיים_remix_01jt7088trfdqv6hcvs68xjf7f.png')`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+        }}
+        aria-label="Hero section with video blog illustration background"
+      >
+        <div className="absolute inset-0 bg-gradient-to-b from-[rgba(0,0,0,0.5)] to-[rgba(255,255,255,0.7)] z-0" />
+        <div className="container mx-auto px-4 relative z-10">
           <motion.div
-            className="max-w-3xl mx-auto text-center"
+            className="max-w-3xl mx-auto text-center bg-black/40 backdrop-blur-sm p-6 rounded-xl shadow-lg"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <h1 className="text-4xl md:text-5xl font-bold mb-6 bg-clip-text text-transparent bg-brand-gradient">בלוג וידאו</h1>
-            <p className="text-xl text-muted-foreground">
-              סרטוני וידאו מהערוץ שלנו
+            <h1 className="text-4xl md:text-5xl font-bold mb-6 text-white drop-shadow-lg">בלוג וידאו</h1>
+            <p className="text-lg mt-2 text-white/90 drop-shadow">
+              בלוג הווידאו הוא ערוץ היוטיוב שלי, בו תמצאו חדשות ועדכונים על כלים חדשים בבינה מלאכותית, מדריכים וטיפים שימושיים, והסברים מעשיים על איך להפיק את המיטב מה-AI.
             </p>
           </motion.div>
         </div>

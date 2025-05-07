@@ -67,30 +67,36 @@ const OrganizationsSection = () => {
 
   // Function to adjust visible organizations based on screen width
   const adjustVisibleOrgs = () => {
-    let columns = 5; // Default for large screens
+    let columns = 5; // Default for very large screens
     
     if (window.innerWidth < 768) {
       columns = 2; // Mobile
     } else if (window.innerWidth < 1024) {
       columns = 3; // Tablet
+    } else if (window.innerWidth < 1280) {
+      columns = 4; // Desktop
     }
     
     setGridCols(columns);
     
-    // Calculate how many complete rows we can display
+    // טיפול נפרד למקרה של 4 עמודות
+    if (columns === 4) {
+      // במקרה של 4 עמודות, נציג רק 8 לוגואים (2 שורות מלאות)
+      setVisibleOrgs(organizations.slice(0, 8));
+      return;
+    }
+    
+    // חישוב כמה ארגונים ניתן להציג בשורות מלאות
     const totalOrgs = organizations.length;
-    const rowsNeeded = Math.floor(totalOrgs / columns);
-    const orgsToShow = rowsNeeded * columns;
+    const remainder = totalOrgs % columns;
     
-    // Ensure we show at least 4 organizations (minimum requirement)
-    const finalOrgsToShow = Math.max(orgsToShow, 4);
-    
-    // Adjust if we need to show a complete row
-    if (totalOrgs > finalOrgsToShow && totalOrgs < finalOrgsToShow + columns) {
-      // If there are leftover items but not enough for a full row, hide them
-      setVisibleOrgs(organizations.slice(0, finalOrgsToShow));
+    // אם יש שארית (השורה האחרונה לא מלאה), נציג רק את השורות המלאות
+    if (remainder !== 0) {
+      // מספר הארגונים שיוצרים שורות מלאות
+      const completeRowsCount = totalOrgs - remainder;
+      setVisibleOrgs(organizations.slice(0, completeRowsCount));
     } else {
-      // Otherwise show all organizations
+      // אם הכל מסתדר בשורות מלאות, נציג הכל
       setVisibleOrgs(organizations);
     }
   };
@@ -116,7 +122,7 @@ const OrganizationsSection = () => {
           </p>
         </div>
         
-        <div className={`grid grid-cols-2 md:grid-cols-3 lg:grid-cols-${gridCols} gap-6 items-center justify-items-center`}>
+        <div className={`grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-${gridCols} gap-6 items-center justify-items-center`}>
           {visibleOrgs.map((org, index) => <motion.div key={index} initial={{
           opacity: 0,
           y: 20

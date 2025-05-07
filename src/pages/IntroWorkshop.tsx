@@ -21,12 +21,14 @@ const IntroWorkshop = () => {
           />
           <div className="absolute inset-0 bg-black/40"></div>
           <div className="absolute inset-0 flex flex-col justify-center items-center text-center p-4">
-            <h1 className="text-3xl md:text-5xl font-bold mb-6 text-white">
-              סדנת היכרות עם עולם ה-AI
-            </h1>
-            <p className="text-xl mb-8 text-white/90 max-w-2xl">
-              סדנה מקוונת להיכרות ראשונית עם עולם הבינה המלאכותית והכלים שמשנים את חיינו
-            </p>
+            <div className="bg-black/40 backdrop-blur-sm p-6 rounded-xl shadow-lg max-w-3xl">
+              <h1 className="text-3xl md:text-5xl font-bold mb-6 text-white drop-shadow-lg">
+                סדנת היכרות עם עולם ה-AI
+              </h1>
+              <p className="text-xl mb-8 text-white/90 drop-shadow max-w-2xl">
+                סדנה מקוונת להיכרות ראשונית עם עולם הבינה המלאכותית והכלים שמשנים את חיינו
+              </p>
+            </div>
           </div>
         </div>
       </div>
@@ -114,7 +116,7 @@ const IntroWorkshop = () => {
 
           <div className="text-center">
             <h2 className="text-2xl font-semibold mb-6">מעוניינים להשתתף בסדנת היכרות?</h2>
-            <p className="text-lg mb-6">הסדנאות מתקיימות באופן מקוון, בתשלום סמלי או ללא עלות</p>
+
             <Button asChild size="lg" className="text-lg px-8">
               <a href="/contact">צרו קשר למידע על הסדנה הקרובה</a>
             </Button>

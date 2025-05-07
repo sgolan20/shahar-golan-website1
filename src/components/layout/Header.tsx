@@ -24,8 +24,10 @@ const MobileNavLinks = () => {
       <Link to="/focused-course" className="block px-4 py-2 text-right font-medium text-[#4a52a3] hover:bg-brand-gradient hover:text-white rounded-md transition-all">קורס ממוקד</Link>
       <Link to="/focused-workshop" className="block px-4 py-2 text-right font-medium text-[#4a52a3] hover:bg-brand-gradient hover:text-white rounded-md transition-all">סדנה ממוקדת</Link>
       <Link to="/custom-lecture" className="block px-4 py-2 text-right font-medium text-[#4a52a3] hover:bg-brand-gradient hover:text-white rounded-md transition-all">הרצאה בהתאמה אישית</Link>
-      <Link to="/intro-workshop" className="block px-4 py-2 text-right font-medium text-[#4a52a3] hover:bg-brand-gradient hover:text-white rounded-md transition-all">סדנת מבוא</Link>
+      <Link to="/intro-workshop" className="block px-4 py-2 text-right font-medium text-[#4a52a3] hover:bg-brand-gradient hover:text-white rounded-md transition-all">סדנת היכרות</Link>
       <Link to="/video-blog" className="block px-4 py-2 text-right font-medium text-[#4a52a3] hover:bg-brand-gradient hover:text-white rounded-md transition-all">בלוג וידאו</Link>
+      <Link to="/why-me" className="block px-4 py-2 text-right font-medium text-[#4a52a3] hover:bg-brand-gradient hover:text-white rounded-md transition-all">למה מרצה לבינה מלאכותית?</Link>
+      <Link to="/about" className="block px-4 py-2 text-right font-medium text-[#4a52a3] hover:bg-brand-gradient hover:text-white rounded-md transition-all">אודות</Link>
       <Link to="/contact" className="block px-4 py-2 text-right font-medium text-[#4a52a3] hover:bg-brand-gradient hover:text-white rounded-md transition-all">צור קשר</Link>
     </div>
   );
@@ -50,8 +52,10 @@ const Header = () => {
             <NavButton to="/focused-course">קורס ממוקד</NavButton>
             <NavButton to="/focused-workshop">סדנה ממוקדת</NavButton>
             <NavButton to="/custom-lecture">הרצאה בהתאמה אישית</NavButton>
-            <NavButton to="/intro-workshop">סדנת מבוא</NavButton>
+            <NavButton to="/intro-workshop">סדנת היכרות</NavButton>
             <NavButton to="/video-blog">בלוג וידאו</NavButton>
+            <NavButton to="/why-me">למה מרצה לבינה מלאכותית?</NavButton>
+            <NavButton to="/about">אודות</NavButton>
             <NavButton to="/contact">צור קשר</NavButton>
           </nav>
           

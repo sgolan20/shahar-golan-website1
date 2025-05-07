@@ -95,13 +95,13 @@ const ContactForm = () => {
             <label htmlFor="name" className="block text-sm font-medium mb-2">
               שם מלא
             </label>
-            <Input id="name" name="name" type="text" value={formData.name} onChange={handleChange} required placeholder="השם המלא שלך" />
+            <Input id="name" name="name" type="text" value={formData.name} onChange={handleChange} required placeholder="השם שמופיע בתעודת הזהות 😉" />
           </div>
           <div>
             <label htmlFor="email" className="block text-sm font-medium mb-2">
               אימייל
             </label>
-            <Input id="email" name="email" type="email" value={formData.email} onChange={handleChange} required placeholder="האימייל שלך" />
+            <Input id="email" name="email" type="email" value={formData.email} onChange={handleChange} required placeholder="זה שבאמת בודקים..." />
           </div>
         </div>
         
@@ -116,7 +116,7 @@ const ContactForm = () => {
             <label htmlFor="subject" className="block text-sm font-medium mb-2">
               נושא
             </label>
-            <Input id="subject" name="subject" type="text" value={formData.subject} onChange={handleChange} required placeholder="נושא הפנייה" />
+            <Input id="subject" name="subject" type="text" value={formData.subject} onChange={handleChange} required placeholder="על מה נדבר?" />
           </div>
         </div>
         
@@ -124,7 +124,7 @@ const ContactForm = () => {
           <label htmlFor="message" className="block text-sm font-medium mb-2">
             הודעה
           </label>
-          <Textarea id="message" name="message" rows={6} value={formData.message} onChange={handleChange} required placeholder="פרט את בקשתך כאן..." />
+          <Textarea id="message" name="message" rows={6} value={formData.message} onChange={handleChange} required placeholder="זה המקום לפרט יותר, כדי שאגיע מוכן לשיחה איתך..." />
         </div>
         
         <Button type="submit" className="w-full sm:w-auto btn-shine" disabled={isSubmitting}>
