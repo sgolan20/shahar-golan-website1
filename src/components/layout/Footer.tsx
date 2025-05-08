@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Youtube, Linkedin, Mail, ArrowUp, Send } from "lucide-react";
+import { Youtube, Linkedin, Mail, ArrowUp, Send, BookOpen, Users, Presentation, Coffee, HelpCircle, Video, User } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -85,17 +85,35 @@ const Footer = () => {
           </div>
           
           <div className="md:col-span-1">
-            <h3 className="font-display font-medium text-lg mb-4">ניווט מהיר</h3>
-            <nav className="flex flex-col space-y-2">
-              <Link to="/" className="text-muted-foreground hover:text-primary transition-colors">בית</Link>
-              <Link to="/about" className="text-muted-foreground hover:text-primary transition-colors">אודות</Link>
-              <Link to="/why-me" className="text-muted-foreground hover:text-primary transition-colors">למה מרצה לבינה מלאכותית?</Link>
-              <Link to="/focused-course" className="text-muted-foreground hover:text-primary transition-colors">קורס ממוקד</Link>
-              <Link to="/focused-workshop" className="text-muted-foreground hover:text-primary transition-colors">סדנה ממוקדת</Link>
-              <Link to="/custom-lecture" className="text-muted-foreground hover:text-primary transition-colors">הרצאה בהתאמה אישית</Link>
-              <Link to="/intro-workshop" className="text-muted-foreground hover:text-primary transition-colors">סדנת היכרות</Link>
-              <Link to="/video-blog" className="text-muted-foreground hover:text-primary transition-colors">בלוג וידאו</Link>
-              <Link to="/contact" className="text-muted-foreground hover:text-primary transition-colors">צור קשר</Link>
+            <nav className="flex flex-col space-y-4">
+              <Link to="/focused-course" className="flex items-center text-muted-foreground hover:text-primary transition-colors">
+                <BookOpen className="ml-2 h-5 w-5" />
+                <span>קורס ממוקד</span>
+              </Link>
+              <Link to="/focused-workshop" className="flex items-center text-muted-foreground hover:text-primary transition-colors">
+                <Users className="ml-2 h-5 w-5" />
+                <span>סדנה ממוקדת</span>
+              </Link>
+              <Link to="/custom-lecture" className="flex items-center text-muted-foreground hover:text-primary transition-colors">
+                <Presentation className="ml-2 h-5 w-5" />
+                <span>הרצאה בהתאמה אישית</span>
+              </Link>
+              <Link to="/intro-workshop" className="flex items-center text-muted-foreground hover:text-primary transition-colors">
+                <Coffee className="ml-2 h-5 w-5" />
+                <span>סדנת היכרות</span>
+              </Link>
+              <Link to="/why-me" className="flex items-center text-muted-foreground hover:text-primary transition-colors">
+                <HelpCircle className="ml-2 h-5 w-5" />
+                <span>למה מרצה לבינה מלאכותית?</span>
+              </Link>
+              <Link to="/video-blog" className="flex items-center text-muted-foreground hover:text-primary transition-colors">
+                <Video className="ml-2 h-5 w-5" />
+                <span>בלוג וידאו</span>
+              </Link>
+              <Link to="/about" className="flex items-center text-muted-foreground hover:text-primary transition-colors">
+                <User className="ml-2 h-5 w-5" />
+                <span>אודות</span>
+              </Link>
             </nav>
           </div>
           
@@ -104,7 +122,10 @@ const Footer = () => {
             <p className="text-muted-foreground mb-2">
               מעוניינים בהרצאה, סדנה או קורס מותאם אישית?
             </p>
-            <a href="mailto:sgolan20@gmail.com" className="text-primary font-medium hover:underline mb-4 inline-block">sgolan20@gmail.com</a>
+            <Link to="/contact" className="btn-primary inline-flex items-center px-4 py-2 rounded-md text-sm font-medium mb-4">
+              <Mail className="ml-2 h-4 w-4" />
+              השאירו פרטים
+            </Link>
             
             <div className="flex space-x-4 space-x-reverse mb-4">
               <a href="https://www.youtube.com/@sgolan20" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-primary transition-colors" aria-label="ערוץ יוטיוב">
@@ -120,86 +141,58 @@ const Footer = () => {
           </div>
           
           <div className="md:col-span-1">
-            <h3 className="font-display font-medium text-lg mb-4">טופס יצירת קשר</h3>
-            <form 
-              name="contact" 
-              method="POST" 
-              data-netlify="true" 
-              netlify-honeypot="bot-field"
-              onSubmit={handleSubmit} 
-              className="space-y-3"
-            >
-              {/* Hidden fields for Netlify */}
-              <input type="hidden" name="form-name" value="contact" />
-              <p className="hidden">
-                <label>
-                  Don't fill this out if you're human: <input name="bot-field" />
-                </label>
-              </p>
-
-              <div className="grid grid-cols-2 gap-2">
+            <h3 className="font-display font-medium text-lg mb-4">קהילות AI ששווה להצטרף אליהן</h3>
+            <p className="text-muted-foreground mb-4">
+              עדכונים שוטפים על עולם הבינה המלאכותית, טיפים וכלים שימושיים
+            </p>
+            
+            <div className="flex flex-col space-y-3">
+              <a 
+                href="https://www.youtube.com/@sgolan20" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="flex items-center text-muted-foreground hover:text-primary transition-colors"
+              >
+                <i className="fab fa-youtube text-xl ml-2"></i>
                 <div>
-                  <Input id="name" name="name" type="text" value={formData.name} onChange={handleChange} required placeholder="שם מלא" className="text-sm" />
+                  <p className="font-medium">ערוץ היוטיוב שלי</p>
+                  <p className="text-xs">סרטונים והדרכות על כלי AI וטכנולוגיות חדשות</p>
                 </div>
-                <div>
-                  <Input id="email" name="email" type="email" value={formData.email} onChange={handleChange} required placeholder="אימייל" className="text-sm" />
-                </div>
-              </div>
+              </a>
               
-              <div className="grid grid-cols-2 gap-2">
+              <a 
+                href="https://whatsapp.com/channel/0029VbAUMkz6rsQkIw39w91o" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="flex items-center text-muted-foreground hover:text-primary transition-colors"
+              >
+                <i className="fab fa-whatsapp text-xl ml-2"></i>
                 <div>
-                  <Input id="phone" name="phone" type="tel" value={formData.phone} onChange={handleChange} placeholder="טלפון" className="text-sm" />
+                  <p className="font-medium">ערוץ העדכונים בוואטסאפ</p>
+                  <p className="text-xs">פוסטים ועדכונים על AI פעם עד פעמיים בשבוע</p>
                 </div>
+              </a>
+              
+              <a 
+                href="http://t.me/sgolanai" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="flex items-center text-muted-foreground hover:text-primary transition-colors"
+              >
+                <i className="fab fa-telegram text-xl ml-2"></i>
                 <div>
-                  <Input id="subject" name="subject" type="text" value={formData.subject} onChange={handleChange} required placeholder="נושא" className="text-sm" />
+                  <p className="font-medium">ערוץ העדכונים בטלגרם</p>
+                  <p className="text-xs">תוכן וטיפים שימושיים לשימוש ב-AI</p>
                 </div>
-              </div>
-              
-              <div>
-                <Textarea id="message" name="message" rows={3} value={formData.message} onChange={handleChange} required placeholder="הודעה" className="text-sm" />
-              </div>
-              
-              <Button type="submit" className="w-full btn-shine text-sm" disabled={isSubmitting}>
-                {isSubmitting ? (
-                  <>
-                    <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                    שולח...
-                  </>
-                ) : (
-                  <>
-                    <Send className="ml-2 h-4 w-4" />
-                    שליחה
-                  </>
-                )}
-              </Button>
-            </form>
+              </a>
+            </div>
           </div>
         </div>
         
         <div className="border-t border-gray-200 pt-8 flex flex-col md:flex-row justify-between items-center">
-          <p className="text-muted-foreground text-sm">
+          <p className="text-muted-foreground text-sm text-center mx-auto mb-4 md:mb-0">
             &copy; {new Date().getFullYear()} שחר גולן. כל הזכויות שמורות.
           </p>
-          <div className="mt-4">
-            <h3 className="text-lg font-bold mb-2">הצטרפו לקהילה שלי</h3>
-            <div className="flex gap-4">
-              <a href="https://www.youtube.com/@sgolan20" target="_blank" rel="noopener noreferrer">
-                <i className="fab fa-youtube text-xl hover:opacity-80 transition-opacity"></i>
-              </a>
-              <a href="https://t.me/sgolanai" target="_blank" rel="noopener noreferrer">
-                <i className="fab fa-telegram text-xl hover:opacity-80 transition-opacity"></i>
-              </a>
-              <a href="https://chat.whatsapp.com/CuYj1dsmrcH80cbfAOsotQ" target="_blank" rel="noopener noreferrer">
-                <i className="fab fa-whatsapp text-xl hover:opacity-80 transition-opacity"></i>
-              </a>
-              <a href="https://www.facebook.com/groups/976255830459659/" target="_blank" rel="noopener noreferrer">
-                <i className="fab fa-facebook text-xl hover:opacity-80 transition-opacity"></i>
-              </a>
-            </div>
-          </div>
           <button onClick={scrollToTop} className="mt-4 md:mt-0 flex items-center text-sm text-muted-foreground hover:text-primary transition-colors" aria-label="חזרה למעלה">
             חזרה למעלה
             <ArrowUp size={16} className="mr-1" />

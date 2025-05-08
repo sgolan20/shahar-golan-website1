@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { BookOpen, Users, Lightbulb, Youtube, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+
 const About = () => {
   return <div>
       {/* Hero Section */}
@@ -76,7 +77,7 @@ const About = () => {
 
               <div className="flex flex-wrap gap-4">
                 <Button asChild className="btn-shine">
-                  <Link to="/contact">צור קשר</Link>
+                  <Link to="/contact">בואו נדבר</Link>
                 </Button>
                 <Button asChild variant="outline">
                   <a href="https://www.youtube.com/@sgolan20" target="_blank" rel="noopener noreferrer" className="bg-red-600 text-white hover:bg-red-700 border-red-600 hover:border-red-700 flex items-center">
@@ -229,9 +230,9 @@ const About = () => {
           }} transition={{
             duration: 0.5
           }}>
-              <h2 className="text-3xl font-bold mb-6">היתרון שלי</h2>
+              <h2 className="text-3xl font-bold mb-6">היתרונות שתקבלו</h2>
               <p className="text-lg mb-6 text-muted-foreground">
-                היכולת שלי למקד את התוכן לקהל היעד הספציפי ולהציג נושאים מורכבים בצורה נגישה ופשוטה היא מה שמייחד את ההרצאות והסדנאות שלי.
+                תהנו מהדרכות המותאמות במדויק לצרכים שלכם, שהופכות מושגים מורכבים לפשוטים ומעשיים.
               </p>
               
               <div className="space-y-4">
@@ -242,8 +243,8 @@ const About = () => {
                     </svg>
                   </div>
                   <div>
-                    <h3 className="text-lg font-medium">התאמה אישית</h3>
-                    <p className="text-muted-foreground">התוכן מותאם לצרכים, לרמת הידע ולאתגרים הספציפיים של קהל היעד</p>
+                    <h3 className="text-lg font-medium">תוכן המותאם לצרכים שלכם</h3>
+                    <p className="text-muted-foreground">תקבלו הדרכה מותאמת בדיוק לאתגרים ולמטרות של הארגון שלכם, עם דוגמאות מעולם התוכן שלכם</p>
                   </div>
                 </div>
                 
@@ -254,8 +255,8 @@ const About = () => {
                     </svg>
                   </div>
                   <div>
-                    <h3 className="text-lg font-medium">פישוט מושגים מורכבים</h3>
-                    <p className="text-muted-foreground">הסברת רעיונות ותהליכים מורכבים בצורה פשוטה וברורה לכל רמת ידע</p>
+                    <h3 className="text-lg font-medium">הבנה מהירה של טכנולוגיות מורכבות</h3>
+                    <p className="text-muted-foreground">גם ללא רקע טכני, תוכלו להבין ולהשתמש בכלי AI מתקדמים דרך הסברים פשוטים ודוגמאות מוחשיות</p>
                   </div>
                 </div>
                 
@@ -266,8 +267,8 @@ const About = () => {
                     </svg>
                   </div>
                   <div>
-                    <h3 className="text-lg font-medium">שילוב תיאוריה ומעשה</h3>
-                    <p className="text-muted-foreground">חיבור בין עקרונות תיאורטיים ליישומים מעשיים שניתן להטמיע מיד</p>
+                    <h3 className="text-lg font-medium">יישום מיידי בעבודה</h3>
+                    <p className="text-muted-foreground">תצאו עם כלים פרקטיים שתוכלו ליישם כבר למחרת, ותראו תוצאות ושיפור ביעילות באופן מיידי</p>
                   </div>
                 </div>
                 
@@ -278,8 +279,8 @@ const About = () => {
                     </svg>
                   </div>
                   <div>
-                    <h3 className="text-lg font-medium">התעדכנות מתמדת</h3>
-                    <p className="text-muted-foreground">עדכון שוטף בכל החידושים והפיתוחים האחרונים בעולם הבינה המלאכותית</p>
+                    <h3 className="text-lg font-medium">הישארו בחזית הטכנולוגיה</h3>
+                    <p className="text-muted-foreground">תהיו מעודכנים בכל החידושים האחרונים והדרכים לנצל אותם לטובת העסק והקריירה שלכם</p>
                   </div>
                 </div>
               </div>
@@ -304,88 +305,9 @@ const About = () => {
                 </div>
                 <img src="/lovable-uploads/76f2cafb-36e3-43b9-a0a5-a5fb11f41703.png" alt="הרצאה" className="w-full h-full object-cover rounded-xl shadow-lg" />
                 <div className="absolute -bottom-6 -left-6 bg-gradient-to-r from-purple-500 to-purple-700 p-4 rounded-xl shadow-lg text-white transform -rotate-3">
-                  <h3 className="text-lg font-bold">המורכב לפשוט</h3>
-                  <p className="text-sm">בינה מלאכותית לכל אחד</p>
+                  <h3 className="text-lg font-bold">ידע הופך לכוח</h3>
+                  <p className="text-sm">AI נגיש לשימוש יומיומי</p>
                 </div>
-              </div>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* Testimonials */}
-      <section className="py-20 bg-gray-50">
-        <div className="container mx-auto px-4">
-          <motion.div className="text-center mb-12" initial={{
-          opacity: 0,
-          y: 20
-        }} whileInView={{
-          opacity: 1,
-          y: 0
-        }} viewport={{
-          once: true
-        }} transition={{
-          duration: 0.5
-        }}>
-            <h2 className="text-3xl font-bold mb-4">מה אומרים עליי</h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
-              משוב מארגונים וחברות שעבדתי איתם
-            </p>
-          </motion.div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <motion.div initial={{
-            opacity: 0,
-            x: -20
-          }} whileInView={{
-            opacity: 1,
-            x: 0
-          }} viewport={{
-            once: true
-          }} transition={{
-            duration: 0.5
-          }} className="bg-white p-8 rounded-xl shadow-sm">
-              <div className="flex flex-col h-full">
-                <div className="mb-6">
-                  <svg className="h-8 w-8 text-purple-500" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
-                  </svg>
-                </div>
-                <p className="text-lg mb-6 flex-grow">
-                  ההרצאה של שחר הייתה מרתקת ומעשית. הוא הצליח להנגיש את עולם הבינה המלאכותית לכל העובדים, מהמנהלים ועד אנשי התפעול, והדגים שימושים מעשיים שכבר משפרים את העבודה שלנו.
-                </p>
-                <footer>
-                  <p className="font-semibold">דנה כהן</p>
-                  <p className="text-muted-foreground">מנהלת משאבי אנוש, חברת היי-טק</p>
-                </footer>
-              </div>
-            </motion.div>
-
-            <motion.div initial={{
-            opacity: 0,
-            x: 20
-          }} whileInView={{
-            opacity: 1,
-            x: 0
-          }} viewport={{
-            once: true
-          }} transition={{
-            duration: 0.5,
-            delay: 0.2
-          }} className="bg-white p-8 rounded-xl shadow-sm">
-              <div className="flex flex-col h-full">
-                <div className="mb-6">
-                  <svg className="h-8 w-8 text-purple-500" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
-                  </svg>
-                </div>
-                <p className="text-lg mb-6 flex-grow">
-                  הסדנה ששחר העביר לצוות המכירות שלנו פתחה לנו את העיניים לאפשרויות הרבות שכלי ה-AI מציעים. בתוך שבועיים כבר ראינו שיפור משמעותי בתהליכי העבודה והיעילות של הצוות.
-                </p>
-                <footer>
-                  <p className="font-semibold">יוסי לוי</p>
-                  <p className="text-muted-foreground">סמנכ"ל מכירות, חברת פינטק</p>
-                </footer>
               </div>
             </motion.div>
           </div>

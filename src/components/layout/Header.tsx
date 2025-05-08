@@ -53,8 +53,8 @@ const Header = () => {
             <NavButton to="/focused-workshop">סדנה ממוקדת</NavButton>
             <NavButton to="/custom-lecture">הרצאה בהתאמה אישית</NavButton>
             <NavButton to="/intro-workshop">סדנת היכרות</NavButton>
-            <NavButton to="/video-blog">בלוג וידאו</NavButton>
             <NavButton to="/why-me">למה מרצה לבינה מלאכותית?</NavButton>
+            <NavButton to="/video-blog">בלוג וידאו</NavButton>
             <NavButton to="/about">אודות</NavButton>
             <NavButton to="/contact">צור קשר</NavButton>
           </nav>

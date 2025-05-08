@@ -68,7 +68,7 @@ const TestimonialsSection = () => {
             אין חכם כבעל ניסיון
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            אלו שכבר השתתפו בסדנאות ובהרצאות שלי
+            אלו שכבר השתתפו בסדנאות ובהרצאות שהעברתי
           </p>
         </motion.div>
 

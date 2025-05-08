@@ -54,11 +54,13 @@ const OrganizationsSection = () => {
   }, {
     name: "אוניברסיטת בר-אילן",
     logo: "/lovable-uploads/Bar_Ilan_logo.png"
-  },
-    {
-      name: "HackerU by ThriveDx",
-      logo: "/lovable-uploads/f10ea97f-6626-4010-b552-1741b0fe7f2c.png"
-    }
+  }, {
+    name: "HackerU by ThriveDx",
+    logo: "/lovable-uploads/f10ea97f-6626-4010-b552-1741b0fe7f2c.png"
+  }, {
+    name: "רוטשילד",
+    logo: "/lovable-uploads/logo-rot.jpg"
+  }
   ];
 
   // State for storing visible organizations and grid columns
@@ -116,7 +118,7 @@ const OrganizationsSection = () => {
   return <section className="py-16 bg-gray-50">
       <div className="container mx-auto px-4">
         <div className="text-center mb-10">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">הם כבר מכירים אותי</h2>
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">מביני עניין</h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             חלק מהארגונים המובילים בישראל שנהניתי להרצות ולהעביר סדנאות בהם
           </p>
