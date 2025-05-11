@@ -11,7 +11,10 @@ const ContactInfo = () => {
     duration: 0.5,
     delay: 0.4
   }}>
-      <h2 className="text-2xl font-bold mb-6">פרטי התקשרות</h2>
+      <div className="flex flex-col items-center mb-8">
+        <img src="/lovable-uploads/logogolanai2.png" alt="שחר גולן לוגו" className="h-24 mb-4" />
+        <h2 className="text-2xl font-bold">פרטי התקשרות</h2>
+      </div>
       <div className="bg-gray-50 p-6 rounded-xl">
         <div className="space-y-6">
           <div className="flex">
