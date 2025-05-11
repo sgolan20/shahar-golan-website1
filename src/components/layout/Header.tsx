@@ -43,7 +43,7 @@ const Header = () => {
         <div className="flex items-center justify-between h-20 md:h-24">
           {/* Logo */}
           <Link to="/" className="flex flex-col items-center">
-            <img src="/lovable-uploads/a1101c8c-6041-4b87-b131-c307256136f7.png" alt="שחר גולן לוגו" className="h-10 md:h-12" />
+            <img src="/lovable-uploads/logogolanai2.png" alt="שחר גולן לוגו" className="h-10 md:h-12" />
             <h2 className="text-lg font-bold font-rubik bg-clip-text text-transparent bg-brand-gradient mt-1">שחר גולן</h2>
           </Link>
           
