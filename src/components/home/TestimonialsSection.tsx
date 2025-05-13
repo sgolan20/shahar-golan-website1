@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { ChevronLeft, ChevronRight, Quote } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -16,6 +16,14 @@ const TestimonialsSection = () => {
   const testimonials: Testimonial[] = [
     {
       id: 1,
+      content: "שחר גולן, מלמד קורס \"עיצוב עם בינה מלאכותית\" בטכניון. שחר הוא אדם מקסים ומרצה מקצועי במיוחד, שמצליח להעביר תכנים מורכבים בצורה נגישה, ברורה ומעוררת עניין. הסטודנטים מאוד מעריכים אותו, הן בזכות הידע הרחב שלו והן בזכות הגישה האנושית והמעודדת שהוא מביא לשיעורים.",
+      author: "קובי גופר",
+      role: "מנהל המרכז לעיצוב גרפי וצילום",
+      company: "ביה\"ס ללימודי המשך בטכניון",
+      image: "/lovable-uploads/b0557ac0-7382-4653-91f2-aa5d3551d4c9.jpg",
+    },
+    {
+      id: 2,
       content: "הקורס עם שחר היה מעולה! הוא הכניס אותנו לעולם הבינה מלאכותית בצורה ברורה, פרקטית וקלילה. ההסברים תמיד היו בגובה העיניים עם המון סבלנות. ורואים שיש לו המון ידע בנושא. לא פחות חשוב השיעורים תמיד עברו עם אנרגיות טובות. ממליצה בחום!",
       author: "רינה חסון",
       role: "משתתפת בקורס",
@@ -23,7 +31,7 @@ const TestimonialsSection = () => {
       image: "/lovable-uploads/rina.jpg",
     },
     {
-      id: 2,
+      id: 3,
       content: "מהכרותי עם שחר הוא אחד מבעלי הידע הנרחב ביותר בתחום ה AI היצירתי (תמונה, טקסט, סאונד, וידאו וכד ...) ככזה הוא מעביר ידע חוצה פלטפורמות, שפותח כיווני חשיבה ומעניק יכולות מעשיות רבות.",
       author: "עמוס רפאלי",
       role: "יו\"ר הוועד המנהל",
@@ -34,6 +42,7 @@ const TestimonialsSection = () => {
   ];
 
   const [activeIndex, setActiveIndex] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
 
   const nextTestimonial = () => {
     setActiveIndex((prev) => (prev + 1) % testimonials.length);
@@ -42,6 +51,17 @@ const TestimonialsSection = () => {
   const prevTestimonial = () => {
     setActiveIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length);
   };
+
+  // אוטומטית מתקדם לממליץ הבא כל 5 שניות
+  useEffect(() => {
+    if (isPaused) return;
+    
+    const interval = setInterval(() => {
+      nextTestimonial();
+    }, 5000);
+    
+    return () => clearInterval(interval);
+  }, [isPaused]);
 
   return (
     <section className="py-16 overflow-hidden relative" id="testimonials">
@@ -77,6 +97,8 @@ const TestimonialsSection = () => {
             <div 
               className="flex transition-transform duration-500 ease-in-out"
               style={{ transform: `translateX(${activeIndex * 100}%)` }}
+              onMouseEnter={() => setIsPaused(true)}
+              onMouseLeave={() => setIsPaused(false)}
             >
               {testimonials.map((testimonial, index) => (
                 <div
