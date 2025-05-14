@@ -18,6 +18,7 @@ import IntroWorkshop from "./pages/IntroWorkshop";
 import AutoScrollTop from "./components/common/AutoScrollTop";
 import ScrollToTop from "./components/common/ScrollToTop";
 import YouTubeVideos from "./pages/YouTubeVideos";
+import ThankYou from "./pages/ThankYou";
 
 const queryClient = new QueryClient();
 
@@ -40,6 +41,7 @@ const App = () => (
             <Route path="/focused-workshop" element={<Layout><FocusedWorkshop /></Layout>} />
             <Route path="/custom-lecture" element={<Layout><CustomLecture /></Layout>} />
             <Route path="/intro-workshop" element={<Layout><IntroWorkshop /></Layout>} />
+            <Route path="/thank-you" element={<ThankYou />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AnimatePresence>
