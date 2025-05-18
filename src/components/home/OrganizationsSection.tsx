@@ -60,6 +60,9 @@ const OrganizationsSection = () => {
   }, {
     name: "רוטשילד",
     logo: "/lovable-uploads/logo-rot.jpg"
+  }, {
+    name: "ג'וינט ישראל",
+    logo: "/lovable-uploads/גוינט ישראל.png"
   }
   ];
 
