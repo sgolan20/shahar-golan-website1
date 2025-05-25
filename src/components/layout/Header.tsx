@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Menu, X, ChevronDown } from "lucide-react";
@@ -18,14 +17,66 @@ const NavButton = ({ to, children }: { to: string; children: React.ReactNode }) 
   );
 };
 
+// BlogDropdown component for desktop
+const BlogDropdown = () => {
+  return (
+    <div className="relative group">
+      <div className="flex items-center px-3 py-2 cursor-pointer transition-colors relative group">
+        <span className="relative z-10 text-[#4a52a3] group-hover:text-[#4a52a3]/80 transition-all duration-300">
+          בלוג
+        </span>
+        <ChevronDown className="w-4 h-4 mr-1 text-[#4a52a3] group-hover:text-[#4a52a3]/80 transition-all duration-300" />
+        <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-brand-gradient group-hover:w-full transition-all duration-300"></span>
+      </div>
+      
+      {/* Dropdown Menu */}
+      <div className="absolute top-full right-0 mt-2 w-48 bg-white rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 border border-gray-100">
+        <div className="py-1">
+          <Link 
+            to="/video-blog" 
+            className="block px-4 py-2 text-right text-[#4a52a3] hover:bg-gray-50 hover:text-[#4a52a3]/80 transition-colors"
+          >
+            בלוג וידאו
+          </Link>
+          <Link 
+            to="/articles-blog" 
+            className="block px-4 py-2 text-right text-[#4a52a3] hover:bg-gray-50 hover:text-[#4a52a3]/80 transition-colors"
+          >
+            בלוג מאמרים
+          </Link>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const MobileNavLinks = () => {
+  const [isBlogMenuOpen, setIsBlogMenuOpen] = useState(false);
+
   return (
     <div className="flex flex-col space-y-2 py-2">
       <Link to="/focused-course" className="block px-4 py-2 text-right font-medium text-[#4a52a3] hover:bg-brand-gradient hover:text-white rounded-md transition-all">קורס ממוקד</Link>
       <Link to="/focused-workshop" className="block px-4 py-2 text-right font-medium text-[#4a52a3] hover:bg-brand-gradient hover:text-white rounded-md transition-all">סדנה ממוקדת</Link>
       <Link to="/custom-lecture" className="block px-4 py-2 text-right font-medium text-[#4a52a3] hover:bg-brand-gradient hover:text-white rounded-md transition-all">הרצאה בהתאמה אישית</Link>
       <Link to="/intro-workshop" className="block px-4 py-2 text-right font-medium text-[#4a52a3] hover:bg-brand-gradient hover:text-white rounded-md transition-all">סדנת היכרות</Link>
-      <Link to="/video-blog" className="block px-4 py-2 text-right font-medium text-[#4a52a3] hover:bg-brand-gradient hover:text-white rounded-md transition-all">בלוג וידאו</Link>
+      
+      {/* Mobile Blog Menu */}
+      <div>
+        <button 
+          onClick={() => setIsBlogMenuOpen(!isBlogMenuOpen)}
+          className="w-full flex items-center justify-between px-4 py-2 text-right font-medium text-[#4a52a3] hover:bg-gray-50 rounded-md transition-all"
+        >
+          <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${isBlogMenuOpen ? 'rotate-180' : ''}`} />
+          בלוג
+        </button>
+        {isBlogMenuOpen && (
+          <div className="mr-4 mt-1 space-y-1">
+            <Link to="/video-blog" className="block px-4 py-2 text-right text-[#4a52a3] hover:bg-brand-gradient hover:text-white rounded-md transition-all">בלוג וידאו</Link>
+            <Link to="/articles-blog" className="block px-4 py-2 text-right text-[#4a52a3] hover:bg-brand-gradient hover:text-white rounded-md transition-all">בלוג מאמרים</Link>
+          </div>
+        )}
+      </div>
+      
       <Link to="/why-me" className="block px-4 py-2 text-right font-medium text-[#4a52a3] hover:bg-brand-gradient hover:text-white rounded-md transition-all">למה מרצה לבינה מלאכותית?</Link>
       <Link to="/about" className="block px-4 py-2 text-right font-medium text-[#4a52a3] hover:bg-brand-gradient hover:text-white rounded-md transition-all">אודות</Link>
       <Link to="/contact" className="block px-4 py-2 text-right font-medium text-[#4a52a3] hover:bg-brand-gradient hover:text-white rounded-md transition-all">צור קשר</Link>
@@ -54,7 +105,7 @@ const Header = () => {
             <NavButton to="/custom-lecture">הרצאה בהתאמה אישית</NavButton>
             <NavButton to="/intro-workshop">סדנת היכרות</NavButton>
             <NavButton to="/why-me">למה מרצה לבינה מלאכותית?</NavButton>
-            <NavButton to="/video-blog">בלוג וידאו</NavButton>
+            <BlogDropdown />
             <NavButton to="/about">אודות</NavButton>
             <NavButton to="/contact">צור קשר</NavButton>
           </nav>
