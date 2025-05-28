@@ -1,5 +1,7 @@
 import React from 'react';
 import { motion } from "framer-motion";
+import ArticlesGrid from '../components/blog/ArticlesGrid';
+import { articlesData } from '../components/blog/articlesData';
 
 const ArticlesBlog = () => {
   return (
@@ -31,13 +33,35 @@ const ArticlesBlog = () => {
         </div>
       </section>
 
-      {/* Content Section - תיכף נוסיף כאן את התוכן */}
-      <section className="py-12">
+      {/* Content Section - רשת מאמרים */}
+      <section className="py-12 md:py-16">
         <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center">
-            <p className="text-gray-600 text-lg">הדף בבנייה...</p>
-            <p className="text-gray-500 text-sm mt-2">כאן יופיעו המאמרים בקרוב</p>
-          </div>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="mb-12"
+          >
+            <h2 className="text-3xl font-bold text-center mb-2">המאמרים האחרונים</h2>
+            <p className="text-gray-600 text-center max-w-2xl mx-auto">מחשבות, תובנות וטיפים מעשיים על עולם הבינה המלאכותית, היצירתיות וההתפתחות האישית</p>
+          </motion.div>
+          
+          {articlesData.length > 0 ? (
+            <motion.div
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+            >
+              <ArticlesGrid articles={articlesData} />
+            </motion.div>
+          ) : (
+            <div className="max-w-4xl mx-auto text-center">
+              <p className="text-gray-600 text-lg">הדף בבנייה...</p>
+              <p className="text-gray-500 text-sm mt-2">כאן יופיעו המאמרים בקרוב</p>
+            </div>
+          )}
         </div>
       </section>
     </div>

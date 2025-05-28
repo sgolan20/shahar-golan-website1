@@ -18,6 +18,7 @@ import AutoScrollTop from "./components/common/AutoScrollTop";
 import ScrollToTop from "./components/common/ScrollToTop";
 import YouTubeVideos from "./pages/YouTubeVideos";
 import ArticlesBlog from "./pages/ArticlesBlog";
+import ArticlePage from "./pages/articles/ArticlePage";
 import ThankYou from "./pages/ThankYou";
 import VibeCoding from "./pages/VibeCoding";
 
@@ -36,6 +37,7 @@ const App = () => (
             <Route path="/" element={<Layout><Index /></Layout>} />
             <Route path="/video-blog" element={<Layout><YouTubeVideos /></Layout>} />
             <Route path="/articles-blog" element={<Layout><ArticlesBlog /></Layout>} />
+            <Route path="/articles-blog/:slug" element={<Layout><ArticlePage /></Layout>} />
             <Route path="/about" element={<Layout><About /></Layout>} />
             <Route path="/contact" element={<Layout><Contact /></Layout>} />
             <Route path="/why-me" element={<Layout><WhyMe /></Layout>} />
