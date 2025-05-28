@@ -50,15 +50,15 @@ const BlogDropdown = () => {
   );
 };
 
-const MobileNavLinks = () => {
+const MobileNavLinks = ({ onLinkClick }: { onLinkClick: () => void }) => {
   const [isBlogMenuOpen, setIsBlogMenuOpen] = useState(false);
 
   return (
     <div className="flex flex-col space-y-2 py-2">
-      <Link to="/focused-course" className="block px-4 py-2 text-right font-medium text-[#4a52a3] hover:bg-brand-gradient hover:text-white rounded-md transition-all">קורס ממוקד</Link>
-      <Link to="/focused-workshop" className="block px-4 py-2 text-right font-medium text-[#4a52a3] hover:bg-brand-gradient hover:text-white rounded-md transition-all">סדנה ממוקדת</Link>
-      <Link to="/custom-lecture" className="block px-4 py-2 text-right font-medium text-[#4a52a3] hover:bg-brand-gradient hover:text-white rounded-md transition-all">הרצאה בהתאמה אישית</Link>
-      <Link to="/intro-workshop" className="block px-4 py-2 text-right font-medium text-[#4a52a3] hover:bg-brand-gradient hover:text-white rounded-md transition-all">סדנת היכרות</Link>
+      <Link to="/focused-course" onClick={onLinkClick} className="block px-4 py-2 text-right font-medium text-[#4a52a3] hover:bg-brand-gradient hover:text-white rounded-md transition-all">קורס ממוקד</Link>
+      <Link to="/focused-workshop" onClick={onLinkClick} className="block px-4 py-2 text-right font-medium text-[#4a52a3] hover:bg-brand-gradient hover:text-white rounded-md transition-all">סדנה ממוקדת</Link>
+      <Link to="/custom-lecture" onClick={onLinkClick} className="block px-4 py-2 text-right font-medium text-[#4a52a3] hover:bg-brand-gradient hover:text-white rounded-md transition-all">הרצאה בהתאמה אישית</Link>
+      <Link to="/intro-workshop" onClick={onLinkClick} className="block px-4 py-2 text-right font-medium text-[#4a52a3] hover:bg-brand-gradient hover:text-white rounded-md transition-all">סדנת היכרות</Link>
       
       {/* Mobile Blog Menu */}
       <div>
@@ -71,15 +71,15 @@ const MobileNavLinks = () => {
         </button>
         {isBlogMenuOpen && (
           <div className="mr-4 mt-1 space-y-1">
-            <Link to="/video-blog" className="block px-4 py-2 text-right text-[#4a52a3] hover:bg-brand-gradient hover:text-white rounded-md transition-all">בלוג וידאו</Link>
-            <Link to="/articles-blog" className="block px-4 py-2 text-right text-[#4a52a3] hover:bg-brand-gradient hover:text-white rounded-md transition-all">בלוג מאמרים</Link>
+            <Link to="/video-blog" onClick={onLinkClick} className="block px-4 py-2 text-right text-[#4a52a3] hover:bg-brand-gradient hover:text-white rounded-md transition-all">בלוג וידאו</Link>
+            <Link to="/articles-blog" onClick={onLinkClick} className="block px-4 py-2 text-right text-[#4a52a3] hover:bg-brand-gradient hover:text-white rounded-md transition-all">בלוג מאמרים</Link>
           </div>
         )}
       </div>
       
-      <Link to="/why-me" className="block px-4 py-2 text-right font-medium text-[#4a52a3] hover:bg-brand-gradient hover:text-white rounded-md transition-all">למה מרצה לבינה מלאכותית?</Link>
-      <Link to="/about" className="block px-4 py-2 text-right font-medium text-[#4a52a3] hover:bg-brand-gradient hover:text-white rounded-md transition-all">אודות</Link>
-      <Link to="/contact" className="block px-4 py-2 text-right font-medium text-[#4a52a3] hover:bg-brand-gradient hover:text-white rounded-md transition-all">צור קשר</Link>
+      <Link to="/why-me" onClick={onLinkClick} className="block px-4 py-2 text-right font-medium text-[#4a52a3] hover:bg-brand-gradient hover:text-white rounded-md transition-all">למה מרצה לבינה מלאכותית?</Link>
+      <Link to="/about" onClick={onLinkClick} className="block px-4 py-2 text-right font-medium text-[#4a52a3] hover:bg-brand-gradient hover:text-white rounded-md transition-all">אודות</Link>
+      <Link to="/contact" onClick={onLinkClick} className="block px-4 py-2 text-right font-medium text-[#4a52a3] hover:bg-brand-gradient hover:text-white rounded-md transition-all">צור קשר</Link>
     </div>
   );
 };
@@ -130,7 +130,7 @@ const Header = () => {
       {isMobileMenuOpen && (
         <div className="md:hidden">
           <div className="px-2 py-2 bg-white/95 border-t border-gray-200 shadow-lg">
-            <MobileNavLinks />
+            <MobileNavLinks onLinkClick={() => setIsMobileMenuOpen(false)} />
           </div>
         </div>
       )}
