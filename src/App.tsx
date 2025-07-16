@@ -22,6 +22,7 @@ import ArticlePage from "./pages/articles/ArticlePage";
 import ThankYou from "./pages/ThankYou";
 import ThankYouPhysical from "./pages/ThankYouPhysical";
 import VibeCoding from "./pages/VibeCoding";
+import ZoomMeeting from "./pages/ZoomMeeting";
 
 const queryClient = new QueryClient();
 
@@ -46,6 +47,7 @@ const App = () => (
             <Route path="/focused-workshop" element={<Layout><FocusedWorkshop /></Layout>} />
             <Route path="/custom-lecture" element={<Layout><CustomLecture /></Layout>} />
             <Route path="/intro-workshop" element={<Layout><IntroWorkshop /></Layout>} />
+            <Route path="/zoom-meeting" element={<Layout><ZoomMeeting /></Layout>} />
             <Route path="/thank-you" element={<ThankYou />} />
             <Route path="/thank-you-physical" element={<ThankYouPhysical />} />
             <Route path="/vibecoding" element={<VibeCoding />} />

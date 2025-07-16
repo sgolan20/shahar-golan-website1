@@ -134,7 +134,7 @@ const Footer = () => {
               <a href="https://www.linkedin.com/in/sgolan20" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-primary transition-colors" aria-label="לינקדאין">
                 <Linkedin size={20} />
               </a>
-              <a href="mailto:sgolan20@gmail.com" className="text-gray-600 hover:text-primary transition-colors" aria-label="אימייל">
+              <a href="mailto:shahar@golanai.co.il" className="text-gray-600 hover:text-primary transition-colors" aria-label="אימייל">
                 <Mail size={20} />
               </a>
             </div>

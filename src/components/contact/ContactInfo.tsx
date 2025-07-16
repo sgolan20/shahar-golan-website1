@@ -23,8 +23,8 @@ const ContactInfo = () => {
             </div>
             <div>
               <h3 className="text-lg font-medium mb-1">אימייל</h3>
-              <a href="mailto:sgolan20@gmail.com" className="text-muted-foreground hover:text-primary transition-colors">
-                sgolan20@gmail.com
+              <a href="mailto:shahar@golanai.co.il" className="text-muted-foreground hover:text-primary transition-colors">
+                shahar@golanai.co.il
               </a>
             </div>
           </div>

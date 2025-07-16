@@ -6,7 +6,7 @@ const StructuredData = () => {
     // Create the structured data script element
     const script = document.createElement("script");
     script.type = "application/ld+json";
-    
+
     // Define the JSON-LD structured data
     const structuredData = {
       "@context": "https://schema.org",
@@ -15,7 +15,7 @@ const StructuredData = () => {
       "description": "מרצה ומדריך לבינה מלאכותית וכלי AI, מלמד כיצד להשתמש בכלים מתקדמים בחיי היום יום והעבודה",
       "url": "https://shahar-golan-website1.netlify.app",
       "telephone": "+972527332838",
-      "email": "sgolan20@gmail.com",
+      "email": "shahar@golanai.co.il",
       "image": "https://shahar-golan-website1.netlify.app/og-image.png",
       "address": {
         "@type": "PostalAddress",
@@ -68,18 +68,18 @@ const StructuredData = () => {
         ]
       }
     };
-    
+
     script.innerHTML = JSON.stringify(structuredData);
-    
+
     // Add the script to the document head
     document.head.appendChild(script);
-    
+
     // Clean up on component unmount
     return () => {
       document.head.removeChild(script);
     };
   }, []);
-  
+
   return null;
 };
 
