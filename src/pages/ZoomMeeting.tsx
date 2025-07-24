@@ -11,7 +11,7 @@ declare global {
 }
 
 const ZoomMeeting = () => {
-  const [isWidgetLoaded, setIsWidgetLoaded] = useState(false);
+  const [showFallback, setShowFallback] = useState(false);
 
   useEffect(() => {
     // Load the Zcal script
@@ -23,45 +23,24 @@ const ZoomMeeting = () => {
     // Add script to head
     document.head.appendChild(script);
 
-    // Check for widget loading
-    const checkWidget = () => {
+    // Simple timer - if widget doesn't load in 5 seconds, show fallback
+    const timer = setTimeout(() => {
       const widgetElement = document.querySelector('.zcal-inline-widget');
       if (widgetElement) {
-        // Check if the widget has been transformed (has more than just the link)
-        const hasCalendar = widgetElement.querySelector('iframe') || 
-                           widgetElement.querySelector('.zcal-calendar') ||
-                           widgetElement.children.length > 1;
-        
-        if (hasCalendar) {
-          setIsWidgetLoaded(true);
-        } else {
-          // Keep checking
-          setTimeout(checkWidget, 500);
+        const hasIframe = widgetElement.querySelector('iframe');
+        if (!hasIframe) {
+          setShowFallback(true);
         }
       } else {
-        setTimeout(checkWidget, 500);
+        setShowFallback(true);
       }
-    };
-
-    // Start checking after script loads
-    script.onload = () => {
-      setTimeout(checkWidget, 1000);
-    };
-
-    // Also start checking immediately in case script is already loaded
-    setTimeout(checkWidget, 1000);
-
-    // Fallback - show widget after 5 seconds regardless
-    const fallbackTimeout = setTimeout(() => {
-      setIsWidgetLoaded(true);
     }, 5000);
 
     return () => {
-      // Cleanup on unmount
+      clearTimeout(timer);
       if (document.head.contains(script)) {
         document.head.removeChild(script);
       }
-      clearTimeout(fallbackTimeout);
     };
   }, []);
 
@@ -152,25 +131,25 @@ const ZoomMeeting = () => {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="text-center">
-                  {/* Loading State */}
-                  {!isWidgetLoaded && (
-                    <div className="mb-6 py-12">
-                      <div className="flex flex-col items-center justify-center space-y-4">
-                        <Loader2 className="h-8 w-8 animate-spin text-brandBlue" />
-                        <p className="text-muted-foreground">טוען לוח זמנים...</p>
-                        <div className="text-xs text-muted-foreground">
-                          זה יקח רק כמה שניות
-                        </div>
+                  {/* Zcal Widget - This will be replaced by the script */}
+                  <div className="zcal-inline-widget mb-6">
+                    <a href="https://zcal.co/i/voc_RSSx">קביעת פגישת זום - Schedule a meeting</a>
+                  </div>
+                  
+                  {/* Fallback button when widget doesn't load */}
+                  {showFallback && (
+                    <div className="mb-6 -mt-12">
+                      <div className="text-center bg-white p-6 rounded-lg border-2 border-brandBlue/20">
+                        <p className="text-muted-foreground mb-4">לוח הזמנים לא נטען כמו שצריך</p>
+                        <Button 
+                          onClick={() => window.location.reload()}
+                          className="bg-brand-gradient hover:bg-brand-gradient-hover text-white px-8 py-4 text-lg font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300"
+                        >
+                          📅 רענן להצגת זמינות השעות
+                        </Button>
                       </div>
                     </div>
                   )}
-                  
-                  {/* Zcal Widget - This will be replaced by the script */}
-                  <div 
-                    className={`zcal-inline-widget mb-6 ${!isWidgetLoaded ? 'opacity-0 absolute -z-10' : 'opacity-100'}`}
-                  >
-                    <a href="https://zcal.co/i/voc_RSSx">קביעת פגישת זום - Schedule a meeting</a>
-                  </div>
                   
                   <div className="text-sm text-muted-foreground space-y-2">
                     <p>✅ זמינות גמישה לפי הצורך</p>

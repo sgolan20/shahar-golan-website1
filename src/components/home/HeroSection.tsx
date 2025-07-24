@@ -80,7 +80,7 @@ const HeroSection = () => {
           duration: 0.5,
           delay: 0.4
         }} className="hidden lg:flex justify-center items-center">
-            <div className="text-white p-8 rounded-xl bg-black/40 backdrop-blur-sm border border-transparent bg-gradient-to-r from-[#4a52a3]/20 to-[#4aaba3]/20 max-w-md mt-24 shadow-lg shadow-[#4aaba3]/10 hover-scale">
+            <div className="text-white p-8 rounded-xl bg-black/40 backdrop-blur-sm border border-transparent bg-gradient-to-r from-[#4a52a3]/20 to-[#4aaba3]/20 max-w-md mt-[425px] shadow-lg shadow-[#4aaba3]/10 hover-scale">
               <h3 className="text-2xl font-bold mb-3">שחר גולן</h3>
               <p className="text-white/80">מרצה ל-GEN-AI ובינה מלאכותית. מעביר הדרכות וסדנאות AI לשיפור היצירתיות והיעילות בארגונים.</p>
             </div>

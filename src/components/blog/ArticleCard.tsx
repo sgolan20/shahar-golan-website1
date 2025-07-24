@@ -28,9 +28,9 @@ const ArticleCard: React.FC<ArticleCardProps> = ({
       <Link to={`/articles-blog/${slug}`} className="block h-full">
         <div className="bg-white rounded-xl shadow-md overflow-hidden h-full flex flex-col hover:shadow-lg transition-shadow duration-300">
           <div className="h-48 overflow-hidden">
-            <img 
-              src={imageUrl} 
-              alt={title} 
+            <img
+              src={imageUrl}
+              alt={title}
               className="w-full h-full object-cover object-center transform hover:scale-105 transition-transform duration-500"
             />
           </div>
