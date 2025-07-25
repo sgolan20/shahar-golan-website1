@@ -1,4 +1,4 @@
-import { ArrowRight, Calendar, Video, Clock, CheckCircle, Loader2, DollarSign, Star, Users, BookOpen } from "lucide-react";
+import { ArrowRight, Calendar, Video, Clock, CheckCircle, Loader2, Coins, Star, Users, BookOpen } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
@@ -19,7 +19,7 @@ const PrivateLesson = () => {
     script.type = 'text/javascript';
     script.async = true;
     script.src = 'https://static.zcal.co/embed/v1/embed.js';
-    
+
     // Add script to head
     document.head.appendChild(script);
 
@@ -83,13 +83,13 @@ const PrivateLesson = () => {
                 <div className="zcal-inline-widget mb-6">
                   <a href="https://zcal.co/i/Vf8VWinM">שיעור/ייעוץ - שעה - Schedule a meeting</a>
                 </div>
-                
+
                 {/* Fallback button when widget doesn't load */}
                 {showFallback && (
                   <div className="mb-6 -mt-12">
                     <div className="text-center bg-white p-6 rounded-lg border-2 border-brandBlue/20">
                       <p className="text-muted-foreground mb-4">לוח הזמנים לא נטען כמו שצריך</p>
-                      <Button 
+                      <Button
                         onClick={() => window.location.reload()}
                         className="bg-brand-gradient hover:bg-brand-gradient-hover text-white px-8 py-4 text-lg font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300"
                       >
@@ -98,12 +98,12 @@ const PrivateLesson = () => {
                     </div>
                   </div>
                 )}
-                
+
                 <div className="text-sm text-muted-foreground space-y-2">
-                  <p>✅ תשלום מאובטח דרך המערכת</p>
-                  <p>✅ אישור מיידי במייל</p>
-                  <p>✅ קישור זום יישלח אוטומטית</p>
-                  <p>✅ אפשרות לביטול עד 24 שעות מראש</p>
+                  <p>✅ קישור לתשלום ישלח לאחר ביצוע הפגישה</p>
+                  <p>✅ תקבלו מייל עם זימון ליומן מיד עם ביצוע ההזמנה</p>
+                  <p>✅ קישור לזום יעודכן בתיאור הפגישה בזימון ביומן</p>
+                  <p>✅ נא לעדכן על ביטול עד 24 שעות לפני הפגישה</p>
                 </div>
               </CardContent>
             </Card>
@@ -131,7 +131,7 @@ const PrivateLesson = () => {
                       <p className="text-muted-foreground">שעה מלאה (60 דקות)</p>
                     </div>
                   </div>
-                  
+
                   <div className="flex items-center gap-3">
                     <Video className="h-6 w-6 text-brandTeal" />
                     <div>
@@ -141,7 +141,7 @@ const PrivateLesson = () => {
                   </div>
 
                   <div className="flex items-center gap-3">
-                    <DollarSign className="h-6 w-6 text-brandTeal" />
+                    <Coins className="h-6 w-6 text-brandTeal" />
                     <div>
                       <h4 className="font-semibold">מחיר</h4>
                       <p className="text-muted-foreground">350₪ + מע"מ (סה"כ 420₪)</p>
@@ -204,7 +204,7 @@ const PrivateLesson = () => {
                   </p>
                 </CardContent>
               </Card>
-              
+
               <Card className="text-center bg-white/80 backdrop-blur-sm">
                 <CardContent className="pt-6">
                   <Clock className="h-8 w-8 text-brandTeal mx-auto mb-3" />
@@ -214,7 +214,7 @@ const PrivateLesson = () => {
                   </p>
                 </CardContent>
               </Card>
-              
+
               <Card className="text-center bg-white/80 backdrop-blur-sm">
                 <CardContent className="pt-6">
                   <Users className="h-8 w-8 text-brandBlue mx-auto mb-3" />
@@ -224,7 +224,7 @@ const PrivateLesson = () => {
                   </p>
                 </CardContent>
               </Card>
-              
+
               <Card className="text-center bg-white/80 backdrop-blur-sm">
                 <CardContent className="pt-6">
                   <CheckCircle className="h-8 w-8 text-green-500 mx-auto mb-3" />
