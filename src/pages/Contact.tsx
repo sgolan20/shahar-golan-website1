@@ -30,7 +30,7 @@ const Contact = () => {
 
             {/* Private Lesson */}
             <div className="text-center bg-gradient-to-br from-brandBlue/5 to-brandTeal/5 p-6 rounded-lg border border-brandBlue/20">
-              <h3 className="text-xl font-semibold text-brandBlue mb-3">שיעור פרטי / ייעוץ</h3>
+              <h3 className="text-xl font-semibold text-brandBlue mb-3">שיעור פרטי</h3>
               <p className="text-muted-foreground mb-4">
                 למידה אישית ומותאמת - שעה מלאה של ידע מרוכז
               </p>

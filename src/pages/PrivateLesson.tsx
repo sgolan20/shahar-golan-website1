@@ -56,7 +56,7 @@ const PrivateLesson = () => {
               </div>
             </div>
             <h1 className="text-4xl font-bold text-brandBlue mb-4">
-              שיעור פרטי / ייעוץ מקצועי
+              שיעור פרטי
             </h1>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
               למידה אישית ומותאמת בדיוק לצרכים שלך - שעה מלאה של ידע מרוכז ומעשי
