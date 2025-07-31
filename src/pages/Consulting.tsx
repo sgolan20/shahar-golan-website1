@@ -144,7 +144,7 @@ const Consulting = () => {
                     <Coins className="h-6 w-6 text-brandTeal" />
                     <div>
                       <h4 className="font-semibold">מחיר</h4>
-                      <p className="text-muted-foreground">800₪ + מע"מ (סה"כ 944₪)</p>
+                      <p className="text-muted-foreground">800₪ + מע"מ</p>
                     </div>
                   </div>
                 </div>
