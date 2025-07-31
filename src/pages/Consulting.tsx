@@ -162,19 +162,19 @@ const Consulting = () => {
                     </li>
                     <li className="flex items-start gap-2">
                       <CheckCircle className="h-5 w-5 text-brandTeal mt-0.5 flex-shrink-0" />
-                      <span className="text-sm">הכוונה אסטרטגית לפיתוח מוצר</span>
+                      <span className="text-sm">התאמת כלי AI מתקדמים לייעול תהליכי עבודה ארגוניים</span>
                     </li>
                     <li className="flex items-start gap-2">
                       <CheckCircle className="h-5 w-5 text-brandTeal mt-0.5 flex-shrink-0" />
-                      <span className="text-sm">המלצות על טכנולוגיות וכלים מתקדמים</span>
+                      <span className="text-sm">תובנות והכוונה על מודלים וכלי GenAI חדשניים לקידום העסק</span>
                     </li>
                     <li className="flex items-start gap-2">
                       <CheckCircle className="h-5 w-5 text-brandTeal mt-0.5 flex-shrink-0" />
-                      <span className="text-sm">תכנון ארכיטקטורה ומבנה מערכת</span>
+                      <span className="text-sm">אסטרטגיית יישום AI ואוטומציה לשיפור פרודוקטיביות</span>
                     </li>
                     <li className="flex items-start gap-2">
                       <CheckCircle className="h-5 w-5 text-brandTeal mt-0.5 flex-shrink-0" />
-                      <span className="text-sm">ביקורת קוד ושיפור ביצועים</span>
+                      <span className="text-sm">הדרכה מעשית על שילוב טכנולוגיות AI בתהליכים קיימים</span>
                     </li>
                   </ul>
                 </div>
