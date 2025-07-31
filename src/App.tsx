@@ -24,6 +24,7 @@ import ThankYouPhysical from "./pages/ThankYouPhysical";
 import VibeCoding from "./pages/VibeCoding";
 import ZoomMeeting from "./pages/ZoomMeeting";
 import PrivateLesson from "./pages/PrivateLesson";
+import Consulting from "./pages/Consulting";
 
 const queryClient = new QueryClient();
 
@@ -50,6 +51,7 @@ const App = () => (
             <Route path="/intro-workshop" element={<Layout><IntroWorkshop /></Layout>} />
             <Route path="/zoom-meeting" element={<Layout><ZoomMeeting /></Layout>} />
             <Route path="/private-lesson" element={<Layout><PrivateLesson /></Layout>} />
+            <Route path="/consulting" element={<Layout><Consulting /></Layout>} />
             <Route path="/thank-you" element={<ThankYou />} />
             <Route path="/thank-you-physical" element={<ThankYouPhysical />} />
             <Route path="/vibecoding" element={<VibeCoding />} />
