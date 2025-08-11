@@ -118,29 +118,6 @@ const Footer = () => {
           </div>
           
           <div className="md:col-span-1">
-            <h3 className="font-display font-medium text-lg mb-4">צור קשר</h3>
-            <p className="text-muted-foreground mb-2">
-              מעוניינים בהרצאה, סדנה או קורס מותאם אישית?
-            </p>
-            <Link to="/contact" className="btn-primary inline-flex items-center px-4 py-2 rounded-md text-sm font-medium mb-4">
-              <Mail className="ml-2 h-4 w-4" />
-              השאירו פרטים
-            </Link>
-            
-            <div className="flex space-x-4 space-x-reverse mb-4">
-              <a href="https://www.youtube.com/@sgolan20" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-primary transition-colors" aria-label="ערוץ יוטיוב">
-                <Youtube size={20} />
-              </a>
-              <a href="https://www.linkedin.com/in/sgolan20" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-primary transition-colors" aria-label="לינקדאין">
-                <Linkedin size={20} />
-              </a>
-              <a href="mailto:shahar@golanai.co.il" className="text-gray-600 hover:text-primary transition-colors" aria-label="אימייל">
-                <Mail size={20} />
-              </a>
-            </div>
-          </div>
-          
-          <div className="md:col-span-1">
             <h3 className="font-display font-medium text-lg mb-4">קהילות AI ששווה להצטרף אליהן</h3>
             <p className="text-muted-foreground mb-4">
               עדכונים שוטפים על עולם הבינה המלאכותית, טיפים וכלים שימושיים
@@ -184,6 +161,29 @@ const Footer = () => {
                   <p className="font-medium">ערוץ העדכונים בטלגרם</p>
                   <p className="text-xs">תוכן וטיפים שימושיים לשימוש ב-AI</p>
                 </div>
+              </a>
+            </div>
+          </div>
+          
+          <div className="md:col-span-1">
+            <h3 className="font-display font-medium text-lg mb-4">צור קשר</h3>
+            <p className="text-muted-foreground mb-2">
+              מעוניינים בהרצאה, סדנה או קורס מותאם אישית?
+            </p>
+            <Link to="/contact" className="btn-primary inline-flex items-center px-4 py-2 rounded-md text-sm font-medium mb-4">
+              <Mail className="ml-2 h-4 w-4" />
+              השאירו פרטים
+            </Link>
+            
+            <div className="flex space-x-4 space-x-reverse mb-4">
+              <a href="https://www.youtube.com/@sgolan20" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-primary transition-colors" aria-label="ערוץ יוטיוב">
+                <Youtube size={20} />
+              </a>
+              <a href="https://www.linkedin.com/in/sgolan20" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-primary transition-colors" aria-label="לינקדאין">
+                <Linkedin size={20} />
+              </a>
+              <a href="mailto:shahar@golanai.co.il" className="text-gray-600 hover:text-primary transition-colors" aria-label="אימייל">
+                <Mail size={20} />
               </a>
             </div>
           </div>
