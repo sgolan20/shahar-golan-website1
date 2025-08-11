@@ -75,17 +75,7 @@ const About = () => {
                 אני חי ונושם AI ואת האפשרויות המעשיות שהוא מביא לחיינו. בוא נגלה יחד איך אפשר לרתום את הטכנולוגיה הזו לפרויקטים מעניינים, לפתרון בעיות אמיתיות, ולהפוך רעיונות לתוצאות מוחשיות.
               </p>
 
-              <div className="flex flex-wrap gap-4">
-                <Button asChild className="btn-shine">
-                  <Link to="/contact">בואו נדבר</Link>
-                </Button>
-                <Button asChild variant="outline">
-                  <a href="https://www.youtube.com/@sgolan20" target="_blank" rel="noopener noreferrer" className="bg-red-600 text-white hover:bg-red-700 border-red-600 hover:border-red-700 flex items-center">
-                    <Youtube className="ml-2 h-5 w-5" />
-                    לערוץ היוטיוב
-                  </a>
-                </Button>
-              </div>
+
             </motion.div>
           </div>
         </div>
@@ -304,10 +294,7 @@ const About = () => {
                   <p className="text-sm">הרצאות וסדנאות</p>
                 </div>
                 <img src="/lovable-uploads/76f2cafb-36e3-43b9-a0a5-a5fb11f41703.png" alt="הרצאה" className="w-full h-full object-cover rounded-xl shadow-lg" />
-                <div className="absolute -bottom-6 -left-6 bg-gradient-to-r from-purple-500 to-purple-700 p-4 rounded-xl shadow-lg text-white transform -rotate-3">
-                  <h3 className="text-lg font-bold">ידע הופך לכוח</h3>
-                  <p className="text-sm">AI נגיש לשימוש יומיומי</p>
-                </div>
+
               </div>
             </motion.div>
           </div>
