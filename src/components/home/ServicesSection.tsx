@@ -1,7 +1,6 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { ArrowRight, Users, Lightbulb, BookOpen, Coffee } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Users, Lightbulb, BookOpen, Coffee } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 
 // Framer Motion variants
@@ -36,28 +35,24 @@ const ServicesSection = () => {
     title: "קורסים ממוקדים",
     description: "קורסים ממוקדים בכלי בינה מלאכותית שונים, מותאמים לקהל היעד ולרמת הידע הקיימת.",
     link: "/focused-course",
-    linkText: "פרטים על קורסים",
     bgImage: "/lovable-uploads/96348fd7-1c9e-49f8-b9c6-4ea486dfd787.png"
   }, {
     icon: <Users className="h-8 w-8" />,
     title: "הרצאות לארגונים",
     description: "הרצאות מרתקות לארגונים וחברות, מותאמות לצרכים הספציפיים של הקהל והארגון.",
     link: "/custom-lecture",
-    linkText: "תיאום הרצאה",
     bgImage: "/lovable-uploads/0d68aedf-beb7-45ae-a23f-322fa1fa7d84.png"
   }, {
     icon: <Lightbulb className="h-8 w-8" />,
     title: "סדנאות מעשיות",
     description: "סדנאות פרקטיות ומעשיות להקניית כלים ומיומנויות בעבודה עם טכנולוגיות AI.",
     link: "/focused-workshop",
-    linkText: "מידע על סדנאות",
     bgImage: "/lovable-uploads/8bdd9e5e-cba8-433d-881f-2701802d539e.png"
   }, {
     icon: <Coffee className="h-8 w-8" />,
     title: "סדנת היכרות",
     description: "צעד ראשון להיכרות עם עולם הבינה המלאכותית, מתאים למתחילים.",
     link: "/intro-workshop",
-    linkText: "הרשמה לסדנה",
     bgImage: "/lovable-uploads/3ad19a3f-7fcb-4dec-b9ff-7dc0a5aaa713.png"
   }];
   return <section className="py-20 bg-gray-50" id="services">
@@ -102,12 +97,6 @@ const ServicesSection = () => {
                       <p className="text-gray-500 mb-5 text-base font-light leading-relaxed">
                         {service.description}
                       </p>
-                      <Button asChild className="rounded-full py-2 px-5 text-sm md:text-base mt-2 shadow-md hover:shadow-xl transition-all w-full justify-center">
-                        <span className="flex items-center text-white font-medium">
-                          {service.linkText}
-                          <ArrowRight className="mr-2 h-4 w-4 transition-transform group-hover:translate-x-1 rtl:group-hover:-translate-x-1" />
-                        </span>
-                      </Button>
                     </div>
                   </CardContent>
                 </Card>
