@@ -92,7 +92,7 @@ const ZoomMeeting = () => {
                     <Video className="h-5 w-5 text-brandTeal" />
                     <div>
                       <h4 className="font-semibold">פלטפורמה</h4>
-                      <p className="text-muted-foreground">זום - קישור יישלח לאחר הקביעה</p>
+                      <p className="text-muted-foreground">זום - קישור יישלח ביום הפגישה</p>
                     </div>
                   </div>
 
@@ -154,7 +154,7 @@ const ZoomMeeting = () => {
                   <div className="text-sm text-muted-foreground space-y-2">
                     <p>✅ זמינות גמישה לפי הצורך</p>
                     <p>✅ אישור מיידי במייל</p>
-                    <p>✅ קישור זום יישלח אוטומטית</p>
+                    <p>✅ קישור זום יישלח ביום הפגישה</p>
                   </div>
                 </CardContent>
               </Card>
