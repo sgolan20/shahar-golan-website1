@@ -1,7 +1,7 @@
 
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { ArrowRight } from "lucide-react";
+
 import { Button } from "@/components/ui/button";
 
 const HeroSection = () => {
@@ -57,13 +57,6 @@ const HeroSection = () => {
             <p className="text-xl text-white mb-8 max-w-2xl mx-auto lg:mr-0 lg:ml-auto font-medium drop-shadow-md">הרצאות וסדנאות AI מותאמות אישית לארגונים ולעסקים שרוצים להוביל בעידן החדש.</p>
             
             <div className="flex flex-wrap justify-center lg:justify-end gap-4">
-              <Button asChild size="lg" className="btn-shine tech-button hover-scale glow">
-                <Link to="/contact">
-                  תיאום הרצאה
-                  <ArrowRight className="mr-2 h-4 w-4" />
-                </Link>
-              </Button>
-              
               <Button asChild size="lg" variant="outline" className="bg-black/40 border-white/30 text-white hover:bg-brand-gradient hover-scale">
                 <Link to="/about">מי אני?</Link>
               </Button>
