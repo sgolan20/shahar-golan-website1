@@ -25,6 +25,7 @@ import VibeCoding from "./pages/VibeCoding";
 import ZoomMeeting from "./pages/ZoomMeeting";
 import PrivateLesson from "./pages/PrivateLesson";
 import Consulting from "./pages/Consulting";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
 
 const queryClient = new QueryClient();
 
@@ -52,6 +53,7 @@ const App = () => (
             <Route path="/zoom-meeting" element={<Layout><ZoomMeeting /></Layout>} />
             <Route path="/private-lesson" element={<Layout><PrivateLesson /></Layout>} />
             <Route path="/consulting" element={<Layout><Consulting /></Layout>} />
+            <Route path="/privacy-policy" element={<Layout><PrivacyPolicy /></Layout>} />
             <Route path="/thank-you" element={<ThankYou />} />
             <Route path="/thank-you-physical" element={<ThankYouPhysical />} />
             <Route path="/vibecoding" element={<VibeCoding />} />

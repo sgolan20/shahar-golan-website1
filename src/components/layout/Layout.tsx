@@ -3,6 +3,8 @@ import Header from "./Header";
 import Footer from "./Footer";
 import SEOHelmet from "./SEOHelmet";
 import { useLocation } from "react-router-dom";
+import CookieConsent from "../CookieConsent";
+import { useCookieConsent } from "../../hooks/useCookieConsent";
 
 interface LayoutProps {
   children: ReactNode;
@@ -20,6 +22,7 @@ const Layout = ({
   ogImage 
 }: LayoutProps) => {
   const location = useLocation();
+  const { handleAccept, handleReject, handleManage } = useCookieConsent();
   
   // Define SEO data for each page
   const getSEOData = () => {
@@ -100,6 +103,11 @@ const Layout = ({
       <Header />
       <main className="flex-grow pt-16 md:pt-20">{children}</main>
       <Footer />
+      <CookieConsent 
+        onAccept={handleAccept}
+        onReject={handleReject}
+        onManage={handleManage}
+      />
     </div>
   );
 };

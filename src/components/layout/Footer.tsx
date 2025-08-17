@@ -190,9 +190,23 @@ const Footer = () => {
         </div>
         
         <div className="border-t border-gray-200 pt-8 flex flex-col md:flex-row justify-between items-center">
-          <p className="text-muted-foreground text-sm text-center mx-auto mb-4 md:mb-0">
-            &copy; {new Date().getFullYear()} שחר גולן. כל הזכויות שמורות.
-          </p>
+          <div className="text-center md:text-left mb-4 md:mb-0">
+            <p className="text-muted-foreground text-sm mb-2">
+              &copy; {new Date().getFullYear()} שחר גולן. כל הזכויות שמורות.
+            </p>
+            <div className="flex flex-wrap justify-center md:justify-start gap-4 text-xs text-muted-foreground">
+              <Link to="/privacy-policy" className="hover:text-primary transition-colors">
+                מדיניות פרטיות
+              </Link>
+              <span>•</span>
+              <button 
+                onClick={() => window.dispatchEvent(new CustomEvent('show-cookie-settings'))}
+                className="hover:text-primary transition-colors"
+              >
+                הגדרות קוקיז
+              </button>
+            </div>
+          </div>
           <button onClick={scrollToTop} className="mt-4 md:mt-0 flex items-center text-sm text-muted-foreground hover:text-primary transition-colors" aria-label="חזרה למעלה">
             חזרה למעלה
             <ArrowUp size={16} className="mr-1" />
