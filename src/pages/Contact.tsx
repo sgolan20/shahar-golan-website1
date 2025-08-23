@@ -16,7 +16,7 @@ const Contact = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
             {/* Free Consultation */}
             <div className="text-center bg-white/50 p-6 rounded-lg border">
-              <h3 className="text-xl font-semibold text-brandBlue mb-3">פגישת היכרות חינמית</h3>
+              <h3 className="text-xl font-semibold text-brandBlue mb-3">פגישת היכרות</h3>
               <p className="text-muted-foreground mb-4">
                 שיחה קצרה להבהרת צרכים והצעת מחיר מותאמת
               </p>
