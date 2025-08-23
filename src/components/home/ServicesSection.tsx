@@ -44,14 +44,14 @@ const ServicesSection = () => {
     bgImage: "/lovable-uploads/0d68aedf-beb7-45ae-a23f-322fa1fa7d84.png"
   }, {
     icon: <Lightbulb className="h-8 w-8" />,
-    title: "סדנאות יישום",
+    title: "סדנאות פרקטיות",
     description: "סדנאות hands-on להכשרת הצוותים שלכם על תהליכי AI מותאמים לעסק, עם התמקדות בצרכים הייחודיים של הארגון.",
     link: "/focused-workshop",
     bgImage: "/lovable-uploads/8bdd9e5e-cba8-433d-881f-2701802d539e.png"
   }, {
     icon: <Coffee className="h-8 w-8" />,
-    title: "אבחון אסטרטגי",
-    description: "מפגש ראשוני לאבחון האפשרויות של AI בעסק שלכם וזיהוי תהליכים שניתן לשפר ולייעל עם בינה מלאכותית.",
+    title: "הרצאת היכרות",
+    description: "הרצאה מבוא מעשית להכרת האפשרויות של AI בעסק שלכם וזיהוי תהליכים שניתן לשפר, מתאימה כנקודת פתיחה לכל ארגון.",
     link: "/intro-workshop",
     bgImage: "/lovable-uploads/3ad19a3f-7fcb-4dec-b9ff-7dc0a5aaa713.png"
   }];

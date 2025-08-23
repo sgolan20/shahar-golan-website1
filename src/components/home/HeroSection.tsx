@@ -54,7 +54,14 @@ const HeroSection = () => {
               <span className="text-transparent bg-clip-text bg-brand-gradient text-shadow-lg">הפכו את ה-AI לנשק הסודי של החברה שלכם</span>
             </h1>
             
-            <p className="text-xl text-white mb-8 max-w-2xl mx-auto lg:mr-0 lg:ml-auto font-medium drop-shadow-md">אני מעצב תהליכי AI מותאמים אישית לעסק שלכם דרך הרצאות וסדנאות ממוקדות, כדי שתוכלו לחסוך זמן, להגדיל רווחים ולהוביל את השוק שלכם.</p>
+            <div className="mb-8 max-w-2xl mx-auto lg:mr-0 lg:ml-auto">
+              <p className="text-2xl md:text-3xl text-white font-bold leading-tight drop-shadow-lg mb-2">
+                הרצאות וסדנאות AI מותאמות אישית
+              </p>
+              <p className="text-xl text-white/90 font-medium drop-shadow-md">
+                לארגונים ולעסקים שרוצים להוביל בעידן החדש
+              </p>
+            </div>
             
             <div className="flex flex-wrap justify-center lg:justify-end gap-4">
               <Button asChild size="lg" variant="outline" className="bg-black/40 border-white/30 text-white hover:bg-brand-gradient hover-scale">
