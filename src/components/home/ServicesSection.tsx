@@ -50,8 +50,8 @@ const ServicesSection = () => {
     bgImage: "/lovable-uploads/8bdd9e5e-cba8-433d-881f-2701802d539e.png"
   }, {
     icon: <Coffee className="h-8 w-8" />,
-    title: "הרצאת היכרות",
-    description: "הרצאה מבוא מעשית להכרת האפשרויות של AI בעסק שלכם וזיהוי תהליכים שניתן לשפר, מתאימה כנקודת פתיחה לכל ארגון.",
+    title: "סדנת מבוא מותאמת",
+    description: "סדנת מבוא מעשית להכרת האפשרויות של AI בעסק שלכם וזיהוי תהליכים שניתן לשפר, מתאימה כנקודת פתיחה לכל ארגון.",
     link: "/intro-workshop",
     bgImage: "/lovable-uploads/3ad19a3f-7fcb-4dec-b9ff-7dc0a5aaa713.png"
   }];
