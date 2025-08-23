@@ -51,14 +51,17 @@ const HeroSection = () => {
           delay: 0.2
         }}>
             <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight drop-shadow-xl">
-              <span className="text-transparent bg-clip-text bg-brand-gradient text-shadow-lg">בואו נכיר את עולם ה-AI</span>
+              <span className="text-transparent bg-clip-text bg-brand-gradient text-shadow-lg">הפכו את ה-AI לנשק הסודי של החברה שלכם</span>
             </h1>
             
-            <p className="text-xl text-white mb-8 max-w-2xl mx-auto lg:mr-0 lg:ml-auto font-medium drop-shadow-md">הרצאות וסדנאות AI מותאמות אישית לארגונים ולעסקים שרוצים להוביל בעידן החדש.</p>
+            <p className="text-xl text-white mb-8 max-w-2xl mx-auto lg:mr-0 lg:ml-auto font-medium drop-shadow-md">אני מעצב תהליכי AI מותאמים אישית לעסק שלכם דרך הרצאות וסדנאות ממוקדות, כדי שתוכלו לחסוך זמן, להגדיל רווחים ולהוביל את השוק שלכם.</p>
             
             <div className="flex flex-wrap justify-center lg:justify-end gap-4">
               <Button asChild size="lg" variant="outline" className="bg-black/40 border-white/30 text-white hover:bg-brand-gradient hover-scale">
-                <Link to="/about">מי אני?</Link>
+                <Link to="/contact">בואו נדבר על העסק שלכם</Link>
+              </Button>
+              <Button asChild size="lg" variant="ghost" className="text-white border border-white/30 hover:bg-white/10">
+                <Link to="/about">הסיפור שלי</Link>
               </Button>
             </div>
           </motion.div>
@@ -75,7 +78,7 @@ const HeroSection = () => {
         }} className="hidden lg:flex justify-center items-center">
             <div className="text-white p-8 rounded-xl bg-black/40 backdrop-blur-sm border border-transparent bg-gradient-to-r from-[#4a52a3]/20 to-[#4aaba3]/20 max-w-md mt-[425px] shadow-lg shadow-[#4aaba3]/10 hover-scale">
               <h3 className="text-2xl font-bold mb-3">שחר גולן</h3>
-              <p className="text-white/80">מרצה ל-GEN-AI ובינה מלאכותית. מעביר הדרכות וסדנאות AI לשיפור היצירתיות והיעילות בארגונים.</p>
+              <p className="text-white/80">מרצה ומכשיר צוותים בתחום ה-AI. מתמחה בהעברת הדרכות מעשיות שמביאות לתוצאות עסקיות מדידות בחברות ובארגונים.</p>
             </div>
           </motion.div>
         </div>

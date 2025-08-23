@@ -32,26 +32,26 @@ const itemVariants = {
 const ServicesSection = () => {
   const services = [{
     icon: <BookOpen className="h-8 w-8" />,
-    title: "קורסים ממוקדים",
-    description: "קורסים ממוקדים בכלי בינה מלאכותית שונים, מותאמים לקהל היעד ולרמת הידע הקיימת.",
+    title: "הכשרת צוותים",
+    description: "הכשרה מעמיקה לצוותי העבודה שלכם על תהליכי AI ספציפיים לתחום הפעילות שלכם, עם כלים מעשיים ליישום מיידי.",
     link: "/focused-course",
     bgImage: "/lovable-uploads/96348fd7-1c9e-49f8-b9c6-4ea486dfd787.png"
   }, {
     icon: <Users className="h-8 w-8" />,
-    title: "הרצאות לארגונים",
-    description: "הרצאות מרתקות לארגונים וחברות, מותאמות לצרכים הספציפיים של הקהל והארגון.",
+    title: "הרצאות עסקיות",
+    description: "הרצאות ממוקדות תוצאות לחברות שרוצות להבין איך AI יכול לשפר את הביצועים העסקיים והרווחיות שלהן.",
     link: "/custom-lecture",
     bgImage: "/lovable-uploads/0d68aedf-beb7-45ae-a23f-322fa1fa7d84.png"
   }, {
     icon: <Lightbulb className="h-8 w-8" />,
-    title: "סדנאות מעשיות",
-    description: "סדנאות פרקטיות ומעשיות להקניית כלים ומיומנויות בעבודה עם טכנולוגיות AI.",
+    title: "סדנאות יישום",
+    description: "סדנאות hands-on להכשרת הצוותים שלכם על תהליכי AI מותאמים לעסק, עם התמקדות בצרכים הייחודיים של הארגון.",
     link: "/focused-workshop",
     bgImage: "/lovable-uploads/8bdd9e5e-cba8-433d-881f-2701802d539e.png"
   }, {
     icon: <Coffee className="h-8 w-8" />,
-    title: "סדנת היכרות",
-    description: "צעד ראשון להיכרות עם עולם הבינה המלאכותית, מתאים למתחילים.",
+    title: "אבחון אסטרטגי",
+    description: "מפגש ראשוני לאבחון האפשרויות של AI בעסק שלכם וזיהוי תהליכים שניתן לשפר ולייעל עם בינה מלאכותית.",
     link: "/intro-workshop",
     bgImage: "/lovable-uploads/3ad19a3f-7fcb-4dec-b9ff-7dc0a5aaa713.png"
   }];
@@ -68,8 +68,8 @@ const ServicesSection = () => {
       }} transition={{
         duration: 0.5
       }}>
-          <h2 className="text-4xl md:text-5xl font-extrabold mb-5 bg-clip-text text-transparent bg-brand-gradient">מה הכי מתאים לכם?</h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto font-light">הדרכות <span className="font-semibold">מותאמות אישית</span> להטמעת בינה מלאכותית בחברה שלכם</p>
+          <h2 className="text-4xl md:text-5xl font-extrabold mb-5 bg-clip-text text-transparent bg-brand-gradient">איך אני עוזר לעסק שלכם?</h2>
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto font-light">באמצעות סדנאות ממוקדות ופרקטיות אוכל להציע לכם <span className="font-semibold">תהליכים מותאמים בעזרת AI</span> שיחסכו לכם זמן וכסף ויתנו לכם יתרון תחרותי</p>
         </motion.div>
 
         <motion.div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8" variants={containerVariants} initial="hidden" whileInView="visible" viewport={{
