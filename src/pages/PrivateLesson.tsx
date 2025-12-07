@@ -144,7 +144,7 @@ const PrivateLesson = () => {
                     <Coins className="h-6 w-6 text-brandTeal" />
                     <div>
                       <h4 className="font-semibold">מחיר</h4>
-                      <p className="text-muted-foreground">350₪ + מע"מ</p>
+                      <p className="text-muted-foreground">450₪ + מע"מ</p>
                     </div>
                   </div>
                 </div>
